@@ -27,11 +27,9 @@ void main()
 
 out vec4 targetColor;
 
-uniform sampler2D texture;
-
 void main()
 {
     // targetColor = texture(texture, fragTexCoord) * vec4(fragColor.xyz, 1.0);
     // targetColor = texture(texture, fragTexCoord);
-    targetColor = vec4(0.8, 0.8, 0.8, 1.0);
+    targetColor = vec4(1.0, 1.0, 1.0, 1.0);
 };
