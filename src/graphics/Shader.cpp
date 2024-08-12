@@ -7,10 +7,10 @@
 
 #include "Renderer.h"
 
-Shader::Shader(const std::string& filepath)
-	: m_FilePath(filepath), m_RendererID(0)
+Shader::Shader(const std::string& filePath)
+	: m_FilePath(filePath), m_RendererID(0)
 {
-    ShaderProgramSource source = ParseShader(filepath);
+    ShaderProgramSource source = ParseShader(filePath);
     m_RendererID = CreateShaderProgram(source.VertexSource, source.FragmentSource);
 }
 

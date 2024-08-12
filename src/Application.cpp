@@ -12,8 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#define TINYOBJLOADER_IMPLEMENTATION
-#include <tinyobj/tiny_obj_loader.h>
 
 #include "graphics/Renderer.h"
 #include "graphics/VertexBuffer.h"
@@ -21,6 +19,8 @@
 #include "graphics/IndexBuffer.h"
 #include "graphics/VertexArray.h"
 #include "graphics/Shader.h"
+
+#include "graphics/Mesh.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
@@ -81,63 +81,11 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
     {
-        std::string inputFile = "res/models/teapot.obj";
-        tinyobj::ObjReaderConfig reader_config;
-        reader_config.mtl_search_path = "./";
-
-        tinyobj::ObjReader reader;
-
-        if (!reader.ParseFromFile(inputFile, reader_config)) {
-            if (!reader.Error().empty()) {
-                std::cerr << "TinyObjReader Error: " << reader.Error();
-            }
-            exit(1);
-        }
-
-        if (!reader.Warning().empty()) {
-            std::cout << "TinyObjReader Warning: " << reader.Warning();
-        }
-
-        auto& attrib = reader.GetAttrib();
-        auto& shapes = reader.GetShapes();
-
-        // CREATING A VERTEX BUFFER FILLED WITH VERTEX POSITIONS
-        std::vector<float> vertices;
-        
-
-        for (const auto& shape : shapes) {
-            for (const auto& index : shape.mesh.indices) {
-                float vertexXPos = attrib.vertices[3 * index.vertex_index + 0];
-                float vertexYPos = attrib.vertices[3 * index.vertex_index + 1];
-                float vertexZPos = attrib.vertices[3 * index.vertex_index + 2];
-
-                //std::cout << "X: " << vertexXPos << ", Y: " << vertexYPos << ", Z: " <<  vertexZPos << std::endl;
-
-                vertices.push_back(vertexXPos);
-                vertices.push_back(vertexYPos);
-                vertices.push_back(vertexZPos);
-            }
-        }
-
-        std::cout << vertices.size() << std::endl;
-
+        std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
+        Mesh teapotMesh(vertices);
 
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
-
-        VertexArray vao;
-        VertexBuffer vbo(&vertices[0], vertices.size() * sizeof(float));
-
-        VertexBufferLayout layout;
-        layout.Push<float>(3);
-        //layout.Push<float>(2);
-        vao.AddBuffer(vbo, layout);
-
-
-        // MATRIX STUFF FOR CAMERA ===============================================================================
-
-        glm::mat4 projection;
-        projection = glm::perspective(glm::radians(45.f), 1.f, 0.1f, 100.f);
 
         glEnable(GL_DEPTH_TEST);
 
@@ -145,36 +93,13 @@ int main(void)
         GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
         while (!glfwWindowShouldClose(window))
         {
-            /* Poll for and process events */
-            float currentFrameTime = glfwGetTime();
-            deltaTime = currentFrameTime - lastFrameTime;
-            lastFrameTime = currentFrameTime;
-
             processInput(window);
 
             glClear(GL_COLOR_BUFFER_BIT);
             glClear(GL_DEPTH_BUFFER_BIT);
 
-            glm::mat4 view;
-            view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-            float height = glm::sin(currentFrameTime * 2) * 0.25f;
-
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(0.f, -0.25f + height, 0.f));
-            model = glm::rotate(model, glm::radians(currentFrameTime * 100), glm::vec3(0.f, 1.f, 0.f));
-            model = glm::scale(model, glm::vec3(0.008f, 0.008f, 0.008f));
-
-            shader.Bind();
-            unsigned int viewLoc = glGetUniformLocation(shader.GetID(), "u_View");
-            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-            unsigned int projLoc = glGetUniformLocation(shader.GetID(), "u_Projection");
-            glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-            unsigned int modelLoc = glGetUniformLocation(shader.GetID(), "u_Model");
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-            vao.Bind();
-            GLCall(glDrawArrays(GL_TRIANGLES, 0, vertices.size()));
+            teapotMesh.draw(shader);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
