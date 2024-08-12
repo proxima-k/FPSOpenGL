@@ -5,6 +5,7 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "Shader.h"
+#include "../game/Camera.h"
 
 class Mesh
 {
@@ -24,6 +25,8 @@ public:
 	~Mesh();
 
 	void draw(Shader& shader);
+
+	void draw(Shader& shader, Camera& camera);
 
 	static std::vector<float> getMeshVerticesFromObjFile(const std::string& filePath);
 };

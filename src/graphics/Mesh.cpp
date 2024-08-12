@@ -71,6 +71,37 @@ void Mesh::draw(Shader& shader)
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));
 }
 
+void Mesh::draw(Shader& shader, Camera& camera)
+{
+	VAO->Bind();
+	shader.Bind();
+
+	glm::vec3 cameraPos = camera.getPosition();
+	glm::vec3 cameraFront = camera.getFront();
+	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	glm::mat4 model = glm::mat4(1.0f);
+	//model = glm::translate(model, glm::vec3(0.f, -0.25f + height, 0.f));
+	//model = glm::rotate(model, glm::radians(currentFrameTime * 100), glm::vec3(0.f, 1.f, 0.f));
+	model = glm::scale(model, glm::vec3(0.008f, 0.008f, 0.008f));
+
+	glm::mat4 view;
+	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.f), 1.f, 0.1f, 100.f);
+
+	// setting uniforms for model, view, projection matrices
+	unsigned int viewLoc = glGetUniformLocation(shader.GetID(), "u_View");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	unsigned int projLoc = glGetUniformLocation(shader.GetID(), "u_Projection");
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	unsigned int modelLoc = glGetUniformLocation(shader.GetID(), "u_Model");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));
+}
+
 std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 {
 	std::string inputFile = "res/models/teapot.obj";

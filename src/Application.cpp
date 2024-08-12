@@ -99,7 +99,10 @@ int main(void)
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            teapotMesh.draw(shader);
+            //glm::vec3 camPos = camera.getFront();
+            //std::cout << camPos.x << " " << camPos.y << " " << camPos.z << std::endl;
+
+            teapotMesh.draw(shader, camera);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
