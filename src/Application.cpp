@@ -22,21 +22,14 @@
 
 #include "graphics/Mesh.h"
 
+#include "game/Camera.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
-void processInput(GLFWwindow* window);
 
 // window settings
 unsigned int windowWidth = 640;
 unsigned int windowHeight = 640;
-
-// camera settings
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-float yaw = -90.0f;
-float pitch = 0.0f;
 
 // mouse input handling
 float mouseLastX = windowWidth / 2.f;
@@ -46,6 +39,8 @@ float mouseLastY = windowHeight / 2.f;
 bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
+
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 
 int main(void)
 {
@@ -93,11 +88,16 @@ int main(void)
         GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
         while (!glfwWindowShouldClose(window))
         {
-            processInput(window);
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+                glfwTerminate();
 
-            glClear(GL_COLOR_BUFFER_BIT);
-            glClear(GL_DEPTH_BUFFER_BIT);
+            float currentFrame = glfwGetTime();
+            deltaTime = currentFrame - lastFrameTime;
+            lastFrameTime = currentFrame;
 
+            camera.update(window, deltaTime);
+            
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             teapotMesh.draw(shader);
 
@@ -123,52 +123,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
-    float xPos = static_cast<float>(mouseXPos);
-    float yPos = static_cast<float>(mouseYPos);
-
-    if (firstMouse)
-    {
-        mouseLastX = xPos;
-        mouseLastY = yPos;
-        firstMouse = false;
-    }
-
-    float xoffset = xPos - mouseLastX;
-    float yoffset = mouseLastY - yPos; // reversed since y-coordinates go from bottom to top
-    mouseLastX = xPos;
-    mouseLastY = yPos;
-
-    float sensitivity = 0.1f; // change this value to your liking
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
-}
-
-void processInput(GLFWwindow* window)
-{
-    const float cameraSpeed = 2.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-
-    //std::cout << "X: " << cameraPos.x << " Y:" << cameraPos.y << " Z:" << cameraPos.z << std::endl;
+    camera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
 }
