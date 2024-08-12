@@ -40,7 +40,7 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+Camera camera(glm::vec3(-3.0f, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f));
 
 int main(void)
 {

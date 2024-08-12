@@ -1,11 +1,14 @@
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include<glm/glm.hpp>
+#include<iostream>
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-    : cameraPos(position), cameraUp(up), yaw(yaw), pitch(pitch), firstMouse(true)
+Camera::Camera(Transform transform, glm::vec3 up)
+    : transform(transform), cameraUp(up), firstMouse(true)
 {
-    cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    cameraForward = glm::vec3(0.0f, 0.0f, -1.0f);
+    transform.rotation = glm::vec3(0, 0, 0);
     lastX = 640.0f / 2.0;  // assuming initial window width of 640
     lastY = 640.0f / 2.0;  // assuming initial window height of 640
 }
@@ -19,13 +22,15 @@ void Camera::processKeyboard(GLFWwindow* window, float deltaTime)
 {
     const float cameraSpeed = 2.5f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        transform.position += cameraSpeed * cameraForward;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        transform.position -= cameraSpeed * cameraForward;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        transform.position -= glm::normalize(glm::cross(cameraForward, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        transform.position += glm::normalize(glm::cross(cameraForward, cameraUp)) * cameraSpeed;
+
+
 }
 
 void Camera::processMouseMovement(float xPos, float yPos)
@@ -42,21 +47,18 @@ void Camera::processMouseMovement(float xPos, float yPos)
     lastX = xPos;
     lastY = yPos;
 
-    float sensitivity = 0.1f;
+    float sensitivity = 0.1f; // Adjust sensitivity as needed
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
-    yaw += xoffset;
-    pitch += yoffset;
+    transform.rotation.x += xoffset; // Yaw
+    transform.rotation.y += yoffset; // Pitch
 
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
+    // Constrain pitch to avoid gimbal lock
+    if (transform.rotation.y > 89.0f)
+        transform.rotation.y = 89.0f;
+    if (transform.rotation.y < -89.0f)
+        transform.rotation.y = -89.0f;
 
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
+    cameraForward = transform.getForward();
 }

@@ -19,7 +19,8 @@ public:
 
 	void destroy() { destroyed = true; }
 
-private:
 	Transform transform;
+
+private:
 	bool destroyed = false;
 };

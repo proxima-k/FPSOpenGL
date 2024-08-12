@@ -15,6 +15,19 @@ public:
 
 	virtual ~Transform() = default;
 
+	glm::vec3 getForward() const 
+	{
+		float yaw = glm::radians(rotation.x); // Convert to radians
+		float pitch = glm::radians(rotation.y); // Convert to radians
+
+		glm::vec3 forward;
+		forward.x = cos(yaw) * cos(pitch);
+		forward.y = sin(pitch);
+		forward.z = sin(yaw) * cos(pitch);
+
+		return glm::normalize(forward);
+	}
+
 	//GetForward
 	//GetUp
 	//GetRight

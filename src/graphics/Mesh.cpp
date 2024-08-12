@@ -76,8 +76,8 @@ void Mesh::draw(Shader& shader, Camera& camera)
 	VAO->Bind();
 	shader.Bind();
 
-	glm::vec3 cameraPos = camera.getPosition();
-	glm::vec3 cameraFront = camera.getFront();
+	glm::vec3 cameraPos = camera.transform.position;
+	glm::vec3 cameraFront = camera.transform.getForward();
 	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	glm::mat4 model = glm::mat4(1.0f);

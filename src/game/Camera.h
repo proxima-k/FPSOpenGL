@@ -5,23 +5,19 @@
 #include <glew/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Transform.h"
+
 class Camera {
 public:
-    Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
+    Camera(Transform transform, glm::vec3 up);
 
     void update(GLFWwindow* window, float deltaTime);
     void processMouseMovement(float xPos, float yPos);
 
-    glm::vec3 getPosition() const { return cameraPos; }
-    glm::vec3 getFront() const { return cameraFront; }
-
+    Transform transform;
 private:
-    glm::vec3 cameraPos;
-    glm::vec3 cameraFront;
+    glm::vec3 cameraForward;
     glm::vec3 cameraUp;
-
-    float yaw;
-    float pitch;
 
     float lastX;
     float lastY;
