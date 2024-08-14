@@ -2,11 +2,14 @@
 
 #include "Player.h"
 #include"Transform.h"
+#include "Game.h"
 
 Player::Player(Camera* camera) 
     : Entity(), camera(camera) 
 { 
     transform.position = glm::vec3(-3, 0, 0);
+    transform.scale = glm::vec3(1.0f);
+
     collision_channel = Collision_Channel::Player;
 }
 
@@ -14,6 +17,10 @@ void Player::update(GLFWwindow* window, float deltaTime)
 {
     processKeyboard(window, deltaTime);
     updateCameraPosition();
+
+    Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
+    if (hit_actor != nullptr) {
+    }
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
