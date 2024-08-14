@@ -28,6 +28,7 @@ void Game::render()
 	{
 		if (entitys[i] != nullptr)
 		{
+			std::cout << "Test" << std::endl;
 			entitys[i]->draw();
 		}
 	}

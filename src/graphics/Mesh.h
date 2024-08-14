@@ -17,6 +17,8 @@ private:
 	VertexArray* VAO;
 	VertexBuffer* VBO;
 
+	Shader* shader;
+	Camera* camera;
 	// pointer to a Transform
 
 public:
@@ -25,9 +27,15 @@ public:
 	Mesh(const float* vertices, unsigned int size);
 	~Mesh();
 
-	void draw(Shader& shader);
+	// draws a static mesh with constant values of view and model matrix
+	//void draw(Shader& shader);	
+	// draws a mesh with constant value of model matrix but dynamic view matrix
+	//void draw(Shader& shader, Camera& camera);
+	void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera& camera);
+	void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
-	void draw(Shader& shader, Camera& camera);
+	void setShader(Shader* _shader) { shader = _shader; }
+	void setCamera(Camera* _camera) { camera = _camera; }
 
 	static std::vector<float> getMeshVerticesFromObjFile(const std::string& filePath);
 };

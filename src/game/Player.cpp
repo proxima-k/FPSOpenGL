@@ -25,7 +25,7 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 {
-    std::cout << transform.position.x << transform.position.y << transform.position.z << std::endl;
+    //std::cout << transform.position.x << transform.position.y << transform.position.z << std::endl;
 
     const float playerSpeed = 2.5f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)

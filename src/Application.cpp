@@ -28,6 +28,7 @@
 #include "game/Camera.h"
 #include "game/Player.h"
 #include "game/Game.h"
+#include "game/Entity.h"
 
 #include "engine/Debug.h"
 #include "engine/Logger.h"
@@ -54,10 +55,6 @@ Game* game;
 
 int main(void)
 {
-    Debug::setCallback([](LogLevel level, const std::string& message) {
-        std::cout << "jajsdhfljkashdfjkhsjkldfhajklsdf" << message << std::endl;
-    });
-
     /* Initialize the library */
     if (!glfwInit())
         return -1;
@@ -111,11 +108,15 @@ int main(void)
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
     
     {
+        // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
         Mesh teapotMesh(vertices);
 
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
+
+        Entity teapotEntity(&teapotMesh, &shader, &camera);
+        //game->spawn_entity(teapotEntity);
 
         glEnable(GL_DEPTH_TEST);
 
@@ -132,12 +133,13 @@ int main(void)
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-            ImGui::ShowDemoWindow(&show_demo_window);
+            //ImGui::ShowDemoWindow(&show_demo_window);
             logger.draw("Logger", &show_log_window);
 
             double currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
+
 
             game->update();
             game->render();
@@ -146,10 +148,11 @@ int main(void)
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            teapotMesh.draw(shader, camera);
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            teapotEntity.draw();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
