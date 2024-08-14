@@ -84,7 +84,7 @@ void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 
 std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 {
-	std::string inputFile = "res/models/teapot.obj";
+	std::string inputFile = filePath;
 	tinyobj::ObjReaderConfig reader_config;
 	reader_config.mtl_search_path = "./";
 

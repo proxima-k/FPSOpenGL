@@ -25,7 +25,7 @@ public:
 		: transform(position, rotation, scale) {	}
 	virtual ~Entity() = default;
 
-	Entity(Mesh* mesh, Shader* shader, Camera* camera);
+	Entity(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera);
 
 	virtual void update();
 	virtual void draw();

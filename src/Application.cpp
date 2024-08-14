@@ -79,7 +79,7 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_movement_callback);
 
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (glewInit() != GLEW_OK) {
         std::cout << "Error!" << std::endl;
@@ -109,13 +109,15 @@ int main(void)
     
     {
         // Entity (mesh path, shader, camera)
-        std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
+        std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         Mesh teapotMesh(vertices);
 
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
 
-        Entity* teapotEntity = game->spawn_entity<Entity>(&teapotMesh, &shader, &camera);
+        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(5,0,5), &teapotMesh, &shader, &camera);
+        Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(5,0,-5), &teapotMesh, &shader, &camera);
+        Entity* teapotEntity3 = game->spawn_entity<Entity>(glm::vec3(5,0,-0), &teapotMesh, &shader, &camera);
         //game->spawn_entity(teapotEntity);
 
         glEnable(GL_DEPTH_TEST);
