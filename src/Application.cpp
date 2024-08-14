@@ -23,6 +23,7 @@
 #include "graphics/Mesh.h"
 
 #include "game/Camera.h"
+#include "game/Player.h"
 #include "game/Game.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -41,7 +42,8 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera camera(glm::vec3(-3.0f, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f));
+Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+Player player(&camera);
 Game game;
 
 int main(void)
@@ -100,14 +102,9 @@ int main(void)
             game.update();
             game.render();
 
-            camera.update(window, deltaTime);
+            player.update(window, deltaTime);
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            //glm::vec3 camPos = camera.getFront();
-            //std::cout << camPos.x << " " << camPos.y << " " << camPos.z << std::endl;
-
-
 
             teapotMesh.draw(shader, camera);
 

@@ -158,6 +158,7 @@
     <ClCompile Include="src\game\Camera.cpp" />
     <ClCompile Include="src\game\Entity.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
+    <ClCompile Include="src\game\Player.cpp" />
     <ClCompile Include="src\game\SkullEnemy.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="src\game\Camera.h" />
     <ClInclude Include="src\game\Entity.h" />
     <ClInclude Include="src\game\Game.h" />
+    <ClInclude Include="src\game\Player.h" />
     <ClInclude Include="src\game\SkullEnemy.h" />
     <ClInclude Include="src\game\Transform.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
