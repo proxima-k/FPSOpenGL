@@ -50,6 +50,10 @@ Camera camera(glm::vec3(-3.0f, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f));
 
 int main(void)
 {
+    Debug::setCallback([](LogLevel level, const std::string& message) {
+        std::cout << "jajsdhfljkashdfjkhsjkldfhajklsdf" << message << std::endl;
+    });
+
     /* Initialize the library */
     if (!glfwInit())
         return -1;
@@ -79,6 +83,7 @@ int main(void)
     if (glewInit() != GLEW_OK) {
         std::cout << "Error!" << std::endl;
     }
+    //std::cout << glGetString(GL_VERSION) << std::endl;
 
     // setup IMGUI context
     IMGUI_CHECKVERSION();
@@ -96,12 +101,8 @@ int main(void)
     bool show_demo_window = true;
     bool show_log_window = true;
 
-    std::cout << glGetString(GL_VERSION) << std::endl;
-
     Logger logger;
-
-    Debug::log("application", "Hej hej");
-    logger.addLog("something something");
+    Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
     
     {
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
@@ -128,9 +129,6 @@ int main(void)
             ImGui::ShowDemoWindow(&show_demo_window);
             logger.draw("Logger", &show_log_window);
 
-            ImGui::Begin("something", &show_log_window);
-            ImGui::Text("something");
-            ImGui::End();
            
 
             float currentFrame = glfwGetTime();

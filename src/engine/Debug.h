@@ -1,6 +1,9 @@
+// Kent
 #pragma once
 
+#include <sstream>
 #include <iostream>
+#include <functional>
 
 enum LogLevel {
 	Info,
@@ -10,28 +13,45 @@ enum LogLevel {
 
 class Debug
 {
+
 private:
+	using Callback = std::function<void(LogLevel,const std::string&)>;
+	static Callback logCallback;
 ;
 	template<typename T>
 	static void logInternal(LogLevel logLevel, const char* source, const T& message)
 	{
-		std::cout << "[ " << source << " ] ";
+		std::ostringstream oss;
+		oss << "[ " << source << " ] ";
 
 		switch (logLevel) {
 		case Info:
-			std::cout << "INFO: ";
+			oss << "INFO: ";
 			break;
 		case Warning:
-			std::cout << "WARNING: ";
+			oss << "WARNING: ";
 			break;
 		case Error:
-			std::cout << "ERROR: ";
+			oss << "ERROR: ";
 			break;
 		}
-		std::cout << message << std::endl;
+		oss << message << std::endl;
+		
+		std::cout << oss.str();
+
+		if (logCallback) {
+			logCallback(logLevel, oss.str());
+		}
+		else {
+			std::cout << "[ Debug ] Warning: No callback set" << std::endl;
+		}
 	}
 
 public:
+	// the following three functions will print out a formatted message to the console
+	// the format looks like this:
+	// [ source ] LOGLEVEL: message
+	// eg: [ Camera ] INFO: xPos - 10
 	template <typename T>
 	static void log(const char* source, const T& message) {
 		logInternal(LogLevel::Info, source, message);
@@ -46,4 +66,10 @@ public:
 	static void logError(const char* source, const T& message) {
 		logInternal(LogLevel::Error, source, message);
 	}
+
+	static void setCallback(Callback callback) {
+		logCallback = callback;
+	}
+
 };
+

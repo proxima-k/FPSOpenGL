@@ -1,6 +1,7 @@
 #pragma once
 
 #include "imgui/imgui.h"
+#include "Debug.h"
 
 struct Logger {
     ImGuiTextBuffer     Buf;
@@ -13,4 +14,6 @@ struct Logger {
     void clear();
     void addLog(const char* fmt, ...) IM_FMTARGS(2);
     void draw(const char* title, bool* p_open = (bool*)0);
+
+    void onLog(LogLevel logLevel, const std::string& message);
 };

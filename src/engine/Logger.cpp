@@ -117,6 +117,11 @@ void Logger::draw(const char* title, bool* p_open)
     ImGui::End();
 }
 
+void Logger::onLog(LogLevel logLevel, const std::string& message)
+{
+    addLog(message.c_str());
+}
+
 
 //void Logger::ShowLogger(bool* p_open)
 //{
