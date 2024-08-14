@@ -115,7 +115,7 @@ int main(void)
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
 
-        game->spawn_entity<Entity>(&teapotMesh, &shader, &camera);
+        Entity* teapotEntity = game->spawn_entity<Entity>(&teapotMesh, &shader, &camera);
         //game->spawn_entity(teapotEntity);
 
         glEnable(GL_DEPTH_TEST);
@@ -126,8 +126,14 @@ int main(void)
         {
             glfwPollEvents();
 
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
                 glfwTerminate();
+
+            double currentFrame = glfwGetTime();
+            deltaTime = currentFrame - lastFrameTime;
+            lastFrameTime = currentFrame;
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -136,21 +142,13 @@ int main(void)
             //ImGui::ShowDemoWindow(&show_demo_window);
             logger.draw("Logger", &show_log_window);
 
-            double currentFrame = glfwGetTime();
-            deltaTime = currentFrame - lastFrameTime;
-            lastFrameTime = currentFrame;
-
-
-            game->update();
-            game->render();
-
             player.update(window, deltaTime);
-            
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            game->update();
+            game->render();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
