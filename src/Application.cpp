@@ -12,6 +12,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 #include "graphics/Renderer.h"
 #include "graphics/VertexBuffer.h"
@@ -25,6 +28,9 @@
 #include "game/Camera.h"
 #include "game/Player.h"
 #include "game/Game.h"
+
+#include "engine/Debug.h"
+#include "engine/Logger.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
@@ -48,6 +54,10 @@ Game game;
 
 int main(void)
 {
+    Debug::setCallback([](LogLevel level, const std::string& message) {
+        std::cout << "jajsdhfljkashdfjkhsjkldfhajklsdf" << message << std::endl;
+    });
+
     /* Initialize the library */
     if (!glfwInit())
         return -1;
@@ -72,13 +82,32 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_movement_callback);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (glewInit() != GLEW_OK) {
         std::cout << "Error!" << std::endl;
     }
+    //std::cout << glGetString(GL_VERSION) << std::endl;
 
-    std::cout << glGetString(GL_VERSION) << std::endl;
+    // setup IMGUI context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+    bool show_demo_window = true;
+    bool show_log_window = true;
+
+    Logger logger;
+    Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
+    
     {
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
         Mesh teapotMesh(vertices);
@@ -92,8 +121,17 @@ int main(void)
         GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
         while (!glfwWindowShouldClose(window))
         {
+            glfwPollEvents();
+
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
                 glfwTerminate();
+
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            ImGui::ShowDemoWindow(&show_demo_window);
+            logger.draw("Logger", &show_log_window);
 
             double currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrameTime;
@@ -108,13 +146,16 @@ int main(void)
 
             teapotMesh.draw(shader, camera);
 
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
-
-            glfwPollEvents();
-
         }
     }
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     glfwTerminate();
     return 0;

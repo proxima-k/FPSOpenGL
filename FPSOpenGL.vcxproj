@@ -155,6 +155,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Logger.cpp" />
+    <ClCompile Include="src\engine\Debug.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui_tables.cpp" />
+    <ClCompile Include="dependencies\imgui\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\game\Camera.cpp" />
     <ClCompile Include="src\game\Entity.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
@@ -169,6 +178,17 @@
     <ClCompile Include="src\graphics\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Logger.h" />
+    <ClInclude Include="src\engine\Debug.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imconfig.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imgui.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imgui_internal.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imstb_textedit.h" />
+    <ClInclude Include="dependencies\imgui\include\imgui\imstb_truetype.h" />
     <ClInclude Include="src\game\Camera.h" />
     <ClInclude Include="src\game\Entity.h" />
     <ClInclude Include="src\game\Game.h" />
