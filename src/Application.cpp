@@ -50,7 +50,7 @@ float lastFrameTime = 0.f;
 
 Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 Player player(&camera);
-Game game;
+Game* game;
 
 int main(void)
 {
@@ -105,6 +105,8 @@ int main(void)
     bool show_demo_window = true;
     bool show_log_window = true;
 
+    game = new Game();
+
     Logger logger;
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
     
@@ -137,8 +139,8 @@ int main(void)
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            game.update();
-            game.render();
+            game->update();
+            game->render();
 
             player.update(window, deltaTime);
             

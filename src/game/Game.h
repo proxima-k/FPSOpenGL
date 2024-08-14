@@ -23,6 +23,14 @@ public:
         std::cerr << "Entity array is full, cannot spawn more entities." << std::endl;
     }
 
+    Game()
+    {
+        for (int i = 0; i < MAX_ENTITYS; ++i)
+        {
+            entitys[i] = nullptr;  // Initialize all pointers to nullptr
+        }
+    }
+
     ~Game()
     {
         for (int i = 0; i < MAX_ENTITYS; ++i)
