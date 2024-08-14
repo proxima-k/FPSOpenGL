@@ -26,6 +26,8 @@
 #include "graphics/Mesh.h"
 
 #include "game/Camera.h"
+#include "game/Player.h"
+#include "game/Game.h"
 
 #include "engine/Debug.h"
 #include "engine/Logger.h"
@@ -46,7 +48,9 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera camera(glm::vec3(-3.0f, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f));
+Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+Player player(&camera);
+Game game;
 
 int main(void)
 {
@@ -129,18 +133,16 @@ int main(void)
             ImGui::ShowDemoWindow(&show_demo_window);
             logger.draw("Logger", &show_log_window);
 
-           
-
-            float currentFrame = glfwGetTime();
+            double currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            camera.update(window, deltaTime);
+            game.update();
+            game.render();
+
+            player.update(window, deltaTime);
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            //glm::vec3 camPos = camera.getFront();
-            //std::cout << camPos.x << " " << camPos.y << " " << camPos.z << std::endl;
 
             teapotMesh.draw(shader, camera);
 

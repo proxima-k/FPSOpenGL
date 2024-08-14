@@ -4,6 +4,14 @@
 
 #include"Transform.h"
 
+enum class Collision_Channel
+{
+	None, 
+	Player,
+	Enemy,
+	Projectile,
+};
+
 class Entity
 {
 public:
@@ -17,10 +25,9 @@ public:
 	virtual void update();
 	virtual void draw();
 
-	void destroy() { destroyed = true; }
-
 	Transform transform;
 
-private:
 	bool destroyed = false;
+
+	Collision_Channel collision_channel = Collision_Channel::None;
 };

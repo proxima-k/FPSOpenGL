@@ -1,6 +1,6 @@
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include<glm/gtc/matrix_transform.hpp>
+#include<glm/gtc/type_ptr.hpp>
 #include<glm/glm.hpp>
 #include<iostream>
 
@@ -11,26 +11,6 @@ Camera::Camera(Transform transform, glm::vec3 up)
     transform.rotation = glm::vec3(0, 0, 0);
     lastX = 640.0f / 2.0;  // assuming initial window width of 640
     lastY = 640.0f / 2.0;  // assuming initial window height of 640
-}
-
-void Camera::update(GLFWwindow* window, float deltaTime)
-{
-    processKeyboard(window, deltaTime);
-}
-
-void Camera::processKeyboard(GLFWwindow* window, float deltaTime)
-{
-    const float cameraSpeed = 2.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        transform.position += cameraSpeed * cameraForward;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        transform.position -= cameraSpeed * cameraForward;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        transform.position -= glm::normalize(glm::cross(cameraForward, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        transform.position += glm::normalize(glm::cross(cameraForward, cameraUp)) * cameraSpeed;
-
-
 }
 
 void Camera::processMouseMovement(float xPos, float yPos)
