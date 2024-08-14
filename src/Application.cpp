@@ -115,7 +115,7 @@ int main(void)
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
 
-        Entity teapotEntity(&teapotMesh, &shader, &camera);
+        game->spawn_entity<Entity>(&teapotMesh, &shader, &camera);
         //game->spawn_entity(teapotEntity);
 
         glEnable(GL_DEPTH_TEST);
@@ -151,8 +151,6 @@ int main(void)
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-            teapotEntity.draw();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

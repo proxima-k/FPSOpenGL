@@ -10,17 +10,21 @@ public:
 	void update();
 	void render();
 
-    void spawn_entity(const Entity& entity)
+    template<typename EntityType>
+    EntityType* spawn_entity(Mesh* mesh, Shader* shader, Camera* camera)
     {
         for (int i = 0; i < MAX_ENTITYS; ++i)
         {
             if (entitys[i] == nullptr)
             {
-                entitys[i] = new Entity(entity);
-                return;
+                EntityType* new_entity = new EntityType(mesh, shader, camera);
+                entitys[i] = new_entity;
+
+                return new_entity;
             }
         }
         std::cerr << "Entity array is full, cannot spawn more entities." << std::endl;
+        return nullptr;
     }
 
     Game()
