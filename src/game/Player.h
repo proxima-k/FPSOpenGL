@@ -5,10 +5,11 @@
 #include <glm/glm.hpp>
 #include "Transform.h"
 #include "Camera.h"
+#include "Entity.h"
 
 class Camera;
 
-class Player
+class Player : public Entity
 {
 public:
 	Player(Camera* camera);
