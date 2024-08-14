@@ -7,6 +7,7 @@ Player::Player(Camera* camera)
     : Entity(), camera(camera) 
 { 
     transform.position = glm::vec3(-3, 0, 0);
+    collision_channel = Collision_Channel::Player;
 }
 
 void Player::update(GLFWwindow* window, float deltaTime) 
