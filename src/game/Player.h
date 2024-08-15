@@ -19,10 +19,6 @@ public:
 	void processKeyboard(GLFWwindow* window, float deltaTime);
 	void updateCameraPosition();
 
-	Transform transform;
-
-	float playerSpeed = 2.0f;
-
 private:
 	Camera* camera;
 };
