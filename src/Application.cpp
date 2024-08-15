@@ -147,7 +147,7 @@ int main(void)
         Shader meshShader("res/shaders/Basic.shader");
         meshShader.Bind();
 
-        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(3), &teapotMesh, &meshShader, &camera);
+        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), &teapotMesh, &meshShader, &camera);
         Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), &teapotMesh, &meshShader, &camera);
 
         glEnable(GL_DEPTH_TEST);

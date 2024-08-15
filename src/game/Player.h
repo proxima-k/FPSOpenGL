@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Entity.h"
+#include "Physicsbody.h"
 
 class Camera;
 
@@ -18,7 +19,9 @@ public:
 
 	void processKeyboard(GLFWwindow* window, float deltaTime);
 	void updateCameraPosition();
-
+	
+	float playerHeight = transform.scale.y / 2;
 private:
 	Camera* camera;
+	Physicsbody physicsbody;
 };
