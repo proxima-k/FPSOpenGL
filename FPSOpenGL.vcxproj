@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\Grid.cpp" />
     <ClCompile Include="src\engine\Logger.cpp" />
     <ClCompile Include="src\engine\Debug.cpp" />
     <ClCompile Include="dependencies\imgui\include\imgui\imgui.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\graphics\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\game\Grid.h" />
     <ClInclude Include="src\engine\Logger.h" />
     <ClInclude Include="src\engine\Debug.h" />
     <ClInclude Include="dependencies\imgui\include\imgui\imconfig.h" />

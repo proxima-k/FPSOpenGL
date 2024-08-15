@@ -33,6 +33,8 @@
 #include "engine/Debug.h"
 #include "engine/Logger.h"
 
+#include "game/Grid.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 
@@ -120,6 +122,10 @@ int main(void)
         Entity* teapotEntity3 = game->spawn_entity<Entity>(glm::vec3(5,0,-0), &teapotMesh, &shader, &camera);
         //game->spawn_entity(teapotEntity);
 
+        Grid floorGrid(1, 1, 5);
+        floorGrid.setCamera(&camera);
+        floorGrid.setShader(&shader);
+
         glEnable(GL_DEPTH_TEST);
 
         /* Loop until the user closes the window */
@@ -151,6 +157,8 @@ int main(void)
 
             game->update();
             game->render();
+
+            floorGrid.draw();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

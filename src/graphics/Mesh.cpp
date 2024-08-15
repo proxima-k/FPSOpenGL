@@ -74,7 +74,7 @@ void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera&
 	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-	GLCall(glDrawArrays(GL_TRIANGLES, 0, verticesCount));
+	GLCall(glDrawArrays(GL_LINE_LOOP, 0, verticesCount));
 }
 
 void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
