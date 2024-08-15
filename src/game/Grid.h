@@ -12,7 +12,8 @@ class Grid
 {
 private:
 	unsigned int verticesCount;
-	int cellWidth, cellHeight;
+	float cellWidth, cellHeight;
+	int cellsPerSideOfAxis;
 
 	VertexArray* VAO;
 	VertexBuffer* VBO;

@@ -13,7 +13,7 @@
 #include "../graphics/VertexBufferLayout.h"
 
 Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
-	: cellWidth(cellWidth), cellHeight(cellHeight)
+	: cellWidth(cellWidth), cellHeight(cellHeight), cellsPerSideOfAxis(cellsPerSideOfAxis)
 {
 	std::vector<float> vertices;
 
@@ -97,6 +97,7 @@ void Grid::draw()
 	model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
 	model = glm::scale(model, transform.scale);
 
 	// View matrix
@@ -117,6 +118,12 @@ void Grid::draw()
 	glm::vec3 bgColor(0.1f);
 	unsigned int bgColorLoc = glGetUniformLocation(shader->GetID(), "u_bgColor");
 	GLCall(glUniform3fv(bgColorLoc, 1, glm::value_ptr(bgColor)));
+
+	unsigned int renderRadiusLoc = glGetUniformLocation(shader->GetID(), "u_renderRadius");
+	glUniform1f(renderRadiusLoc, cellWidth * cellsPerSideOfAxis);
+
+
+
 
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));
 }
