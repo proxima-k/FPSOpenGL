@@ -26,7 +26,7 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 {
-    const float playerSpeed = 20 * deltaTime;
+    const float playerSpeed = 10 * deltaTime;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         transform.position += playerSpeed * camera->getCameraForward();

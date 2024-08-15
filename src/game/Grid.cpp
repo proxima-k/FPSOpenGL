@@ -72,6 +72,10 @@ void Grid::update()
 	float difference;
 	int steps;
 
+	std::cout << "Player Pos";
+	std::cout << player->transform.position.x << " " << player->transform.position.y << " " << player->transform.position.z << std::endl;
+	std::cout << "Grid Pos";
+	std::cout << transform.position.x << " " << transform.position.y << " " << transform.position.z << std::endl;
 	difference= player->transform.position.x - transform.position.x;
 	steps = difference / cellWidth;
 	transform.position.x += steps;
@@ -79,6 +83,7 @@ void Grid::update()
 	difference = player->transform.position.z - transform.position.z;
 	steps = difference / cellHeight;
 	transform.position.z += steps;
+
 }
 
 void Grid::draw()
@@ -86,17 +91,13 @@ void Grid::draw()
 	VAO->Bind();
 	shader->Bind();
 
-	glm::vec3 position(0);
-	glm::vec3 rotation(0);
-	glm::vec3 scale(1);
-
 	// Model matrix
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, position);
-	model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::scale(model, scale);
+	model = glm::translate(model, transform.position);
+	model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::scale(model, transform.scale);
 
 	// View matrix
 	glm::mat4 view;
