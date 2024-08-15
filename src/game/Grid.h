@@ -6,11 +6,13 @@
 #include "../graphics/VertexBuffer.h"
 #include "../graphics/Shader.h"
 #include "../game/Camera.h"
+#include "../game/Player.h"
 
 class Grid
 {
 private:
 	unsigned int verticesCount;
+	int cellWidth, cellHeight;
 
 	VertexArray* VAO;
 	VertexBuffer* VBO;
@@ -18,16 +20,20 @@ private:
 	Shader* shader;
 	Camera* camera;
 
-public:
-	// width, height
-	// create vertices for each line
+	Player* player;
 
+public:
 	Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis);
 	~Grid();
 
+	void update();
 	void draw();
 
 	void setShader(Shader* shader);
 	void setCamera(Camera* camera);
+
+	void setPlayer(Player* player);
+
+	Transform transform;
 };
 

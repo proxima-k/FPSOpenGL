@@ -13,6 +13,7 @@
 #include "../graphics/VertexBufferLayout.h"
 
 Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
+	: cellWidth(cellWidth), cellHeight(cellHeight)
 {
 	std::vector<float> vertices;
 
@@ -45,11 +46,6 @@ Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
 	}
 	verticesCount = vertices.size();
 
-	for (int i = 0; i < vertices.size(); i++) {
-		std::cout << vertices[i] << std::endl;
-	}
-
-
 	VAO = new VertexArray();
 	VBO = new VertexBuffer(&vertices[0], vertices.size() * sizeof(float));
 
@@ -57,7 +53,6 @@ Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
 	layout.Push<float>(3);
 
 	VAO->AddBuffer(*VBO, layout);
-
 }
 
 Grid::~Grid()
@@ -70,6 +65,20 @@ Grid::~Grid()
 
 	camera = NULL;
 	shader = NULL;
+}
+
+void Grid::update()
+{
+	float difference;
+	int steps;
+
+	difference= player->transform.position.x - transform.position.x;
+	steps = difference / cellWidth;
+	transform.position.x += steps;
+	
+	difference = player->transform.position.z - transform.position.z;
+	steps = difference / cellHeight;
+	transform.position.z += steps;
 }
 
 void Grid::draw()
@@ -104,6 +113,10 @@ void Grid::draw()
 	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
+	glm::vec3 bgColor(0.1f);
+	unsigned int bgColorLoc = glGetUniformLocation(shader->GetID(), "u_bgColor");
+	GLCall(glUniform3fv(bgColorLoc, 1, glm::value_ptr(bgColor)));
+
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));
 }
 
@@ -115,4 +128,9 @@ void Grid::setShader(Shader* _shader)
 void Grid::setCamera(Camera* _camera)
 {
 	camera = _camera;
+}
+
+void Grid::setPlayer(Player* _player)
+{
+	player = _player;
 }

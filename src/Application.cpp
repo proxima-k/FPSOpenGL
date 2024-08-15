@@ -110,21 +110,26 @@ int main(void)
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
     
     {
+        Grid floorGrid(1, 1, 10);
+        Shader gridShader("res/shaders/grid.shader");
+        floorGrid.setShader(&gridShader);
+        floorGrid.setCamera(&camera);
+        floorGrid.setPlayer(&player);
+
         // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         Mesh teapotMesh(vertices);
 
-        Shader shader("res/shaders/Basic.shader");
-        shader.Bind();
 
-        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(5,0,5), &teapotMesh, &shader, &camera);
-        Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(5,0,-5), &teapotMesh, &shader, &camera);
-        Entity* teapotEntity3 = game->spawn_entity<Entity>(glm::vec3(5,0,-0), &teapotMesh, &shader, &camera);
+        Shader meshShader("res/shaders/Basic.shader");
+        meshShader.Bind();
+
+        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(5,0,5), &teapotMesh, &meshShader, &camera);
+        Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(5,0,-5), &teapotMesh, &meshShader, &camera);
+        Entity* teapotEntity3 = game->spawn_entity<Entity>(glm::vec3(5,0,-0), &teapotMesh, &meshShader, &camera);
         //game->spawn_entity(teapotEntity);
 
-        Grid floorGrid(1, 1, 5);
-        floorGrid.setCamera(&camera);
-        floorGrid.setShader(&shader);
+        
 
         glEnable(GL_DEPTH_TEST);
 
@@ -158,6 +163,7 @@ int main(void)
             game->update();
             game->render();
 
+            floorGrid.update();
             floorGrid.draw();
 
             /* Swap front and back buffers */
