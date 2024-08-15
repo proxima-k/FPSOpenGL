@@ -26,9 +26,8 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 {
-    //std::cout << transform.position.x << transform.position.y << transform.position.z << std::endl;
-
     const float playerSpeed = 20 * deltaTime;
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         transform.position += playerSpeed * camera->getCameraForward();
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -37,6 +36,8 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         transform.position -= glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         transform.position += glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
+
+    transform.position.y = glm::clamp(transform.position.y, 0.0f, 100.0f);
 }
 
 void Player::updateCameraPosition() 
