@@ -64,7 +64,30 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Hello World", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "(xyz)^0", NULL, NULL);
+
+    int width, height;
+    int channels;
+    unsigned char* pixels = stbi_load("C:/Projects/FPSOpenGL/res/sprites/placeholder.jpg", &width, &height, &channels, 4);
+
+    if (pixels == NULL)
+    {
+        fprintf(stderr, "Failed to load image\n");
+    }
+    else
+    {
+        GLFWimage images[1];
+        images[0].width = width;
+        images[0].height = height;
+        images[0].pixels = pixels;
+
+        glfwSetWindowIcon(window, 1, images);
+
+        // Free the image data
+        stbi_image_free(pixels);
+    }
+
+
     if (!window)
     {
         glfwTerminate();
