@@ -16,7 +16,8 @@ public:
 
 	bool bGravity = false;
 
-	float dampening = 5;
+	float dampening = 5.f;
+	float friction = 1.f;
 
 	float deltaTime = 0.f;
 	float lastFrameTime = 0.f;

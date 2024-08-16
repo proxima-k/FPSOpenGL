@@ -9,7 +9,7 @@ void Physicsbody::update()
     lastFrameTime = currentFrame;
     
     float gravity = -9.81f;
-    float gravityAmplitude = 120.0f;
+    float gravityAmplitude = 120.f;
     if (bGravity) 
     {
         acceleration.y += gravity * gravityAmplitude * deltaTime;
@@ -17,7 +17,7 @@ void Physicsbody::update()
 
     velocity += acceleration * deltaTime;
 
-    double dampingFactor = 1.0 - (dampening * deltaTime);
+    double dampingFactor = 1.f - (dampening * deltaTime);
 
     if (dampingFactor < 0) 
         dampingFactor = 0;
