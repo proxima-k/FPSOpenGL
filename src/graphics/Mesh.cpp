@@ -65,7 +65,7 @@ void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera&
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), 1.f, 0.1f, 100.f);
+	projection = glm::perspective(glm::radians(45.f), camera.getResolutionRatio(), 0.1f, 100.f);
 
 	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));

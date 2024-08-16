@@ -39,8 +39,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 
 // window settings
-unsigned int windowWidth = 640;
-unsigned int windowHeight = 640;
+unsigned int windowWidth = 1920;
+unsigned int windowHeight = 1080;
 
 // mouse input handling
 float mouseLastX = windowWidth / 2.f;
@@ -51,7 +51,7 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
 Player player(&camera);
 Game* game;
 
@@ -133,7 +133,7 @@ int main(void)
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
     
     {
-        Grid floorGrid(1, 1, 10);
+        Grid floorGrid(1, 1, 16);
         Shader gridShader("res/shaders/grid.shader");
         floorGrid.setShader(&gridShader);
         floorGrid.setCamera(&camera);
@@ -172,7 +172,7 @@ int main(void)
             ImGui::NewFrame();
 
             //ImGui::ShowDemoWindow(&show_demo_window);
-            logger.draw("Logger", &show_log_window);
+            //logger.draw("Logger", &show_log_window);
 
             player.update(window, deltaTime);
 

@@ -4,8 +4,8 @@
 #include<glm/glm.hpp>
 #include<iostream>
 
-Camera::Camera(Transform transform, glm::vec3 up)
-    : transform(transform), cameraUp(up), firstMouse(true)
+Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsigned int screenHeight)
+    : transform(transform), cameraUp(up), firstMouse(true), screenWidth(screenWidth), screenHeight(screenHeight)
 {
     cameraForward = glm::vec3(0.0f, 0.0f, -1.0f);
     transform.rotation = glm::vec3(0, 0, 0);

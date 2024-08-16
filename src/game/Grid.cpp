@@ -106,7 +106,7 @@ void Grid::draw()
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), 1.f, 0.1f, 100.f);
+	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
 	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -120,7 +120,7 @@ void Grid::draw()
 	GLCall(glUniform3fv(bgColorLoc, 1, glm::value_ptr(bgColor)));
 
 	unsigned int renderRadiusLoc = glGetUniformLocation(shader->GetID(), "u_renderRadius");
-	glUniform1f(renderRadiusLoc, cellWidth * cellsPerSideOfAxis);
+	glUniform1f(renderRadiusLoc, cellWidth * (cellsPerSideOfAxis - 1));
 
 
 
