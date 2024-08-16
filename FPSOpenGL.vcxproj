@@ -169,6 +169,7 @@
     <ClCompile Include="src\game\Camera.cpp" />
     <ClCompile Include="src\game\Entity.cpp" />
     <ClCompile Include="src\game\Game.cpp" />
+    <ClCompile Include="src\game\Physicsbody.cpp" />
     <ClCompile Include="src\game\Player.cpp" />
     <ClCompile Include="src\game\GenericCube.cpp" />
     <ClCompile Include="src\graphics\Mesh.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\game\Camera.h" />
     <ClInclude Include="src\game\Entity.h" />
     <ClInclude Include="src\game\Game.h" />
+    <ClInclude Include="src\game\Physicsbody.h" />
     <ClInclude Include="src\game\Player.h" />
     <ClInclude Include="src\game\GenericCube.h" />
     <ClInclude Include="src\game\Transform.h" />
