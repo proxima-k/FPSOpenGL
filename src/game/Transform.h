@@ -27,8 +27,4 @@ public:
 
 		return glm::normalize(forward);
 	}
-
-	//GetForward
-	//GetUp
-	//GetRight
 };
