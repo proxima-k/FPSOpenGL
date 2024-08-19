@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <iostream>
 
@@ -23,7 +24,7 @@ MeshRenderer::MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera)
 	setTargetCamera(camera);
 }
 
-void MeshRenderer::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+void MeshRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 {
 	if (mesh == nullptr) {
 		std::cout << "[MeshRenderer] Error: Missing mesh in mesh renderer" << std::endl;
@@ -44,9 +45,10 @@ void MeshRenderer::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	// Model matrix
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
-	model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	model *= glm::toMat4(rotation);
+	/*model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));*/
 	model = glm::scale(model, scale);
 
 	// View matrix

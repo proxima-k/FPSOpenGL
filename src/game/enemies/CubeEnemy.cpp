@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-CubeEnemy::CubeEnemy(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera)
-	: Enemy(position, mesh, shader, camera), physicsBody(), camera(camera) {	}
+CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
+	: Enemy(position, meshRenderer), physicsBody() {	}
 
 void CubeEnemy::update(float deltaTime)
 {
-	glm::vec3 camPos = camera->transform.position;
+	glm::vec3 camPos = Camera::mainCamera->transform.position;
 	glm::vec3 dir = glm::normalize(camPos - transform.position);
 
 	physicsBody.acceleration = glm::vec3(0.0f);

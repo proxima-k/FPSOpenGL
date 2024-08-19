@@ -10,7 +10,7 @@ public:
 	MeshRenderer();
 	MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera);
 
-	void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	void draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale);
 	
 	void setMesh(Mesh* mesh) { this->mesh = mesh; }
 	void setShader(Shader* shader) { this->shader = shader; }

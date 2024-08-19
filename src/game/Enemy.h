@@ -6,7 +6,7 @@
 class Enemy : public Entity 
 {
 public:
-	Enemy(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera);
+	Enemy(glm::vec3 position, MeshRenderer meshRenderer);
 
 	float health;
 	float maxHealth;
