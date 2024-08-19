@@ -72,10 +72,10 @@ void Grid::update()
 	float difference;
 	int steps;
 
-	std::cout << "Player Pos";
+	/*std::cout << "Player Pos";
 	std::cout << player->transform.position.x << " " << player->transform.position.y << " " << player->transform.position.z << std::endl;
 	std::cout << "Grid Pos";
-	std::cout << transform.position.x << " " << transform.position.y << " " << transform.position.z << std::endl;
+	std::cout << transform.position.x << " " << transform.position.y << " " << transform.position.z << std::endl;*/
 	difference= player->transform.position.x - transform.position.x;
 	steps = difference / cellWidth;
 	transform.position.x += steps;
