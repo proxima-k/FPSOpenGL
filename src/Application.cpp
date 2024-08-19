@@ -30,6 +30,8 @@
 #include "game/Game.h"
 #include "game/Entity.h"
 
+#include "game/shooting/Card.h"
+
 #include "engine/Debug.h"
 #include "engine/Logger.h"
 
@@ -51,9 +53,10 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
-Player player(&camera);
-Game* game;
+Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
+Player player(&playerCamera);
+Game* game = nullptr;
+
 
 int main(void)
 {
@@ -128,6 +131,7 @@ int main(void)
     bool show_log_window = true;
 
     game = new Game();
+    Camera::mainCamera = &playerCamera;
 
     Logger logger;
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
@@ -136,19 +140,21 @@ int main(void)
         Grid floorGrid(1, 1, 16);
         Shader gridShader("res/shaders/grid.shader");
         floorGrid.setShader(&gridShader);
-        floorGrid.setCamera(&camera);
+        floorGrid.setCamera(&playerCamera);
         floorGrid.setPlayer(&player);
 
         // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         Mesh teapotMesh(vertices);
-
-
         Shader meshShader("res/shaders/Basic.shader");
-        meshShader.Bind();
 
-        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), &teapotMesh, &meshShader, &camera);
-        Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), &teapotMesh, &meshShader, &camera);
+        MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
+
+        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), teapotMeshRenderer);
+        Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), teapotMeshRenderer);
+
+        // setup card mesh, shader and camera
+        player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
@@ -207,5 +213,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
-    camera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
+    playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
 }

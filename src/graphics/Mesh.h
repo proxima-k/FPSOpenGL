@@ -23,19 +23,23 @@ private:
 
 public:
 	// todo: add indices
-	Mesh(std::vector<float> vertices);
 	Mesh(const float* vertices, unsigned int size);
+	Mesh(std::vector<float> vertices);
 	~Mesh();
+
+	void Bind();
 
 	// draws a static mesh with constant values of view and model matrix
 	//void draw(Shader& shader);	
 	// draws a mesh with constant value of model matrix but dynamic view matrix
 	//void draw(Shader& shader, Camera& camera);
-	void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera& camera);
+	/*void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera* camera);
 	void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
 	void setShader(Shader* _shader) { shader = _shader; }
-	void setCamera(Camera* _camera) { camera = _camera; }
+	void setCamera(Camera* _camera) { camera = _camera; }*/
+
+	int getVerticesCount() { return verticesCount; }
 
 	static std::vector<float> getMeshVerticesFromObjFile(const std::string& filePath);
 };

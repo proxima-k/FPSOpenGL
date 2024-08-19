@@ -2,7 +2,9 @@
 #include "Entity.h"
 #include "Transform.h"
 
-#define MAX_ENTITYS 10
+#include <iostream>
+
+#define MAX_ENTITYS 1000
 
 class Game
 {
@@ -11,13 +13,13 @@ public:
 	void render();
 
     template<typename EntityType>
-    EntityType* spawn_entity(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera)
+    EntityType* spawn_entity(glm::vec3 position, MeshRenderer meshRenderer)
     {
         for (int i = 0; i < MAX_ENTITYS; ++i)
         {
             if (entitys[i] == nullptr)
             {
-                EntityType* new_entity = new EntityType(position, mesh, shader, camera);
+                EntityType* new_entity = new EntityType(position, meshRenderer);
                 entitys[i] = new_entity;
 
                 return new_entity;

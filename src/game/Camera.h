@@ -9,16 +9,18 @@
 
 class Camera {
 public:
+    static Camera* mainCamera;
+    
     Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsigned int screenHeight);
 
     void processMouseMovement(float xPos, float yPos);
-
-    Transform transform;
 
     glm::vec3 getCameraForward() const { return cameraForward; }
     glm::vec3 getCameraUp() const { return cameraUp; }
 
     float getResolutionRatio() { return (float)screenWidth / screenHeight; }
+
+    Transform transform;
 
 private:
     glm::vec3 cameraForward;
@@ -30,5 +32,6 @@ private:
 
     unsigned int screenWidth, screenHeight;
 };
+
 
 #endif
