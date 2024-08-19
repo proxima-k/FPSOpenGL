@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "Physicsbody.h"
+#include "shooting/Shooter.h"
 
 class Camera;
 
@@ -21,6 +22,9 @@ public:
 	void updateCameraPosition();
 	
 	float playerHeight = transform.scale.y / 2;
+
+	Shooter shooter;
+
 private:
 	Camera* camera;
 	Physicsbody physicsbody;
