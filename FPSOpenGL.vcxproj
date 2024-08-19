@@ -126,13 +126,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\GLFW\lib;$(SolutionDir)dependencies\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\GLFW\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\openAL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,6 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
+    <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\enemies\CubeEnemy.cpp" />
     <ClCompile Include="src\game\Enemy.cpp" />
     <ClCompile Include="src\game\Grid.cpp" />
@@ -183,6 +185,7 @@
     <ClCompile Include="src\graphics\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\game\AudioManager.h" />
     <ClInclude Include="src\game\enemies\CubeEnemy.h" />
     <ClInclude Include="src\game\Enemy.h" />
     <ClInclude Include="src\game\Grid.h" />

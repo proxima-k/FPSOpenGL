@@ -16,6 +16,10 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+#include<openAL/al.h>
+#include<openAL/alc.h>
+#include<openAL/dr_mp3.h>
+
 #include "graphics/Renderer.h"
 #include "graphics/VertexBuffer.h"
 #include "graphics/VertexBufferLayout.h"
@@ -55,6 +59,20 @@ float lastFrameTime = 0.f;
 Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
 Player player(&camera);
 Game* game;
+
+#define OpenAL_ErrorCheck(message)\
+{\
+    ALenum error = alGetError();\
+    if (error != AL_NO_ERROR)\
+	{\
+		std::cout << "OpenAL Error: " << error << std::endl;\
+		std::cout << message << std::endl;\
+	}\
+}
+
+#define alec(FUNCTION_CALL)\
+FUNCTION_CALL;\
+OpenAL_ErrorCheck(#FUNCTION_CALL)
 
 int main(void)
 {
@@ -149,6 +167,84 @@ int main(void)
         meshShader.Bind();
 
         Entity* teapotEntity = game->spawn_entity<CubeEnemy>(glm::vec3(1), &teapotMesh, &meshShader, &camera);
+
+        // get default audio device
+        const ALchar* defaultDeviceString = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
+        ALCdevice* device = alcOpenDevice(defaultDeviceString);
+        if (!device) 
+        {
+            std::cout << "Failed to open device" << std::endl;
+        }
+        else 
+        {
+        std::cout << "Opened device: " << alcGetString(device, ALC_DEVICE_SPECIFIER) << std::endl;
+        }
+
+        // create context from device
+        ALCcontext* context = alcCreateContext(device, nullptr);
+
+        // activate context so that openAL state modifications affect this context
+        if(!alcMakeContextCurrent(context))
+		{
+			std::cout << "Failed to make context current" << std::endl;
+		}
+
+        // create a listener in 3d space
+        alec(alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f));
+        alec(alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f));
+
+        // player camera orientation
+        ALfloat forwardAndUpVectors[] = {
+            1.f, 0.f, 0.f,
+            0.f, 1.f, 0.f
+        };
+        alec(alListenerfv(AL_ORIENTATION, forwardAndUpVectors));
+
+        //create buffers that hold audio data
+
+        drmp3 mp3;
+        if(!drmp3_init_file(&mp3, "C:/Projects/FPSOpenGL/res/audio/test.mp3", nullptr))
+		{
+			std::cout << "Failed to load mp3 file" << std::endl;
+		}
+        
+        // Retrieve audio data properties
+        drmp3_uint32 channels = mp3.channels;
+        drmp3_uint32 sampleRate = mp3.sampleRate;
+
+        // Calculate the size of the buffer to hold the audio data
+        drmp3_uint64 totalFrames = drmp3_get_pcm_frame_count(&mp3);
+        std::vector<float> pcmData(totalFrames * channels);
+
+        // Read the PCM frames
+        drmp3_uint64 framesRead = drmp3_read_pcm_frames_f32(&mp3, totalFrames, pcmData.data());
+
+        // Generate and fill OpenAL buffer
+        ALuint buffer;
+        alec(alGenBuffers(1, &buffer));
+
+        ALenum format;
+        if (channels == 1)
+        {
+            format = AL_FORMAT_MONO16;
+        }
+        else if (channels == 2)
+        {
+            format = AL_FORMAT_STEREO16;
+        }
+        else
+        {
+            std::cerr << "Unsupported channel count: " << channels << std::endl;
+            return -1;
+        }
+
+        alec(alBufferData(buffer, format, pcmData.data(), static_cast<ALsizei>(framesRead * channels * sizeof(float)), sampleRate));
+
+        // Clean up
+        drmp3_uninit(&mp3);
+        alcDestroyContext(context);
+        alcCloseDevice(device);
+
 
         glEnable(GL_DEPTH_TEST);
 
