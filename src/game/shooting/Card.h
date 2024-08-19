@@ -10,7 +10,7 @@ public:
 	void launch(glm::vec3 launchPosition, glm::vec3 launchDirection);
 	void update(float deltaTime) override;
 
-private:
+protected:
 	glm::vec3 launchPosition;
 	glm::vec3 launchDirection;
 };

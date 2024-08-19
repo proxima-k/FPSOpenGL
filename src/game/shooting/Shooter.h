@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Card.h"
 #include "glm/glm.hpp"
 #include "../../graphics/Mesh.h"
 #include "../../graphics/Shader.h"

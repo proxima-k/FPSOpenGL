@@ -42,8 +42,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 
 // window settings
-unsigned int windowWidth = 1920;
-unsigned int windowHeight = 1080;
+unsigned int windowWidth = 700;
+unsigned int windowHeight = 700;
 
 // mouse input handling
 float mouseLastX = windowWidth / 2.f;
@@ -156,7 +156,7 @@ int main(void)
 
         // setup card mesh, shader and camera
         player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
-        Entity* teapotEntity = game->spawn_entity<CubeEnemy>(glm::vec3(1), teapotMeshRenderer);
+        //Entity* teapotEntity = game->spawn_entity<CubeEnemy>(glm::vec3(1), teapotMeshRenderer);
 
         glEnable(GL_DEPTH_TEST);
 
