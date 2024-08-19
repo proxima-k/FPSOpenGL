@@ -46,6 +46,9 @@ public:
 
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
 
+    float deltaTime = 0.f;
+    float lastFrameTime = 0.f;
+
 private:
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
 };

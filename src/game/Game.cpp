@@ -5,6 +5,10 @@
 
 void Game::update() 
 {
+	double currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrameTime;
+	lastFrameTime = currentFrame;
+
 	for (int i = 0; i < MAX_ENTITYS; i++)
 	{
 		if (entitys[i] != nullptr) // this line 
@@ -16,7 +20,7 @@ void Game::update()
 			}
 			else 
 			{
-				entitys[i]->update();
+				entitys[i]->update(deltaTime);
 			}
 		}
 	}

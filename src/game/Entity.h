@@ -15,10 +15,8 @@ enum class Collision_Channel
 
 class Entity
 {
-private:
-	Mesh* meshToDraw = nullptr;
-
 public:
+	Mesh* meshToDraw = nullptr;
 	Entity(	glm::vec3 position = glm::vec3(0.0f), 
 			glm::vec3 rotation = glm::vec3(0.0f), 
 			glm::vec3 scale = glm::vec3(1.0f))
@@ -27,7 +25,7 @@ public:
 
 	Entity(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera);
 
-	virtual void update();
+	virtual void update(float deltaTime);
 	virtual void draw();
 
 	Transform transform;
