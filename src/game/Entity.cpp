@@ -21,6 +21,8 @@ void Entity::draw()
 {
 	if (meshToDraw != nullptr) 
 	{
-		meshToDraw->draw(transform.position, transform.rotation, transform.scale);
+		std::cout << "disabled drawcall -> in Entity.cpp" << std::endl;
+
+		//meshToDraw->draw(transform.position, transform.rotation, transform.scale);
 	}
 }

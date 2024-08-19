@@ -5,7 +5,6 @@
 CubeEnemy::CubeEnemy(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera)
 	: Enemy(position, mesh, shader, camera), physicsBody(), camera(camera) {	}
 
-
 void CubeEnemy::update(float deltaTime)
 {
 	glm::vec3 camPos = camera->transform.position;
