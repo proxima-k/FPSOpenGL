@@ -3,7 +3,7 @@
 Card::Card(glm::vec3 position, MeshRenderer meshRenderer)
 	: Entity(position, meshRenderer)
 {
-	
+	collision_channel = Collision_Channel::Projectile;
 }
 
 void Card::launch(glm::vec3 launchPosition, glm::vec3 launchDirection)

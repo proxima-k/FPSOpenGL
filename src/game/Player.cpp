@@ -42,7 +42,7 @@ void Player::update(GLFWwindow* window, float deltaTime)
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr) 
     {
-        //transform.position = glm::vec3(10); 
+        transform.position = glm::vec3(10); 
     }
 }
 

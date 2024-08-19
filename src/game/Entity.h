@@ -28,6 +28,7 @@ public:
 	virtual void update(float deltaTime);
 	virtual void draw();
 
+	void destroy() { destroyed = true; }
 	// components
 	Transform transform;
 	MeshRenderer meshRenderer;
