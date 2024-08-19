@@ -29,6 +29,7 @@
 #include "game/Player.h"
 #include "game/Game.h"
 #include "game/Entity.h"
+#include "game/enemies/CubeEnemy.h"
 
 #include "game/shooting/Card.h"
 
@@ -150,11 +151,12 @@ int main(void)
 
         MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
 
-        Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), teapotMeshRenderer);
-        Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), teapotMeshRenderer);
+        // Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), teapotMeshRenderer);
+        // Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), teapotMeshRenderer);
 
         // setup card mesh, shader and camera
         player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
+        Entity* teapotEntity = game->spawn_entity<CubeEnemy>(glm::vec3(1), teapotMeshRenderer);
 
         glEnable(GL_DEPTH_TEST);
 

@@ -1,15 +1,16 @@
 #pragma once
 #include<glm/glm.hpp>
+#include<glm/gtc/quaternion.hpp>
 
 class Transform 
 {
 public:
 	glm::vec3 position;
-	glm::vec3 rotation;
+	glm::quat rotation;
 	glm::vec3 scale;
 
 	Transform(glm::vec3 pos = glm::vec3(0.0f),
-		glm::vec3 rot = glm::vec3(0.0f),
+		glm::quat rot = glm::quat(0, 0, 0, 0),
 		glm::vec3 scl = glm::vec3(1.0f))
 		: position(pos), rotation(rot), scale(scl) { }
 
@@ -27,8 +28,4 @@ public:
 
 		return glm::normalize(forward);
 	}
-
-	//GetForward
-	//GetUp
-	//GetRight
 };

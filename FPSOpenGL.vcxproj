@@ -158,6 +158,8 @@
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
     <ClCompile Include="src\game\shooting\Shooter.cpp" />
+    <ClCompile Include="src\game\enemies\CubeEnemy.cpp" />
+    <ClCompile Include="src\game\Enemy.cpp" />
     <ClCompile Include="src\game\Grid.cpp" />
     <ClCompile Include="src\engine\Logger.cpp" />
     <ClCompile Include="src\engine\Debug.cpp" />
@@ -187,6 +189,8 @@
     <ClInclude Include="src\graphics\MeshRenderer.h" />
     <ClInclude Include="src\game\shooting\Card.h" />
     <ClInclude Include="src\game\shooting\Shooter.h" />
+    <ClInclude Include="src\game\enemies\CubeEnemy.h" />
+    <ClInclude Include="src\game\Enemy.h" />
     <ClInclude Include="src\game\Grid.h" />
     <ClInclude Include="src\engine\Logger.h" />
     <ClInclude Include="src\engine\Debug.h" />
