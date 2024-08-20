@@ -48,16 +48,6 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 {
-    // shooting system
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
-        // shooter.Shoot()
-        // shooter should have a current card
-        // so everytime the it shoots, it will do a card.launch() with given values 
-        // like starting position, target aiming location
-
-        shooter.shoot(camera->transform.position, camera->transform.getForward());
-    }
-
     // movement
     const float playerSpeed = 800 * deltaTime;
     physicsbody.acceleration = glm::vec3(0.0f);
@@ -84,6 +74,17 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 
     transform.position += physicsbody.velocity * deltaTime;
     transform.position.y = glm::clamp(transform.position.y, 0.0f + playerHeight, 100.0f);
+}
+
+void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+    {
+        // shooter should have a current card
+        // so everytime the it shoots, it will do a card.launch() with given values 
+        // like starting position, target aiming location
+        shooter.shoot(camera->transform.position, camera->transform.getForward());
+    }
 }
 
 void Player::updateCameraPosition() 

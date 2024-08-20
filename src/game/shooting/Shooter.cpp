@@ -22,7 +22,7 @@ void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection)
 	SineCard* newCard = game->spawn_entity<SineCard>(launchPosition, newMeshRenderer);
 
 	if (newCard != nullptr) {
-		newCard->transform.scale = glm::vec3(0.1f);
+		newCard->transform.scale = glm::vec3(0.1f, 0.001f, 0.1f);
 		newCard->launch(launchPosition, launchDirection);
 	}
 }

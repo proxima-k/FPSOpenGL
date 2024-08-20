@@ -40,6 +40,7 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 // window settings
 unsigned int windowWidth = 700;
@@ -107,6 +108,8 @@ int main(void)
     // set callbacks
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_movement_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -216,4 +219,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
     playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    player.mouse_button_callback(window, button, action, mods);
 }
