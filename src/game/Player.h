@@ -27,6 +27,8 @@ public:
 
 	Shooter shooter;
 
+	Camera* getCamera() const { return camera; }
+
 private:
 	Camera* camera;
 	Physicsbody physicsbody;

@@ -19,6 +19,8 @@ void Player::update(GLFWwindow* window, float deltaTime)
     processKeyboard(window, deltaTime);
     updateCameraPosition();
 
+    shooter.update(deltaTime);
+
     ImGui::Begin("Physics Body Controls");
 
     ImGui::Text("Physics Body Values");
