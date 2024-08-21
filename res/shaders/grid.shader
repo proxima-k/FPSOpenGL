@@ -42,11 +42,11 @@ void main()
     
     if (fragWorldPos.z < 0.00001 && fragWorldPos.z > -0.00001)
     {
-        targetColor = vec4(1.0, 0.1, 0.1, 1.0);
+        targetColor = vec4(1.0, 0.2, 0.2, 1.0);
     }
     else if (fragWorldPos.x < 0.00001 && fragWorldPos.x > -0.00001)
     {
-        targetColor = vec4(0.1, 0.1, 1.0, 1.0);
+        targetColor = vec4(0.2, 0.2, 1.0, 1.0);
     }
     else
     {    

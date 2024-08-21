@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/vec3.hpp>
 
 #include <iostream>
 
@@ -17,11 +18,12 @@ MeshRenderer::MeshRenderer()
 {
 }
 
-MeshRenderer::MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera)
+MeshRenderer::MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera, glm::vec3 color)
 {
 	setMesh(mesh);
 	setShader(shader);
 	setTargetCamera(camera);
+	meshColor = color;
 }
 
 void MeshRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
@@ -65,6 +67,10 @@ void MeshRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+
+	unsigned int colorLoc = glGetUniformLocation(shader->GetID(), "u_Color");
+	GLCall(glUniform3fv(colorLoc, 1, glm::value_ptr(meshColor)));
 
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, mesh->getVerticesCount()));
 }
