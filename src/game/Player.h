@@ -29,4 +29,9 @@ public:
 private:
 	Camera* camera;
 	Physicsbody physicsbody;
+
+	glm::vec3 lastVelocity = glm::vec3(0.0f);
+	bool canDash = true;
+	float dashCooldown = 2.0f;
+	float dashCooldownTimer = 0.0f;
 };

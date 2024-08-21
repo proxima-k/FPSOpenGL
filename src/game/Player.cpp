@@ -24,6 +24,16 @@ void Player::update(GLFWwindow* window, float deltaTime)
     {
         transform.position = glm::vec3(10); 
     }
+
+    if (!canDash)
+    {
+        dashCooldownTimer -= deltaTime;
+        if (dashCooldownTimer <= 0.0f)
+        {
+            canDash = true;
+            dashCooldownTimer = 0.0f; // Reset the timer
+        }
+    }
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -50,6 +60,23 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         physicsbody.add_force(glm::vec3(0, 10000 * deltaTime, 0));
     }
 
+    // dashing
+    float vMagnitude = glm::length(physicsbody.velocity);
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && canDash && vMagnitude > 4)
+    {
+        glm::vec3 dashDirection = glm::normalize(physicsbody.velocity);
+        if (glm::length(dashDirection) > 0.0f)
+        {
+            const float dashSpeed = 40000.0f;
+            physicsbody.add_force(dashDirection * dashSpeed * deltaTime);
+
+            dashCooldownTimer = dashCooldown;
+            canDash = false;
+        }
+    }
+
+    // apply velocity
     transform.position += physicsbody.velocity * deltaTime;
     transform.position.y = glm::clamp(transform.position.y, 0.0f + playerHeight, 100.0f);
 }
