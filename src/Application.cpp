@@ -159,7 +159,7 @@ int main(void)
 
         // setup card mesh, shader and camera
         player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
-        Entity* teapotEntity = game->spawn_entity<CubeEnemy>(glm::vec3(1), teapotMeshRenderer);
+        game->setMeshRenderer(&teapotMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 

@@ -18,8 +18,8 @@ public:
 
 	glm::vec3 getForward() const 
 	{
-		float yaw = glm::radians(rotation.x); // Convert to radians
-		float pitch = glm::radians(rotation.y); // Convert to radians
+		float yaw = glm::radians(rotation.x); // convert to radians
+		float pitch = glm::radians(rotation.y); // convert to radians
 
 		glm::vec3 forward;
 		forward.x = cos(yaw) * cos(pitch);
@@ -27,5 +27,18 @@ public:
 		forward.z = sin(yaw) * cos(pitch);
 
 		return glm::normalize(forward);
+	}
+
+	glm::vec3 getRandomPointInRadius(int minDist, int maxDist) const
+	{
+		float angle = std::rand() % 360;
+		float distance = minDist + std::rand() % maxDist;
+
+		glm::vec3 point;
+		point.x = distance * cos(glm::radians(angle));
+		point.y = 0.0f;
+		point.z = distance * sin(glm::radians(angle));
+
+		return point;
 	}
 };
