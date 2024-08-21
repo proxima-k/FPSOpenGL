@@ -41,4 +41,10 @@ public:
 
 		return point;
 	}
+
+	float getVectorMagnitude(glm::vec3 vector)
+	{
+		float beforeSqrt = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
+		return glm::sqrt(beforeSqrt);
+	}
 };

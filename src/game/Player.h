@@ -22,7 +22,6 @@ public:
 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	void updateCameraPosition();
 
-	
 	float playerHeight = transform.scale.y / 2;
 
 	Shooter shooter;
