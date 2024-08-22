@@ -126,13 +126,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\GLFW\lib;$(SolutionDir)dependencies\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\openAL\lib;$(SolutionDir)dependencies\GLFW\lib;$(SolutionDir)dependencies\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,7 +156,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
+    <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
+    <ClCompile Include="src\game\ui\PlayerUI.cpp" />
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
     <ClCompile Include="src\game\shooting\Shooter.cpp" />
@@ -191,7 +193,9 @@
   <ItemGroup>
     <ClInclude Include="src\game\shooting\cards\CosineCard.h" />
     <ClInclude Include="src\engine\Timer.h" />
+    <ClInclude Include="src\game\AudioManager.h" />
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
+    <ClInclude Include="src\game\ui\PlayerUI.h" />
     <ClInclude Include="src\graphics\MeshRenderer.h" />
     <ClInclude Include="src\game\shooting\Card.h" />
     <ClInclude Include="src\game\shooting\Shooter.h" />
