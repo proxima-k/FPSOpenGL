@@ -2,6 +2,7 @@
 
 #include "../Game.h"
 #include "cards/SineCard.h"
+#include "cards/CosineCard.h"
 #include "UI/UICard.h"
 #include "../Player.h"
 
@@ -28,14 +29,18 @@ void Shooter::setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera
 
 void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection)
 {
-	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(1.0f, 0.3f, 0.3f));
+	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
+
+	int cardType = rand() % 2;
 
 	// spawn a card and launch it
-	SineCard* newCard = game->spawn_entity<SineCard>(launchPosition, newMeshRenderer);
-
-	if (newCard != nullptr) {
-		newCard->transform.scale = glm::vec3(0.1f, 0.001f, 0.1f);
-		newCard->launch(launchPosition, launchDirection);
+	switch (cardType) {
+		case 0:
+			spawnCard<SineCard>(launchPosition, launchDirection);
+			break;
+		case 1:
+			spawnCard<CosineCard>(launchPosition, launchDirection);
+			break;
 	}
 }
 
@@ -43,11 +48,11 @@ void Shooter::setupUI() {
 	glm::vec3 offset = player->transform.position + player->transform.getForward();
 	//glm::vec3 offset(1.f);
 
-	for (int i = 0; i < 2; i++) {
+	/*for (int i = 0; i < 2; i++) {
 		UICard* newUICard = game->spawn_entity<UICard>(offset, MeshRenderer(cardMesh, cardShader, camera, glm::vec3(1.0f, 0.3f, 0.3f)));
 		newUICard->transform.scale = glm::vec3(0.1f, 0.1f, 0.001f);
 		uiCards.push_back(newUICard);
-	}
+	}*/
 }
 
 

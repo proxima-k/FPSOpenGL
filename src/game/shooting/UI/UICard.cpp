@@ -14,5 +14,5 @@ void UICard::update(float deltaTime)
 		timeElapsed -= glm::pi<float>();
 
 	// float up and down
-	transform.position.y += sin(timeElapsed * 2.0f) * 0.1f;
+	transform.position.y += sin(timeElapsed * 2.0f) * 0.05f;
 }

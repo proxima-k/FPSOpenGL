@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="src\game\shooting\UI\UICard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\game\shooting\cards\CosineCard.h" />
     <ClInclude Include="src\engine\Timer.h" />
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
     <ClInclude Include="src\graphics\MeshRenderer.h" />
