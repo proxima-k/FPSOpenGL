@@ -38,6 +38,8 @@
 
 #include "game/Grid.h"
 
+#include "game/ui/UI.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -57,8 +59,34 @@ float lastFrameTime = 0.f;
 
 Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
 Player player(&playerCamera);
+UI ui;
 Game* game = nullptr;
 
+GLuint LoadTextureFromFile(const char* filename)
+{
+    int width, height, channels;
+    unsigned char* pixels = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
+    if (!pixels)
+    {
+        std::cerr << "Failed to load image: " << filename << std::endl;
+        return 0;
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    stbi_image_free(pixels);
+
+    return textureID;
+}
 
 int main(void)
 {
@@ -94,7 +122,6 @@ int main(void)
         stbi_image_free(pixels);
     }
 
-
     if (!window)
     {
         glfwTerminate();
@@ -117,19 +144,6 @@ int main(void)
         std::cout << "Error!" << std::endl;
     }
     //std::cout << glGetString(GL_VERSION) << std::endl;
-
-    // setup IMGUI context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
 
     bool show_demo_window = true;
     bool show_log_window = true;
@@ -154,9 +168,6 @@ int main(void)
 
         MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
 
-        // Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), teapotMeshRenderer);
-        // Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), teapotMeshRenderer);
-
         // setup card mesh, shader and camera
         player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
 
@@ -167,12 +178,13 @@ int main(void)
 
         glEnable(GL_DEPTH_TEST);
 
-        /* Loop until the user closes the window */
-        GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+        ui.Init(window);
+
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
 
+            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -182,17 +194,7 @@ int main(void)
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            //ImGui::ShowDemoWindow(&show_demo_window);
-            //logger.draw("Logger", &show_log_window);
-
             player.update(window, deltaTime);
-
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             game->update();
             game->render();
@@ -200,13 +202,15 @@ int main(void)
             floorGrid.update();
             floorGrid.draw();
 
+            ui.Begin();
+            ui.Render();
+            ui.End();
+
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
         }
     }
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    ui.Shutdown();
 
     glfwTerminate();
     return 0;

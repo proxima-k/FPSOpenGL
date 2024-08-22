@@ -158,7 +158,7 @@
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
     <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
-    <ClCompile Include="src\game\ui\PlayerUI.cpp" />
+    <ClCompile Include="src\game\ui\UI.cpp" />
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
     <ClCompile Include="src\game\shooting\Shooter.cpp" />
@@ -195,7 +195,7 @@
     <ClInclude Include="src\engine\Timer.h" />
     <ClInclude Include="src\game\AudioManager.h" />
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
-    <ClInclude Include="src\game\ui\PlayerUI.h" />
+    <ClInclude Include="src\game\ui\UI.h" />
     <ClInclude Include="src\graphics\MeshRenderer.h" />
     <ClInclude Include="src\game\shooting\Card.h" />
     <ClInclude Include="src\game\shooting\Shooter.h" />
