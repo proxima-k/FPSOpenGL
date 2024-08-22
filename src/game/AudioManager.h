@@ -1,5 +1,6 @@
 #pragma once
 
+#define DR_MP3_IMPLEMENTATION
 #include<openAL/al.h>
 #include<openAL/alc.h>
 #include<openAL/dr_mp3.h>
