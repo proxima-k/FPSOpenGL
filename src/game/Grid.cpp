@@ -122,7 +122,8 @@ void Grid::draw()
 	unsigned int renderRadiusLoc = glGetUniformLocation(shader->GetID(), "u_renderRadius");
 	glUniform1f(renderRadiusLoc, cellWidth * (cellsPerSideOfAxis - 1));
 
-
+	unsigned int gridWorldPosLoc = glGetUniformLocation(shader->GetID(), "u_gridWorldPos");
+	GLCall(glUniform3fv(gridWorldPosLoc, 1, glm::value_ptr(transform.position)));
 
 
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));

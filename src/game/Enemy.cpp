@@ -1,12 +1,9 @@
 #include "Enemy.h"
 #include <iostream>
 
-Enemy::Enemy(glm::vec3 position, Mesh* mesh, Shader* shader, Camera* camera)
+Enemy::Enemy(glm::vec3 position, MeshRenderer meshRenderer)
+    : Entity(position, meshRenderer)
 {
-    meshToDraw = mesh;
-    meshToDraw->setShader(shader);
-    meshToDraw->setCamera(camera);
-
     collision_channel = Collision_Channel::Enemy;
 
     maxHealth = 10.0f;

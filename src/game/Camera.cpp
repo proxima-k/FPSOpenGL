@@ -4,6 +4,8 @@
 #include<glm/glm.hpp>
 #include<iostream>
 
+Camera* Camera::mainCamera = nullptr;
+
 Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsigned int screenHeight)
     : transform(transform), cameraUp(up), firstMouse(true), screenWidth(screenWidth), screenHeight(screenHeight)
 {

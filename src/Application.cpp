@@ -31,19 +31,20 @@
 #include "game/Entity.h"
 #include "game/enemies/CubeEnemy.h"
 
+#include "game/shooting/Card.h"
+
 #include "engine/Debug.h"
 #include "engine/Logger.h"
 
 #include "game/Grid.h"
 
-#include "game/AudioManager.h"
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 // window settings
-unsigned int windowWidth = 1920;
-unsigned int windowHeight = 1080;
+unsigned int windowWidth = 700;
+unsigned int windowHeight = 700;
 
 // mouse input handling
 float mouseLastX = windowWidth / 2.f;
@@ -54,151 +55,161 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera camera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
-Player player(&camera);
-AudioManager audioManager;
-Game* game;
+Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
+Player player(&playerCamera);
+Game* game = nullptr;
+
 
 int main(void)
 {
-	/* Initialize the library */
-	if (!glfwInit())
-		return -1;
+    /* Initialize the library */
+    if (!glfwInit())
+        return -1;
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "(xyz)^0", NULL, NULL);
+    /* Create a windowed mode window and its OpenGL context */
+    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "(xyz)^0", NULL, NULL);
 
-	int width, height;
-	int channels;
-	unsigned char* pixels = stbi_load("C:/Projects/FPSOpenGL/res/sprites/placeholder.jpg", &width, &height, &channels, 4);
+    int width, height;
+    int channels;
+    unsigned char* pixels = stbi_load("C:/Projects/FPSOpenGL/res/sprites/placeholder.jpg", &width, &height, &channels, 4);
 
-	if (pixels == NULL)
-	{
-		fprintf(stderr, "Failed to load image\n");
-	}
-	else
-	{
-		GLFWimage images[1];
-		images[0].width = width;
-		images[0].height = height;
-		images[0].pixels = pixels;
+    if (pixels == NULL)
+    {
+        fprintf(stderr, "Failed to load image\n");
+    }
+    else
+    {
+        GLFWimage images[1];
+        images[0].width = width;
+        images[0].height = height;
+        images[0].pixels = pixels;
 
-		glfwSetWindowIcon(window, 1, images);
+        glfwSetWindowIcon(window, 1, images);
 
-		// Free the image data
-		stbi_image_free(pixels);
-	}
-
-		if (!window)
-		{
-			glfwTerminate();
-			return -1;
-		}
-
-		/* Make the window's context current */
-		glfwMakeContextCurrent(window);
-		glfwSwapInterval(1);
-
-		// set callbacks
-		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-		glfwSetCursorPosCallback(window, mouse_movement_callback);
-
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-		if (glewInit() != GLEW_OK) {
-			std::cout << "Error!" << std::endl;
-		}
-		//std::cout << glGetString(GL_VERSION) << std::endl;
-
-		// setup IMGUI context
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsLight();
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-
-		bool show_demo_window = true;
-		bool show_log_window = true;
-
-		game = new Game();
-
-		Logger logger;
-		Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
-
-		{
-			Grid floorGrid(1, 1, 16);
-			Shader gridShader("res/shaders/grid.shader");
-			floorGrid.setShader(&gridShader);
-			floorGrid.setCamera(&camera);
-			floorGrid.setPlayer(&player);
-
-			// Entity (mesh path, shader, camera)
-			std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-			Mesh teapotMesh(vertices);
+        // Free the image data
+        stbi_image_free(pixels);
+    }
 
 
-			Shader meshShader("res/shaders/Basic.shader");
-			meshShader.Bind();
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
 
-			Entity* teapotEntity = game->spawn_entity<CubeEnemy>(glm::vec3(1), &teapotMesh, &meshShader, &camera);
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
 
-			audioManager.playSound("test.mp3", glm::vec3(10));
+    // set callbacks
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_movement_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    
 
-			glEnable(GL_DEPTH_TEST);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-			/* Loop until the user closes the window */
-			GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-			while (!glfwWindowShouldClose(window))
-			{
-				glfwPollEvents();
+    if (glewInit() != GLEW_OK) {
+        std::cout << "Error!" << std::endl;
+    }
+    //std::cout << glGetString(GL_VERSION) << std::endl;
 
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // setup IMGUI context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-				if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-					glfwTerminate();
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
 
-				double currentFrame = glfwGetTime();
-				deltaTime = currentFrame - lastFrameTime;
-				lastFrameTime = currentFrame;
+    bool show_demo_window = true;
+    bool show_log_window = true;
 
-				ImGui_ImplOpenGL3_NewFrame();
-				ImGui_ImplGlfw_NewFrame();
-				ImGui::NewFrame();
+    game = new Game();
+    Camera::mainCamera = &playerCamera;
 
-				//ImGui::ShowDemoWindow(&show_demo_window);
-				//logger.draw("Logger", &show_log_window);
+    Logger logger;
+    Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
+    
+    {
+        Grid floorGrid(1, 1, 16);
+        Shader gridShader("res/shaders/grid.shader");
+        floorGrid.setShader(&gridShader);
+        floorGrid.setCamera(&playerCamera);
+        floorGrid.setPlayer(&player);
 
-				player.update(window, deltaTime);
+        // Entity (mesh path, shader, camera)
+        std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
+        Mesh teapotMesh(vertices);
+        Shader meshShader("res/shaders/Basic.shader");
 
-				ImGui::Render();
-				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
 
-				game->update();
-				game->render();
+        // Entity* teapotEntity = game->spawn_entity<Entity>(glm::vec3(1), teapotMeshRenderer);
+        // Entity* teapotEntity2 = game->spawn_entity<Entity>(glm::vec3(-3), teapotMeshRenderer);
 
-				floorGrid.update();
-				floorGrid.draw();
+        // setup card mesh, shader and camera
+        player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
 
-				/* Swap front and back buffers */
-				glfwSwapBuffers(window);
-			}
-		}
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		player.shooter.setPlayer(&player);
+		player.shooter.setupUI();
 
-		glfwTerminate();
-		return 0;
+        game->setMeshRenderer(&teapotMesh, &meshShader, &playerCamera);
+
+        glEnable(GL_DEPTH_TEST);
+
+        /* Loop until the user closes the window */
+        GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+        while (!glfwWindowShouldClose(window))
+        {
+            glfwPollEvents();
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+                glfwTerminate();
+
+            double currentFrame = glfwGetTime();
+            deltaTime = currentFrame - lastFrameTime;
+            lastFrameTime = currentFrame;
+
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            //ImGui::ShowDemoWindow(&show_demo_window);
+            //logger.draw("Logger", &show_log_window);
+
+            player.update(window, deltaTime);
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            game->update();
+            game->render();
+
+            floorGrid.update();
+            floorGrid.draw();
+
+            /* Swap front and back buffers */
+            glfwSwapBuffers(window);
+        }
+    }
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwTerminate();
+    return 0;
 }
 
 
@@ -211,5 +222,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
-    camera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
+    playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    player.mouse_button_callback(window, button, action, mods);
 }

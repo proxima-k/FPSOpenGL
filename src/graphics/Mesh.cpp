@@ -30,6 +30,9 @@ Mesh::Mesh(const float* vertices, unsigned int size) :
 	VAO->AddBuffer(*VBO, layout);
 }
 
+Mesh::Mesh(std::vector<float> vertices)
+	: Mesh(vertices.data(), vertices.size() * sizeof(float)) { }
+
 Mesh::~Mesh()
 {
 	delete VAO;
@@ -42,11 +45,12 @@ Mesh::~Mesh()
 	camera = NULL;
 }
 
-Mesh::Mesh(std::vector<float> vertices)
-	: Mesh(vertices.data(), vertices.size() * sizeof(float)) { }
-
-
-void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera& camera)
+void Mesh::Bind()
+{
+	VAO->Bind();
+}
+/*
+void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera* camera)
 {
 	VAO->Bind();
 	shader->Bind();
@@ -61,11 +65,11 @@ void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera&
 
 	// View matrix
 	glm::mat4 view;
-	view = glm::lookAt(camera.transform.position, camera.transform.position + camera.transform.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::lookAt(camera->transform.position, camera->transform.position + camera->transform.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), camera.getResolutionRatio(), 0.1f, 100.f);
+	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
 	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -79,8 +83,9 @@ void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera&
 
 void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	draw(position, rotation, scale, *camera);
+	draw(position, rotation, scale, camera);
 }
+*/
 
 std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 {

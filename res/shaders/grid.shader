@@ -22,7 +22,7 @@ in vec3 fragPos;
 
 uniform vec3 u_bgColor;
 uniform float u_renderRadius;
-uniform vec3 u_playerPos;
+uniform vec3 u_gridWorldPos;
 
 out vec4 targetColor;
 
@@ -33,8 +33,26 @@ float Lerp(float a, float b, float t)
 
 void main()
 {
+    vec3 u_playerPos;
+    
     float t = clamp(distance(fragPos, u_playerPos) / u_renderRadius, 0, 1);
     float color = Lerp(u_bgColor.x, 1.0, 1 - t);
+    // if position is along the line of an axis, then become a certain color
+    vec3 fragWorldPos = fragPos + u_gridWorldPos;
     
-    targetColor = vec4(vec3(color), 1.0);
+    if (fragWorldPos.z < 0.00001 && fragWorldPos.z > -0.00001)
+    {
+        targetColor = vec4(1.0, 0.2, 0.2, 1.0);
+    }
+    else if (fragWorldPos.x < 0.00001 && fragWorldPos.x > -0.00001)
+    {
+        targetColor = vec4(0.2, 0.2, 1.0, 1.0);
+    }
+    else
+    {    
+        targetColor = vec4(vec3(color), 1.0);
+    }
+    
+    // vec3 redColor = vec3(1.0, 0.1, 0.1) * float(fragWorldPos.z < 0.000001) + vec3(color) * float(fragWorldPos.z != 0);
+    
 };
