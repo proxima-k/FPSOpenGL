@@ -29,8 +29,8 @@ public:
 	Camera* getCamera() const { return camera; }
 
 private:
-	Camera* camera;
 	Physicsbody physicsbody;
+	Camera* camera;
 
 	glm::vec3 lastVelocity = glm::vec3(0.0f);
 	bool canDash = true;

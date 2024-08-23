@@ -2,6 +2,9 @@
 #include <stb/stb_image.h>
 #include <iostream>
 
+GLuint UI::detectioncircle = 0;
+GLuint UI::crosshair = 0;
+
 void UI::Init(GLFWwindow* window)
 {
     IMGUI_CHECKVERSION();
@@ -12,6 +15,9 @@ void UI::Init(GLFWwindow* window)
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    detectioncircle = LoadTextureFromFile("res/sprites/detectioncircle.png");
+    crosshair = LoadTextureFromFile("res/sprites/crosshair177.png");
 }
 
 void UI::Begin()
@@ -29,20 +35,63 @@ void UI::End()
 
 void UI::Render()
 {
-    static GLuint myImageTexture = LoadTextureFromFile("res/sprites/crosshair177.png");
+    if (detectioncircle == 0 || crosshair == 0)
+    {
+		std::cerr << "Textures not loaded" << std::endl;
+		return;
+	}
+
     ImGuiIO& io = ImGui::GetIO();
 
     ImVec2 windowSize = io.DisplaySize;
-    ImVec2 imageSize(60, 60);
-    ImVec2 imagePosition((windowSize.x) / 2.0f - (imageSize.x / 2), (windowSize.y) / 2.0f - (imageSize.y / 2));
+
+
+    // draw detection circle
+    ImVec2 detectionCircleSize(200, 200);
+    ImVec2 detectionCirclePosition((windowSize.x) / 2.0f - (detectionCircleSize.x / 2), (windowSize.y) / 2.0f - (detectionCircleSize.y / 2));
+
+    static float rotationAngle = 0.0f;
+    rotationAngle += 0.01f;
+
+    // calculate sine and cosine of the angle
+    float cosAngle = cos(rotationAngle);
+    float sinAngle = sin(rotationAngle);
+
+    // calculate the rotated corner positions
+    ImVec2 vertices[4];
+    vertices[0] = ImVec2(-detectionCircleSize.x / 2.0f, -detectionCircleSize.y / 2.0f);
+    vertices[1] = ImVec2(detectionCircleSize.x / 2.0f, -detectionCircleSize.y / 2.0f);
+    vertices[2] = ImVec2(detectionCircleSize.x / 2.0f, detectionCircleSize.y / 2.0f);
+    vertices[3] = ImVec2(-detectionCircleSize.x / 2.0f, detectionCircleSize.y / 2.0f);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        float x = vertices[i].x;
+        float y = vertices[i].y;
+        vertices[i].x = cosAngle * x - sinAngle * y + (windowSize.x / 2);
+        vertices[i].y = sinAngle * x + cosAngle * y + (windowSize.y / 2);
+    }
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(windowSize);
 
     ImGui::Begin("Image Window", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
 
-    ImGui::SetCursorPos(imagePosition);
-    ImGui::Image((void*)(intptr_t)myImageTexture, imageSize);
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    drawList->AddImageQuad(
+        (void*)(intptr_t)detectioncircle,
+        vertices[0],
+        vertices[1],
+        vertices[2],
+        vertices[3]
+    );
+
+    // draw crosshair
+    ImVec2 crosshairSize(40, 40);
+    ImVec2 crosshairPos((windowSize.x) / 2.0f - (crosshairSize.x / 2), (windowSize.y) / 2.0f - (crosshairSize.y / 2));
+
+    ImGui::SetCursorPos(crosshairPos);
+    ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
 
     ImGui::End();
 }

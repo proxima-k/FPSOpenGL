@@ -13,6 +13,8 @@ public:
     static void Render();
     static void Shutdown();
 
+    static GLuint detectioncircle;
+    static GLuint crosshair;
 private:
     static GLuint LoadTextureFromFile(const char* filename);
 };

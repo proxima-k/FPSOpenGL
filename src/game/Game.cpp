@@ -73,7 +73,6 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 		AABB b = AABB::from_position_size(entitys[i]->transform);
 
 		if (aabb_overlap(a, b)) {
-			std::cout << "Overlapping" << std::endl;
 			return entitys[i];
 		}
 	}
