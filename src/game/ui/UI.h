@@ -4,6 +4,8 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+#include "../Game.h"
+
 class UI
 {
 public:
@@ -13,8 +15,8 @@ public:
     static void Render();
     static void Shutdown();
 
-    static GLuint detectioncircle;
     static GLuint crosshair;
+    static ImFont* kanitFont;
 private:
     static GLuint LoadTextureFromFile(const char* filename);
 };
