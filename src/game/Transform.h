@@ -1,6 +1,7 @@
 #pragma once
-#include<glm/glm.hpp>
-#include<glm/gtc/quaternion.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <iostream>
 
 class Transform 
 {
@@ -10,24 +11,27 @@ public:
 	glm::vec3 scale;
 
 	Transform(glm::vec3 pos = glm::vec3(0.0f),
-		glm::quat rot = glm::quat(0, 0, 0, 0),
+		glm::quat rot = glm::quat(1, 0, 0, 0),
 		glm::vec3 scl = glm::vec3(1.0f))
 		: position(pos), rotation(rot), scale(scl) { }
 
 	virtual ~Transform() = default;
 
-	glm::vec3 getForward() const 
-	{
-		float yaw = glm::radians(rotation.x); // convert to radians
-		float pitch = glm::radians(rotation.y); // convert to radians
+	glm::vec3 getForward() const {
+		return glm::normalize(rotation * glm::vec3(0, 0, 1));
 
-		glm::vec3 forward;
-		forward.x = cos(yaw) * cos(pitch);
-		forward.y = sin(pitch);
-		forward.z = sin(yaw) * cos(pitch);
+		//float yaw = glm::radians(rotation.y); // convert to radians
+		//float pitch = glm::radians(rotation.x); // convert to radians
 
-		return glm::normalize(forward);
+		//glm::vec3 forward;
+		//forward.x = cos(yaw) * cos(pitch);
+		//forward.y = sin(pitch);
+		//forward.z = sin(yaw) * cos(pitch);
+
+		//return glm::normalize(forward);
 	}
+	glm::vec3 getRight() const { return glm::normalize(rotation * glm::vec3(1, 0, 0)); }
+	glm::vec3 getUp()    const { return glm::normalize(rotation * glm::vec3(0, 1, 0)); }
 
 	glm::vec3 getRandomPointInRadius(int minDist, int maxDist) const
 	{

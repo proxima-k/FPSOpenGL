@@ -102,7 +102,7 @@ void Grid::draw()
 
 	// View matrix
 	glm::mat4 view;
-	view = glm::lookAt(camera->transform.position, camera->transform.position + camera->transform.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::lookAt(camera->transform.position, camera->transform.position + camera->transform.getForward(), camera->transform.getUp());
 
 	// Projection matrix
 	glm::mat4 projection;

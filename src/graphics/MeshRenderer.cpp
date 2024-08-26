@@ -55,7 +55,7 @@ void MeshRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 
 	// View matrix
 	glm::mat4 view;
-	view = glm::lookAt(targetCamera->transform.position, targetCamera->transform.position + targetCamera->transform.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::lookAt(targetCamera->transform.position, targetCamera->transform.position + targetCamera->transform.getForward(), targetCamera->transform.getUp());
 
 	// Projection matrix
 	glm::mat4 projection;

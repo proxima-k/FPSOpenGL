@@ -40,11 +40,11 @@ void main()
     // if position is along the line of an axis, then become a certain color
     vec3 fragWorldPos = fragPos + u_gridWorldPos;
     
-    if (fragWorldPos.z < 0.00001 && fragWorldPos.z > -0.00001)
+    if (fragWorldPos.z < 0.00001 && fragWorldPos.z > -0.00001 && fragWorldPos.x >= 0)
     {
         targetColor = vec4(1.0, 0.2, 0.2, 1.0);
     }
-    else if (fragWorldPos.x < 0.00001 && fragWorldPos.x > -0.00001)
+    else if (fragWorldPos.x < 0.00001 && fragWorldPos.x > -0.00001 && fragWorldPos.z >= 0)
     {
         targetColor = vec4(0.2, 0.2, 1.0, 1.0);
     }

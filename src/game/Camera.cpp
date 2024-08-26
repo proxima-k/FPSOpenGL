@@ -33,39 +33,29 @@ void Camera::processMouseMovement(float xPos, float yPos)
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
-    transform.rotation.x += xoffset; // Yaw
-    transform.rotation.y += yoffset; // Pitch
+    glm::quat yRotate = glm::angleAxis(glm::radians(-xoffset), glm::vec3(0, 1, 0));
+    transform.rotation = yRotate * transform.rotation;
+
+    glm::quat xRotate = glm::angleAxis(glm::radians(-yoffset), transform.getRight());
+    transform.rotation = xRotate * transform.rotation;
+
+
+    //std::cout << "X: " << transform.getForward().x << " Y: " << transform.getForward().y << " Z: " << transform.getForward().z << std::endl;
+
+    /*
+    transform.rotation.y += xoffset; // Yaw
+    transform.rotation.x += yoffset; // Pitch
 
     // Constrain pitch to avoid gimbal lock
-    if (transform.rotation.y > 89.0f)
-        transform.rotation.y = 89.0f;
-    if (transform.rotation.y < -89.0f)
-        transform.rotation.y = -89.0f;
+    if (transform.rotation.x > 89.0f)
+        transform.rotation.x = 89.0f;
+    if (transform.rotation.x < -89.0f)
+        transform.rotation.x = -89.0f;
+    */
 
     cameraForward = transform.getForward();
-    
-    // rotate testRotation
-	glm::vec3 testForward = testRotation * glm::vec3(0, 0, 1);
-	glm::vec3 testRight = testRotation * glm::vec3(1, 0, 0);
 
-	testRotation = glm::rotate(testRotation, glm::radians(xoffset), glm::vec3(0, 1, 0));
-	//testRotation = glm::rotate(testRotation, (-yoffset), testRight); 
-
-    /*testForward = testRotation * glm::vec3(0, 0, 1);
-	testRight = testRotation * glm::vec3(1, 0, 0);
-
-    std::cout << "Forward" << std::endl;
-	std::cout << "X: " << testForward.x << " Y: " << testForward.y << " Z: " << testForward.z << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "Right" << std::endl;
-	std::cout << "X: " << testRight.x << " Y: " << testRight.y << " Z: " << testRight.z << std::endl;
-    std::cout << std::endl;*/
-
-	glm::vec3 eulerAngles = glm::eulerAngles(testRotation);
-
-	std::cout << "X: " << eulerAngles.x << " Y: " << eulerAngles.y << " Z: " << eulerAngles.z << std::endl;
-		std::cout << std::endl;
-
-	/*std::cout << "X: " << testRotation.x << " Y: " << testRotation.y << " Z: " << testRotation.z << " W: " << testRotation.w << std::endl;*/
+    //glm::vec3 eulerAngles = glm::eulerAngles(transform.rotation);
+    //std::cout << "X: " << eulerAngles.x << " Y: " << eulerAngles.y << " Z: " << eulerAngles.z << std::endl;
+    //std::cout << "X: " << transform.rotation.x << " Y: " << transform.rotation.y << " Z: " << transform.rotation.z << " W: " << transform.rotation.w << std::endl;
 }
