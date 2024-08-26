@@ -65,6 +65,8 @@ private:
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
 
     Timer timer;
+
+	bool spawnEnemy = false;
 };
 
 extern Game* game;

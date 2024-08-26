@@ -31,14 +31,17 @@ void Game::update()
 		}
 	}
 
-	// spawn a new enemy when the timer reaches zero
-	if (timer.isZero())
-	{
-		timer.setTimer(250);
-		timer.setCallback([this]() { this->timer_callback(); });
-	}
+	if (spawnEnemy) {
 
-	timer.updateTimer(deltaTime);
+		// spawn a new enemy when the timer reaches zero
+		if (timer.isZero())
+		{
+			timer.setTimer(250);
+			timer.setCallback([this]() { this->timer_callback(); });
+		}
+
+		timer.updateTimer(deltaTime);
+	}
 }
 
 // callback function for the timer

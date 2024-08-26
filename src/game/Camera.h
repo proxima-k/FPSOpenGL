@@ -30,6 +30,8 @@ private:
     float lastY;
     bool firstMouse;
 
+	glm::quat testRotation = glm::quat(1, 0, 0, 0);
+
     unsigned int screenWidth, screenHeight;
 };
 
