@@ -89,7 +89,7 @@ void Player::mouse_button_callback(GLFWwindow* window, int button, int action, i
         // shooter should have a current card
         // so everytime the it shoots, it will do a card.launch() with given values 
         // like starting position, target aiming location
-        shooter.shoot(camera->transform.position, camera->transform.getForward());
+        shooter.shoot(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());
     }
 }
 

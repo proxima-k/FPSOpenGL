@@ -19,7 +19,7 @@ public:
 
 	void update(float deltaTime);
 
-	void shoot(glm::vec3 launchPosition, glm::vec3 launchDirection);
+	void shoot(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void setupUI();
 
 	void setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
@@ -27,7 +27,7 @@ public:
 
 private:	
 	template <typename CardType>
-	void spawnCard(glm::vec3 launchPosition, glm::vec3 launchDirection) {
+	void spawnCard(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
 		MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
 
 		CardType* newCard = game->spawn_entity<CardType>(launchPosition, newMeshRenderer);
@@ -35,7 +35,7 @@ private:
 
 		if (newCard != nullptr) {
 			newCard->transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
-			newCard->launch(launchPosition, launchDirection);
+			newCard->launch(launchPosition, launchDirection, upDirection);
 		}
 	}
 

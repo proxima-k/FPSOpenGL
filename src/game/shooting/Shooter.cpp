@@ -27,7 +27,7 @@ void Shooter::setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera
 	this->camera = camera;
 }
 
-void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection)
+void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 
@@ -36,10 +36,10 @@ void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection)
 	// spawn a card and launch it
 	switch (cardType) {
 		case 0:
-			spawnCard<SineCard>(launchPosition, launchDirection);
+			spawnCard<SineCard>(launchPosition, launchDirection, upDirection);
 			break;
 		case 1:
-			spawnCard<CosineCard>(launchPosition, launchDirection);
+			spawnCard<CosineCard>(launchPosition, launchDirection, upDirection);
 			break;
 	}
 }
