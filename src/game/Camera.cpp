@@ -34,53 +34,23 @@ void Camera::processMouseMovement(float xPos, float yPos)
     xOffset *= sensitivity;
     yOffset *= sensitivity;
 
+    // Rotate the Yaw of the camera (looking left and right)
     glm::quat yRotate = glm::angleAxis(glm::radians(-xOffset), glm::vec3(0, 1, 0));
     transform.rotation = yRotate * transform.rotation;
 
-    std::cout << currentPitch << std::endl;
-
+    // constrain pitch to avoid overturn
     float newPitch = currentPitch + yOffset;
-
     if (newPitch < -89.f) {
         yOffset = -89.f - currentPitch;
-        currentPitch = -89.f;
     }
     else if (newPitch > 89.f) {
         yOffset = 89.f - currentPitch;
-        currentPitch = 89.f;
     }
-    else {
-        currentPitch += yOffset;
-    }
+    currentPitch += yOffset;
 
+    // Rotate the Pitch of the camera (looking up and down)
     glm::quat xRotate = glm::angleAxis(glm::radians(yOffset), transform.getRight());
     transform.rotation = xRotate * transform.rotation;
-
-
-    std::cout << std::setprecision(2) << std::fixed;
-    
-    /*std::cout << "Forward:" << std::endl;
-    std::cout << "X: " << transform.getForward().x << " Y: " << transform.getForward().y << " Z: " << transform.getForward().z << std::endl;
-    std::cout << "Right:" << std::endl;
-    std::cout << "X: " << transform.getRight().x << " Y: " << transform.getRight().y << " Z: " << transform.getRight().z << std::endl;
-    std::cout << "Up:" << std::endl;
-    std::cout << "X: " << transform.getUp().x << " Y: " << transform.getUp().y << " Z: " << transform.getUp().z << std::endl;
-    std::cout << std::endl;*/
-
-    /*
-    transform.rotation.y += xoffset; // Yaw
-    transform.rotation.x += yoffset; // Pitch
-
-    // Constrain pitch to avoid gimbal lock
-    if (transform.rotation.x > 89.0f)
-        transform.rotation.x = 89.0f;
-    if (transform.rotation.x < -89.0f)
-        transform.rotation.x = -89.0f;
-    */
-
-    //glm::vec3 eulerAngles = glm::eulerAngles(transform.rotation);
-    //std::cout << "X: " << eulerAngles.x << " Y: " << eulerAngles.y << " Z: " << eulerAngles.z << std::endl;
-    //std::cout << "X: " << transform.rotation.x << " Y: " << transform.rotation.y << " Z: " << transform.rotation.z << " W: " << transform.rotation.w << std::endl;
 
     cameraForward = transform.getForward();
 }
