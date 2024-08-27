@@ -3,6 +3,7 @@
 #include<glm/gtc/type_ptr.hpp>
 #include<glm/glm.hpp>
 #include<iostream>
+#include<iomanip>
 
 Camera* Camera::mainCamera = nullptr;
 
@@ -24,23 +25,47 @@ void Camera::processMouseMovement(float xPos, float yPos)
         firstMouse = false;
     }
 
-    float xoffset = xPos - lastX;
-    float yoffset = lastY - yPos; // reversed since y-coordinates go from bottom to top
+    float xOffset = xPos - lastX;
+    float yOffset = yPos - lastY;
     lastX = xPos;
     lastY = yPos;
 
     float sensitivity = 0.1f; // Adjust sensitivity as needed
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
+    xOffset *= sensitivity;
+    yOffset *= sensitivity;
 
-    glm::quat yRotate = glm::angleAxis(glm::radians(-xoffset), glm::vec3(0, 1, 0));
+    glm::quat yRotate = glm::angleAxis(glm::radians(-xOffset), glm::vec3(0, 1, 0));
     transform.rotation = yRotate * transform.rotation;
 
-    glm::quat xRotate = glm::angleAxis(glm::radians(-yoffset), transform.getRight());
+    std::cout << currentPitch << std::endl;
+
+    float newPitch = currentPitch + yOffset;
+
+    if (newPitch < -89.f) {
+        yOffset = -89.f - currentPitch;
+        currentPitch = -89.f;
+    }
+    else if (newPitch > 89.f) {
+        yOffset = 89.f - currentPitch;
+        currentPitch = 89.f;
+    }
+    else {
+        currentPitch += yOffset;
+    }
+
+    glm::quat xRotate = glm::angleAxis(glm::radians(yOffset), transform.getRight());
     transform.rotation = xRotate * transform.rotation;
 
 
-    //std::cout << "X: " << transform.getForward().x << " Y: " << transform.getForward().y << " Z: " << transform.getForward().z << std::endl;
+    std::cout << std::setprecision(2) << std::fixed;
+    
+    /*std::cout << "Forward:" << std::endl;
+    std::cout << "X: " << transform.getForward().x << " Y: " << transform.getForward().y << " Z: " << transform.getForward().z << std::endl;
+    std::cout << "Right:" << std::endl;
+    std::cout << "X: " << transform.getRight().x << " Y: " << transform.getRight().y << " Z: " << transform.getRight().z << std::endl;
+    std::cout << "Up:" << std::endl;
+    std::cout << "X: " << transform.getUp().x << " Y: " << transform.getUp().y << " Z: " << transform.getUp().z << std::endl;
+    std::cout << std::endl;*/
 
     /*
     transform.rotation.y += xoffset; // Yaw
@@ -53,9 +78,9 @@ void Camera::processMouseMovement(float xPos, float yPos)
         transform.rotation.x = -89.0f;
     */
 
-    cameraForward = transform.getForward();
-
     //glm::vec3 eulerAngles = glm::eulerAngles(transform.rotation);
     //std::cout << "X: " << eulerAngles.x << " Y: " << eulerAngles.y << " Z: " << eulerAngles.z << std::endl;
     //std::cout << "X: " << transform.rotation.x << " Y: " << transform.rotation.y << " Z: " << transform.rotation.z << " W: " << transform.rotation.w << std::endl;
+
+    cameraForward = transform.getForward();
 }

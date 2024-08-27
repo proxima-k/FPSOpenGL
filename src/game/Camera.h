@@ -30,6 +30,8 @@ private:
     float lastY;
     bool firstMouse;
 
+    float currentPitch = 0;
+
     unsigned int screenWidth, screenHeight;
 };
 
