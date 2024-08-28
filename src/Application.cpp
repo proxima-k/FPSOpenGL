@@ -164,19 +164,71 @@ int main(void)
         floorGrid.setPlayer(&player);
 
         // Entity (mesh path, shader, camera)
-        std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-        Mesh teapotMesh(vertices);
+        std::vector<float> enemyCubeVertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
+        Mesh enemyCubeMesh(enemyCubeVertices);
         Shader meshShader("res/shaders/Basic.shader");
+
+        MeshRenderer enemyCubeMeshRenderer(&enemyCubeMesh, &meshShader, Camera::mainCamera);
+
+        std::vector<float> teapotVertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
+        Mesh teapotMesh(teapotVertices);
 
         MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
 
+        // setup post process components 
+        float texVertices[] = {
+            // positions   // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f,  1.0f,  0.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  1.0f,  1.0f, 1.0f
+        };
+        Shader outlineShader("res/shaders/postprocess.shader");
+        VertexArray quadVAO;
+        VertexBuffer quadVBO(texVertices, sizeof(texVertices));
+        VertexBufferLayout layout;
+        layout.Push<float>(2);
+        layout.Push<float>(2);
+        quadVAO.AddBuffer(quadVBO, layout);
+
+        unsigned int framebuffer;
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        unsigned int textureColorBuffer;
+        glGenTextures(1, &textureColorBuffer);
+        glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
+
+        GLuint rbo;
+        glGenRenderbuffers(1, &rbo);
+        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, windowWidth, windowHeight);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            std::cerr << "ERROR: FRAMEBUFFER NOT COMPLETE" << std::endl;
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
         // setup card mesh, shader and camera
-        player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
+        player.shooter.setCardRenderer(&enemyCubeMesh, &meshShader, &playerCamera);
 
 		player.shooter.setPlayer(&player);
 		player.shooter.setupUI();
 
-        game->setMeshRenderer(&teapotMesh, &meshShader, &playerCamera);
+        game->setMeshRenderer(&enemyCubeMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
@@ -184,10 +236,8 @@ int main(void)
 
         while (!glfwWindowShouldClose(window))
         {
+            // LOGICS =========================================================
             glfwPollEvents();
-
-            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
                 glfwTerminate();
@@ -197,16 +247,32 @@ int main(void)
             lastFrameTime = currentFrame;
 
             player.update(window, deltaTime);
-
             game->update();
-            game->render();
-
             floorGrid.update();
+
+            // GRAPHICS =======================================================
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glEnable(GL_DEPTH_TEST);
+
+            game->render();
+            teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
             floorGrid.draw();
 
             ui.Begin();
             ui.Render();
             ui.End();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            outlineShader.Bind();
+            quadVAO.Bind();
+            glDisable(GL_DEPTH_TEST);
+            glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
