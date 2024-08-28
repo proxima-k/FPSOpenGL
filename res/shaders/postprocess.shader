@@ -23,6 +23,18 @@ uniform sampler2D u_screenTexture;
 
 void main()
 {
-    fragColor = vec4(vec3(1.0 - texture(u_screenTexture, texCoord)), 1.0);
-    //fragColor = texture(u_screenTexture, texCoord);
+    float scale = 1;
+    float halfScaleFloor = floor(scale * 0.5);
+    float halfScaleCeil = ceil(scale * 0.5);
+
+    ivec2 texSize = textureSize(u_screenTexture, 0);
+    vec2 texelSize = 1.0 / vec2(texSize);
+
+    vec2 bottomLeftUV  = texCoord - texelSize * halfScaleFloor;
+    vec2 topRightUV    = texCoord + texelSize * halfScaleCeil;
+    vec2 bottomRightUV = texCoord + vec2( texelSize.x * halfScaleCeil , -texelSize.y * halfScaleFloor);
+    vec2 topLeftUV     = texCoord + vec2(-texelSize.x * halfScaleFloor,  texelSize.y * halfScaleCeil);
+
+    //fragColor = vec4(vec3(1.0 - texture(u_screenTexture, texCoord)), 1.0);
+    fragColor = texture(u_screenTexture, texCoord);
 };
