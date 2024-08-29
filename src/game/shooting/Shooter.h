@@ -19,7 +19,8 @@ public:
 
 	void update(float deltaTime);
 
-	void shoot(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
+	void shootRandom(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
+	void shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void setupUI();
 
 	void setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);

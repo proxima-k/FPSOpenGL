@@ -3,6 +3,7 @@
 #include "../Game.h"
 #include "cards/SineCard.h"
 #include "cards/CosineCard.h"
+#include "cards/DefaultCard.h"
 #include "UI/UICard.h"
 #include "../Player.h"
 
@@ -27,7 +28,7 @@ void Shooter::setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera
 	this->camera = camera;
 }
 
-void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
+void Shooter::shootRandom(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 
@@ -42,6 +43,13 @@ void Shooter::shoot(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::ve
 			spawnCard<CosineCard>(launchPosition, launchDirection, upDirection);
 			break;
 	}
+}
+
+void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
+{
+	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
+
+	spawnCard<DefaultCard>(launchPosition, launchDirection, upDirection);
 }
 
 void Shooter::setupUI() {

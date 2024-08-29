@@ -28,6 +28,7 @@ void CubeEnemy::update(float deltaTime)
 	if (hit_actor != nullptr)
 	{
 		game->playerScore += 10;
+		
 		destroy();
 	}
 }
