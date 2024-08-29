@@ -57,7 +57,7 @@ void UI::Render()
 
     // draw current score
 
-    ImVec2 scoreposition(0, 0);
+    ImVec2 scoreposition(windowSize.x / 2 - 100, 0);
 
     int score = 0;
    
