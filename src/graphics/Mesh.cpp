@@ -26,6 +26,7 @@ Mesh::Mesh(const float* vertices, unsigned int size) :
 
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
+	layout.Push<float>(3);
 	
 	VAO->AddBuffer(*VBO, layout);
 }
@@ -49,43 +50,6 @@ void Mesh::Bind()
 {
 	VAO->Bind();
 }
-/*
-void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, Camera* camera)
-{
-	VAO->Bind();
-	shader->Bind();
-
-	// Model matrix
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, position);
-	model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::scale(model, scale);
-
-	// View matrix
-	glm::mat4 view;
-	view = glm::lookAt(camera->transform.position, camera->transform.position + camera->transform.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	// Projection matrix
-	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
-
-	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	unsigned int viewLoc = glGetUniformLocation(shader->GetID(), "u_View");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-	GLCall(glDrawArrays(GL_TRIANGLES, 0, verticesCount));
-}
-
-void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
-{
-	draw(position, rotation, scale, camera);
-}
-*/
 
 std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 {
@@ -109,6 +73,14 @@ std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 	auto& attrib = reader.GetAttrib();
 	auto& shapes = reader.GetShapes();
 
+	for (size_t i = 0; i < attrib.normals.size() / 3; i++) {
+		std::cout << "Normal " << i << ": "
+			<< attrib.normals[3 * i + 0] << ", "
+			<< attrib.normals[3 * i + 1] << ", "
+			<< attrib.normals[3 * i + 2] << std::endl;
+	}
+
+
 	// Creating a vector of floats filled with the model's vertex positions
 	std::vector<float> vertices;
 
@@ -123,6 +95,24 @@ std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 			vertices.push_back(vertexXPos);
 			vertices.push_back(vertexYPos);
 			vertices.push_back(vertexZPos);
+
+			if (index.normal_index >= 0) {
+				float normalX = attrib.normals[3 * index.normal_index + 0];
+				float normalY = attrib.normals[3 * index.normal_index + 1];
+				float normalZ = attrib.normals[3 * index.normal_index + 2];
+
+				// Push normals to the vertices vector
+				vertices.push_back(normalX);
+				vertices.push_back(normalY);
+				vertices.push_back(normalZ);
+				std::cout << "test" << std::endl;
+			}
+			else {
+				// Handle case where normals are not present (e.g., use a default normal)
+				vertices.push_back(0.0f); // Default normal X
+				vertices.push_back(0.0f); // Default normal Y
+				vertices.push_back(0.0f); // Default normal Z
+			}
 		}
 	}
 	return vertices;

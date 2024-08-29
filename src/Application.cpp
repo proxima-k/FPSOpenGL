@@ -260,6 +260,7 @@ int main(void)
 
             game->render();
             teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
+			enemyCubeMeshRenderer.draw(glm::vec3(3, 0.2f, 0), glm::quat(1, 0, 0, 0), glm::vec3(0.5f));
             floorGrid.draw();
 
             ui.Begin();
