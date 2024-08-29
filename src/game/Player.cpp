@@ -19,6 +19,7 @@ void Player::update(GLFWwindow* window, float deltaTime)
     shooter.update(deltaTime);
 
     processKeyboard(window, deltaTime);
+    tiltCamera(window, deltaTime);
     updateCameraPosition();
     checkCollision();
 
@@ -91,6 +92,16 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     // apply velocity
     transform.position += physicsbody.velocity * deltaTime;
     transform.position.y = glm::clamp(transform.position.y, 0.0f + playerHeight, 100.0f);
+}
+
+void Player::tiltCamera(GLFWwindow* window, float deltaTime)
+{
+    float rotationAngle = 10.0f;
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera->transform.rotation *= glm::quat(glm::vec3(0.0f, 0.0f, -rotationAngle * deltaTime));
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera->transform.rotation *= glm::quat(glm::vec3(0.0f, 0.0f, rotationAngle * deltaTime));
 }
 
 void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

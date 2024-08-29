@@ -17,8 +17,8 @@ public:
 	Player(Camera* camera);
 
 	void update(GLFWwindow* window, float deltaTime);
-
 	void processKeyboard(GLFWwindow* window, float deltaTime);
+	void tiltCamera(GLFWwindow* window, float deltaTime);
 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	void updateCameraPosition();
 	void checkCollision();
