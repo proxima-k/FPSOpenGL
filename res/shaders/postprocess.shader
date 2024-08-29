@@ -19,7 +19,11 @@ out vec4 fragColor;
 
 in vec2 texCoord;
 
-uniform sampler2D u_screenTexture;
+uniform sampler2D u_colorTexture;
+uniform sampler2D u_depthTexture;
+
+
+
 
 void main()
 {
@@ -27,7 +31,7 @@ void main()
     float halfScaleFloor = floor(scale * 0.5);
     float halfScaleCeil = ceil(scale * 0.5);
 
-    ivec2 texSize = textureSize(u_screenTexture, 0);
+    ivec2 texSize = textureSize(u_colorTexture, 0);
     vec2 texelSize = 1.0 / vec2(texSize);
 
     vec2 bottomLeftUV  = texCoord - texelSize * halfScaleFloor;
@@ -35,6 +39,6 @@ void main()
     vec2 bottomRightUV = texCoord + vec2( texelSize.x * halfScaleCeil , -texelSize.y * halfScaleFloor);
     vec2 topLeftUV     = texCoord + vec2(-texelSize.x * halfScaleFloor,  texelSize.y * halfScaleCeil);
 
-    //fragColor = vec4(vec3(1.0 - texture(u_screenTexture, texCoord)), 1.0);
-    fragColor = texture(u_screenTexture, texCoord);
+    //fragColor = vec4(vec3(1.0 - texture(u_colorTexture, texCoord)), 1.0);
+    fragColor = vec4(vec3(1.0 - texture(u_depthTexture, texCoord).x), 1.0);
 };

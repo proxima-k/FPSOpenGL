@@ -198,22 +198,24 @@ int main(void)
         glGenFramebuffers(1, &framebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-        unsigned int textureColorBuffer;
-        glGenTextures(1, &textureColorBuffer);
-        glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+        unsigned int colorBufferTexture;
+        glGenTextures(1, &colorBufferTexture);
+        glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferTexture, 0);
 
-        GLuint rbo;
-        glGenRenderbuffers(1, &rbo);
-        glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, windowWidth, windowHeight);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        unsigned int depthBufferTexture;
+        glGenTextures(1, &depthBufferTexture);
+        glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, windowWidth, windowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBufferTexture, 0);
 
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             std::cerr << "ERROR: FRAMEBUFFER NOT COMPLETE" << std::endl;
@@ -269,9 +271,17 @@ int main(void)
             glClear(GL_COLOR_BUFFER_BIT);
 
             outlineShader.Bind();
-            quadVAO.Bind();
             glDisable(GL_DEPTH_TEST);
-            glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+            
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
+            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_colorTexture"), 0);
+
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
+            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_depthTexture"), 1);
+
+            quadVAO.Bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
 
             /* Swap front and back buffers */
