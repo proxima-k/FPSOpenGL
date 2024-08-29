@@ -1,9 +1,11 @@
 #include "UI.h"
 #include <stb/stb_image.h>
 #include <iostream>
+#include <sstream>
+#include <string>
 
-GLuint UI::detectioncircle = 0;
 GLuint UI::crosshair = 0;
+ImFont* UI::kanitFont = nullptr;
 
 void UI::Init(GLFWwindow* window)
 {
@@ -16,8 +18,12 @@ void UI::Init(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    detectioncircle = LoadTextureFromFile("res/sprites/detectioncircle.png");
     crosshair = LoadTextureFromFile("res/sprites/crosshair177.png");
+
+    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
+    if (!kanitFont) {
+        std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
+    }
 }
 
 void UI::Begin()
@@ -35,56 +41,38 @@ void UI::End()
 
 void UI::Render()
 {
-    if (detectioncircle == 0 || crosshair == 0)
-    {
-		std::cerr << "Textures not loaded" << std::endl;
-		return;
-	}
-
     ImGuiIO& io = ImGui::GetIO();
 
     ImVec2 windowSize = io.DisplaySize;
-
-
-    // draw detection circle
-    ImVec2 detectionCircleSize(200, 200);
-    ImVec2 detectionCirclePosition((windowSize.x) / 2.0f - (detectionCircleSize.x / 2), (windowSize.y) / 2.0f - (detectionCircleSize.y / 2));
-
-    static float rotationAngle = 0.0f;
-    rotationAngle += 0.01f;
-
-    // calculate sine and cosine of the angle
-    float cosAngle = cos(rotationAngle);
-    float sinAngle = sin(rotationAngle);
-
-    // calculate the rotated corner positions
-    ImVec2 vertices[4];
-    vertices[0] = ImVec2(-detectionCircleSize.x / 2.0f, -detectionCircleSize.y / 2.0f);
-    vertices[1] = ImVec2(detectionCircleSize.x / 2.0f, -detectionCircleSize.y / 2.0f);
-    vertices[2] = ImVec2(detectionCircleSize.x / 2.0f, detectionCircleSize.y / 2.0f);
-    vertices[3] = ImVec2(-detectionCircleSize.x / 2.0f, detectionCircleSize.y / 2.0f);
-
-    for (int i = 0; i < 4; ++i)
-    {
-        float x = vertices[i].x;
-        float y = vertices[i].y;
-        vertices[i].x = cosAngle * x - sinAngle * y + (windowSize.x / 2);
-        vertices[i].y = sinAngle * x + cosAngle * y + (windowSize.y / 2);
-    }
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(windowSize);
 
     ImGui::Begin("Image Window", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
+    
+    if (kanitFont) 
+    {
+        ImGui::PushFont(kanitFont); // use the loaded font
+    }
 
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    drawList->AddImageQuad(
-        (void*)(intptr_t)detectioncircle,
-        vertices[0],
-        vertices[1],
-        vertices[2],
-        vertices[3]
-    );
+    // draw current score
+
+    ImVec2 scoreposition(windowSize.x / 2 - 100, 0);
+
+    int score = 0;
+   
+    std::stringstream ss;
+    ss << "Score: " << game->playerScore;
+    std::string scoreStr = ss.str();
+    const char* scoreText = scoreStr.c_str();
+    
+    ImGui::SetCursorPos(scoreposition);
+    ImGui::Text(scoreText);
+
+    if (kanitFont) 
+    {
+        ImGui::PopFont(); // revert to the default font
+    }
 
     // draw crosshair
     ImVec2 crosshairSize(40, 40);

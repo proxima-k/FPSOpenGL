@@ -61,6 +61,8 @@ public:
     Shader* cubeEnemyShader;
     Camera* camera;
 
+    int playerScore = 0;
+
 private:
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
 

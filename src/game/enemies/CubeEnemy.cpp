@@ -27,6 +27,7 @@ void CubeEnemy::update(float deltaTime)
 	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Projectile);
 	if (hit_actor != nullptr)
 	{
+		game->playerScore += 10;
 		destroy();
 	}
 }
