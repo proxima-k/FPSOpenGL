@@ -166,6 +166,7 @@ int main(void)
         // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         Mesh teapotMesh(vertices);
+
         Shader meshShader("res/shaders/Basic.shader");
 
         MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);

@@ -11,6 +11,7 @@ enum class Collision_Channel
 	Player,
 	Enemy,
 	Projectile,
+	XP,
 };
 
 class Entity

@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Transform.h"
 #include "../engine/Timer.h"
+#include "xp/XP.h"
 
 #include <iostream>
 
@@ -31,6 +32,16 @@ public:
         return nullptr;
     }
 
+    void spawnXP(glm::vec3 position, int xpamount) 
+    {
+        MeshRenderer xpMesh(cubeEnemyMesh, cubeEnemyShader, camera);
+
+        for(int i = 0; i < xpamount; i++)
+		{
+			spawn_entity<XP>(position, xpMesh);
+		}
+    }
+
     Game()
     {
         for (int i = 0; i < MAX_ENTITYS; ++i)
@@ -49,8 +60,8 @@ public:
         }
     }
 
-
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
+
     void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
     void timer_callback();
 

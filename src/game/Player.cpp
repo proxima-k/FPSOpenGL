@@ -8,7 +8,7 @@
 Player::Player(Camera* camera)
     : Entity(), camera(camera), physicsbody()
 { 
-    transform.scale = glm::vec3(1.0f);
+    transform.scale = glm::vec3(0.5f);
     physicsbody.bGravity = true;
     collision_channel = Collision_Channel::Player;
 }
@@ -16,15 +16,11 @@ Player::Player(Camera* camera)
 void Player::update(GLFWwindow* window, float deltaTime) 
 {
     physicsbody.update();
+    shooter.update(deltaTime);
+
     processKeyboard(window, deltaTime);
     updateCameraPosition();
-
-    shooter.update(deltaTime);
-    Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
-    if (hit_actor != nullptr) 
-    {
-        transform.position = glm::vec3(10); 
-    }
+    checkCollision();
 
     if (!canDash)
     {
@@ -32,8 +28,23 @@ void Player::update(GLFWwindow* window, float deltaTime)
         if (dashCooldownTimer <= 0.0f)
         {
             canDash = true;
-            dashCooldownTimer = 0.0f; // Reset the timer
+            dashCooldownTimer = 0.0f;
         }
+    }
+}
+
+void Player::checkCollision() 
+{
+    Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
+    if (hit_actor != nullptr)
+    {
+        transform.position = glm::vec3(10);
+    }
+
+    Entity* hit_actor2 = game->get_coliding_entity(this, Collision_Channel::XP);
+    if (hit_actor2 != nullptr)
+    {
+        hit_actor2->destroy();
     }
 }
 

@@ -21,6 +21,7 @@ public:
 	void processKeyboard(GLFWwindow* window, float deltaTime);
 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	void updateCameraPosition();
+	void checkCollision();
 
 	float playerHeight = transform.scale.y / 2;
 
