@@ -270,6 +270,7 @@ int main(void)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
 
+            // geometry pass
             game->render();
             teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
 			enemyCubeMeshRenderer.draw(glm::vec3(3, 0.2f, 0), glm::quat(1, 0, 0, 0), glm::vec3(0.5f));
@@ -278,6 +279,13 @@ int main(void)
             ui.Render();
             ui.End();
 
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer); // FBO with depth data
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)
+
+            // Blit the depth buffer from the FBO to the default framebuffer
+            glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+            // post processing pass
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
@@ -300,6 +308,9 @@ int main(void)
             quadVAO.Bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
 
+            glEnable(GL_DEPTH_TEST);
+
+            // floor grid pass
             floorGrid.draw();
 
             /* Swap front and back buffers */
