@@ -31,6 +31,6 @@ layout(location = 1) out vec4 outNormal;
 
 void main()
 {
-    outColor = vec4(fragNormal, 1.0);
+    outColor = vec4(u_Color, 1.0);
     outNormal = vec4(fragNormal * 0.5 + 0.5, 1.0);
 };

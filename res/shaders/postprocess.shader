@@ -58,7 +58,8 @@ float GetEdgeDepth() {
     
     float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
     
-    edgeDepth = float(edgeDepth > 1.5 * depth0);
+    float depthThreshold = 6;
+    edgeDepth = float(edgeDepth > depthThreshold * depth0);
     
 
     // NORMALS
@@ -82,6 +83,14 @@ void main()
 {
     //fragColor = vec4(vec3(texture(u_colorTexture, texCoord)), 1.0);
     //fragColor = vec4(vec3(texture(u_normalTexture, texCoord)), 1.0);
-    
-    fragColor = vec4(vec3(GetEdgeDepth()), 1.0);
+    vec3 outlineColor = vec3(0.1, 0.1, 0.1);
+    vec3 baseColor = texture(u_colorTexture, texCoord).rgb;
+
+    float edge = GetEdgeDepth();
+    float red   = baseColor.r * (1 - float(edge >= 1)) + outlineColor.r * float(edge >= 1);
+    float green = baseColor.g * (1 - float(edge >= 1)) + outlineColor.g * float(edge >= 1);
+    float blue  = baseColor.b * (1 - float(edge >= 1)) + outlineColor.b * float(edge >= 1);
+
+    //fragColor = vec4(vec3(GetEdgeDepth()), 1.0);
+    fragColor = vec4(red, green, blue, 1.0);
 };
