@@ -73,47 +73,106 @@ std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 	auto& attrib = reader.GetAttrib();
 	auto& shapes = reader.GetShapes();
 
-	for (size_t i = 0; i < attrib.normals.size() / 3; i++) {
-		std::cout << "Normal " << i << ": "
-			<< attrib.normals[3 * i + 0] << ", "
-			<< attrib.normals[3 * i + 1] << ", "
-			<< attrib.normals[3 * i + 2] << std::endl;
-	}
-
-
 	// Creating a vector of floats filled with the model's vertex positions
-	std::vector<float> vertices;
+    // Creating a vector of floats filled with the model's vertex positions and normals
+    std::vector<float> verticesAndNormals;
 
-	for (const auto& shape : shapes) {
-		for (const auto& index : shape.mesh.indices) {
-			float vertexXPos = attrib.vertices[3 * index.vertex_index + 0];
-			float vertexYPos = attrib.vertices[3 * index.vertex_index + 1];
-			float vertexZPos = attrib.vertices[3 * index.vertex_index + 2];
+    bool hasNormals = !attrib.normals.empty();
 
-			//std::cout << "X: " << vertexXPos << ", Y: " << vertexYPos << ", Z: " <<  vertexZPos << std::endl;
+    // Storage for vertex normals if we need to calculate them
+    std::vector<glm::vec3> vertexNormals(attrib.vertices.size() / 3, glm::vec3(0.0f));
 
-			vertices.push_back(vertexXPos);
-			vertices.push_back(vertexYPos);
-			vertices.push_back(vertexZPos);
+    // Iterate over shapes and calculate normals if necessary
+    for (const auto& shape : shapes) {
+        for (size_t i = 0; i < shape.mesh.indices.size(); i += 3) {
+            // get 3 indices that forms a triangle
+            tinyobj::index_t idx0 = shape.mesh.indices[i];
+            tinyobj::index_t idx1 = shape.mesh.indices[i + 1];
+            tinyobj::index_t idx2 = shape.mesh.indices[i + 2];
 
-			if (index.normal_index >= 0) {
-				float normalX = attrib.normals[3 * index.normal_index + 0];
-				float normalY = attrib.normals[3 * index.normal_index + 1];
-				float normalZ = attrib.normals[3 * index.normal_index + 2];
+            glm::vec3 v0(attrib.vertices[3 * idx0.vertex_index + 0], attrib.vertices[3 * idx0.vertex_index + 1], attrib.vertices[3 * idx0.vertex_index + 2]);
+            glm::vec3 v1(attrib.vertices[3 * idx1.vertex_index + 0], attrib.vertices[3 * idx1.vertex_index + 1], attrib.vertices[3 * idx1.vertex_index + 2]);
+            glm::vec3 v2(attrib.vertices[3 * idx2.vertex_index + 0], attrib.vertices[3 * idx2.vertex_index + 1], attrib.vertices[3 * idx2.vertex_index + 2]);
 
-				// Push normals to the vertices vector
-				vertices.push_back(normalX);
-				vertices.push_back(normalY);
-				vertices.push_back(normalZ);
-				std::cout << "test" << std::endl;
-			}
-			else {
-				// Handle case where normals are not present (e.g., use a default normal)
-				vertices.push_back(0.0f); // Default normal X
-				vertices.push_back(0.0f); // Default normal Y
-				vertices.push_back(0.0f); // Default normal Z
-			}
-		}
-	}
-	return vertices;
+            glm::vec3 normal0, normal1, normal2;
+
+            if (!hasNormals) {
+                // Calculate the face normal
+                glm::vec3 faceNormal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+                // Accumulate the face normal for each vertex
+                vertexNormals[idx0.vertex_index] += faceNormal;
+                vertexNormals[idx1.vertex_index] += faceNormal;
+                vertexNormals[idx2.vertex_index] += faceNormal;
+
+                normal0 = faceNormal;
+                normal1 = faceNormal;
+                normal2 = faceNormal;
+            }
+            else {
+                // If normals are present in the OBJ file, use them directly
+                normal0 = glm::vec3(attrib.normals[3 * idx0.normal_index + 0],
+                    attrib.normals[3 * idx0.normal_index + 1],
+                    attrib.normals[3 * idx0.normal_index + 2]);
+
+                normal1 = glm::vec3(attrib.normals[3 * idx1.normal_index + 0],
+                    attrib.normals[3 * idx1.normal_index + 1],
+                    attrib.normals[3 * idx1.normal_index + 2]);
+
+                normal2 = glm::vec3(attrib.normals[3 * idx2.normal_index + 0],
+                    attrib.normals[3 * idx2.normal_index + 1],
+                    attrib.normals[3 * idx2.normal_index + 2]);
+            }
+
+            // vertex 1 position
+            verticesAndNormals.push_back(v0.x);
+            verticesAndNormals.push_back(v0.y);
+            verticesAndNormals.push_back(v0.z);
+            // vertex 1 normal
+            verticesAndNormals.push_back(normal0.x);
+            verticesAndNormals.push_back(normal0.y);
+            verticesAndNormals.push_back(normal0.z);
+          
+            // vertex 2 position
+            verticesAndNormals.push_back(v1.x);
+            verticesAndNormals.push_back(v1.y);
+            verticesAndNormals.push_back(v1.z);
+            // vertex 2 normal
+            verticesAndNormals.push_back(normal1.x);
+            verticesAndNormals.push_back(normal1.y);
+            verticesAndNormals.push_back(normal1.z);
+
+            // vertex 3 position
+            verticesAndNormals.push_back(v2.x);
+            verticesAndNormals.push_back(v2.y);
+            verticesAndNormals.push_back(v2.z);
+            // vertex 3 normal
+            verticesAndNormals.push_back(normal2.x);
+            verticesAndNormals.push_back(normal2.y);
+            verticesAndNormals.push_back(normal2.z);
+          
+        }
+    }
+
+    //if (!hasNormals) {
+    //    // Normalize accumulated vertex normals and add them to the vertex data
+    //    for (size_t i = 0; i < vertexNormals.size(); i++) {
+    //        vertexNormals[i] = glm::normalize(vertexNormals[i]);
+    //    }
+
+    //    size_t counter = 0;
+    //    for (const auto& shape : shapes) {
+    //        for (const auto& index : shape.mesh.indices) {
+    //            glm::vec3 normal = vertexNormals[index.vertex_index];
+
+    //            // Insert the calculated normal after the corresponding vertex position
+    //            verticesAndNormals[6 * counter + 3] = normal.x;
+    //            verticesAndNormals[6 * counter + 4] = normal.y;
+    //            verticesAndNormals[6 * counter + 5] = normal.z;
+    //            counter++;
+    //        }
+    //    }
+    //}
+
+    return verticesAndNormals;
 }

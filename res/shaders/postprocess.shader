@@ -21,6 +21,7 @@ in vec2 texCoord;
 
 uniform sampler2D u_colorTexture;
 uniform sampler2D u_depthTexture;
+uniform sampler2D u_normalTexture;
 
 float LinearizeDepth(float depth)
 {
@@ -28,11 +29,7 @@ float LinearizeDepth(float depth)
     return (2.0 * 1.0 * 0.1) / (1.0 + 0.1 - z * (1.0 - 0.1));
 }
 
-
-void main()
-{
-    fragColor = vec4(vec3(texture(u_colorTexture, texCoord)), 1.0);
-    
+float GetEdgeDepth() {
     float scale = 1;
     float halfScaleFloor = floor(scale * 0.5);
     float halfScaleCeil = ceil(scale * 0.5);
@@ -63,5 +60,28 @@ void main()
     
     edgeDepth = float(edgeDepth > 1.5 * depth0);
     
-    //fragColor = vec4(vec3(0.1, edgeDepth, 0.1), 1.0);
+
+    // NORMALS
+    vec3 normal0 = texture(u_normalTexture, bottomLeftUV).rgb;
+    vec3 normal1 = texture(u_normalTexture, topRightUV).rgb;
+    vec3 normal2 = texture(u_normalTexture, bottomRightUV).rgb;
+    vec3 normal3 = texture(u_normalTexture, topLeftUV).rgb;
+
+    vec3 normalFiniteDifference0 = normal1 - normal0;
+    vec3 normalFiniteDifference1 = normal3 - normal2;
+
+    float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
+    edgeNormal = float(edgeNormal > 0.4);
+
+    float edge = max(edgeDepth, edgeNormal);
+
+    return edge;
+}
+
+void main()
+{
+    //fragColor = vec4(vec3(texture(u_colorTexture, texCoord)), 1.0);
+    //fragColor = vec4(vec3(texture(u_normalTexture, texCoord)), 1.0);
+    
+    fragColor = vec4(vec3(GetEdgeDepth()), 1.0);
 };

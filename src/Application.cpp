@@ -166,7 +166,7 @@ int main(void)
         // Entity (mesh path, shader, camera)
         std::vector<float> enemyCubeVertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         Mesh enemyCubeMesh(enemyCubeVertices);
-        Shader meshShader("res/shaders/Basic.shader");
+        Shader meshShader("res/shaders/mesh.shader");
 
         MeshRenderer enemyCubeMeshRenderer(&enemyCubeMesh, &meshShader, Camera::mainCamera);
 
@@ -216,6 +216,18 @@ int main(void)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBufferTexture, 0);
 
+        GLuint normalTexture;
+        glGenTextures(1, &normalTexture);
+        glBindTexture(GL_TEXTURE_2D, normalTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, windowWidth, windowHeight, 0, GL_RGB, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
+
+        GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+        glDrawBuffers(2, attachments);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             std::cerr << "ERROR: FRAMEBUFFER NOT COMPLETE" << std::endl;
@@ -281,6 +293,10 @@ int main(void)
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
             glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_depthTexture"), 1);
+
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, normalTexture);
+            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_normalTexture"), 2);
 
             quadVAO.Bind();
             glDrawArrays(GL_TRIANGLES, 0, 6);
