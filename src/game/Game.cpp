@@ -15,7 +15,7 @@ void Game::update()
 	lastFrameTime = currentFrame;
 
 	// updates all the entitys
-	for (int i = 0; i < MAX_ENTITYS; i++)
+	for (int i = 0; i < MAX_ENTITYS; i++) 
 	{
 		if (entitys[i] != nullptr)
 		{
@@ -28,6 +28,7 @@ void Game::update()
 			{
 				entitys[i]->update(deltaTime);
 			}
+
 		}
 	}
 

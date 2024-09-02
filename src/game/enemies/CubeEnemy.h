@@ -3,6 +3,7 @@
 #include "../Enemy.h"
 #include "../Physicsbody.h"
 #include "../Player.h"
+#include "../../graphics/TrailMesh.h"
 
 class CubeEnemy : public Enemy 
 {
@@ -15,4 +16,7 @@ public:
 
 private:
 	Camera* camera;
+	TrailRenderer trailRenderer;
+
+	glm::vec3 lastPosition;
 };

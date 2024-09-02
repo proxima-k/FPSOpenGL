@@ -27,6 +27,8 @@ public:
 
 	Shooter shooter;
 
+	float speed = 1600;
+
 	Camera* getCamera() const { return camera; }
 
 private:

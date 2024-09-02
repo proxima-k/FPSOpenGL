@@ -5,7 +5,7 @@ void DefaultCard::update(float deltaTime)
 {
 	glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
 
-	currentPosition += launchDirection * deltaTime * 2.f;
+	currentPosition += launchDirection * deltaTime * 10.f;
 
 	transform.position = currentPosition + rightVector * height;
 

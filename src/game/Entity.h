@@ -4,6 +4,7 @@
 
 #include "Transform.h"
 #include "../graphics/MeshRenderer.h" 
+#include "../graphics/TrailRenderer.h"
 
 enum class Collision_Channel
 {

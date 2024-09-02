@@ -1,26 +1,26 @@
 #pragma once
 
-#include "Mesh.h"
+#include "TrailMesh.h"
 #include "Shader.h"
 #include "../game/Camera.h"
 
-class MeshRenderer
+class TrailRenderer
 {
 public:
-	MeshRenderer();
-	MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera, glm::vec3 color = glm::vec3(1.f));
+	TrailRenderer();
+	TrailRenderer(TrailMesh* mesh, Shader* shader, Camera* camera, glm::vec3 color = glm::vec3(1.f));
 
 	void draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale);
-	
-	void setMesh(Mesh* mesh) { this->mesh = mesh; }
+
+	void setMesh(TrailMesh* mesh) { this->mesh = mesh; }
 	void setShader(Shader* shader) { this->shader = shader; }
 	void setTargetCamera(Camera* camera) { this->targetCamera = camera; }
 	void setColor(glm::vec3 color) { this->meshColor = color; }
 
-	glm::vec3 getColor() { return meshColor; }
+	TrailMesh* getMesh() { return this->mesh; }
 
 private:
-	Mesh* mesh = nullptr;
+	TrailMesh* mesh = nullptr;
 	Shader* shader = nullptr;
 	Camera* targetCamera = nullptr;
 	glm::vec3 meshColor;
