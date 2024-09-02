@@ -81,8 +81,6 @@ float GetEdgeDepth() {
 
 void main()
 {
-    //fragColor = vec4(vec3(texture(u_colorTexture, texCoord)), 1.0);
-    //fragColor = vec4(vec3(texture(u_normalTexture, texCoord)), 1.0);
     vec3 outlineColor = vec3(0.1, 0.1, 0.1);
     vec3 baseColor = texture(u_colorTexture, texCoord).rgb;
 
@@ -92,5 +90,8 @@ void main()
     float blue  = baseColor.b * (1 - float(edge >= 1)) + outlineColor.b * float(edge >= 1);
 
     //fragColor = vec4(vec3(GetEdgeDepth()), 1.0);
+    //fragColor = vec4(vec3(texture(u_colorTexture, texCoord)), 1.0);
+    //fragColor = vec4(vec3(texture(u_normalTexture, texCoord)), 1.0);
+    //fragColor = vec4(vec3(1.0 - texture(u_depthTexture, texCoord).x), 1.0);
     fragColor = vec4(red, green, blue, 1.0);
 };

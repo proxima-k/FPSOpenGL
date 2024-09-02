@@ -154,25 +154,5 @@ std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
         }
     }
 
-    //if (!hasNormals) {
-    //    // Normalize accumulated vertex normals and add them to the vertex data
-    //    for (size_t i = 0; i < vertexNormals.size(); i++) {
-    //        vertexNormals[i] = glm::normalize(vertexNormals[i]);
-    //    }
-
-    //    size_t counter = 0;
-    //    for (const auto& shape : shapes) {
-    //        for (const auto& index : shape.mesh.indices) {
-    //            glm::vec3 normal = vertexNormals[index.vertex_index];
-
-    //            // Insert the calculated normal after the corresponding vertex position
-    //            verticesAndNormals[6 * counter + 3] = normal.x;
-    //            verticesAndNormals[6 * counter + 4] = normal.y;
-    //            verticesAndNormals[6 * counter + 5] = normal.z;
-    //            counter++;
-    //        }
-    //    }
-    //}
-
     return verticesAndNormals;
 }

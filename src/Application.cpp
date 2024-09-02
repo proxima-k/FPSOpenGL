@@ -45,8 +45,8 @@ void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 // window settings
-unsigned int windowWidth = 700;
-unsigned int windowHeight = 700;
+unsigned int windowWidth = 1920;
+unsigned int windowHeight = 1080;
 
 // mouse input handling
 float mouseLastX = windowWidth / 2.f;
@@ -194,9 +194,13 @@ int main(void)
         layout.Push<float>(2);
         quadVAO.AddBuffer(quadVBO, layout);
 
-        unsigned int framebuffer;
-        glGenFramebuffers(1, &framebuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, windowWidth, windowHeight);
+
+        unsigned int FBO;
+        glGenFramebuffers(1, &FBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		glViewport(0, 0, windowWidth, windowHeight);
 
         unsigned int colorBufferTexture;
         glGenTextures(1, &colorBufferTexture);
@@ -265,7 +269,7 @@ int main(void)
             floorGrid.update();
 
             // GRAPHICS =======================================================
-            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+            glBindFramebuffer(GL_FRAMEBUFFER, FBO);
             GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
@@ -279,7 +283,7 @@ int main(void)
             ui.Render();
             ui.End();
 
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer); // FBO with depth data
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)
 
             // Blit the depth buffer from the FBO to the default framebuffer
@@ -309,7 +313,8 @@ int main(void)
             glDrawArrays(GL_TRIANGLES, 0, 6);
 
             glEnable(GL_DEPTH_TEST);
-
+			glDepthFunc(GL_LESS);
+            
             // floor grid pass
             floorGrid.draw();
 
