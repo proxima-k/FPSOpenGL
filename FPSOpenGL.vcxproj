@@ -232,6 +232,7 @@
     <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\graphics\IndexBuffer.h" />
     <ClInclude Include="src\graphics\Renderer.h" />
+    <ClInclude Include="src\graphics\TrailSegment.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\graphics\TrailMesh.h" />
     <ClInclude Include="src\graphics\TrailRenderer.h" />

@@ -62,8 +62,6 @@ void TrailRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale
 
 	unsigned int colorLoc = glGetUniformLocation(shader->GetID(), "u_Color");
 	GLCall(glUniform3fv(colorLoc, 1, glm::value_ptr(meshColor)));
-
-	glLineWidth(16.0f);
-	GLCall(glDrawArrays(GL_LINE_STRIP, 0, mesh->getVerticesCount()));
-	glLineWidth(1.0f);
+	
+	GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, mesh->getVerticesCount()));
 }

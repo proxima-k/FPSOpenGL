@@ -35,7 +35,12 @@ void CubeEnemy::update(float deltaTime)
 
 	if (glm::distance(lastPosition, transform.position) > 0.1f) 
 	{
-		trailRenderer.getMesh()->addVertice(transform.position);
+		TrailMesh* trailMesh = trailRenderer.getMesh();
+
+		glm::vec3 newPos = transform.position;
+
+		trailMesh->addVertex(glm::vec3(newPos), .15f);
+		
 		lastPosition = transform.position;
 	}
 

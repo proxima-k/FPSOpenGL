@@ -22,22 +22,42 @@ TrailMesh::TrailMesh(const float* vertices, unsigned int size) : verticesCount(s
 TrailMesh::TrailMesh(std::vector<float> vertices)
 	: TrailMesh(vertices.data(), vertices.size() * sizeof(float)) { }
 
-void TrailMesh::addVertice(const glm::vec3 newVertice)
+void TrailMesh::addVertex(const glm::vec3 newVertice, float width)
 {
-	verticesVector.push_back(newVertice.x);
-	verticesVector.push_back(newVertice.y);
-	verticesVector.push_back(newVertice.z);
+    // store all variables
+    float x = newVertice.x;
+    float y = newVertice.y;
+    float z = newVertice.z;
+    float yOrigin = newVertice.y;
 
-	if (verticesVector.size() > maxTrailPoints * 3)
-	{
-		verticesVector.erase(verticesVector.begin(), verticesVector.begin() + 3);
-	}
+    // define new segments accounting for offset
+    TrailSegment segmentTop (x, y + width / 2, z, y);
+    TrailSegment segmentBottom (x, y - width / 2, z, y);
 
-	// Update VBO with new data
-	VBO->Bind();
-	glBufferData(GL_ARRAY_BUFFER, verticesVector.size() * sizeof(float), verticesVector.data(), GL_DYNAMIC_DRAW);
-	verticesCount = verticesVector.size() / 3; // Each vertex has 3 floats (x, y, z)
+    // add vertex with positive and negative offsets
+    trailSegmentList.push_back(segmentTop);
+    trailSegmentList.push_back(segmentBottom);
 
+    // clear the outdated trail points
+    if (trailSegmentList.size() > maxTrailPoints * 2)
+    {
+        trailSegmentList.erase(trailSegmentList.begin(), trailSegmentList.begin() + 2);
+    }
+
+    // temporary vertex list for the buffer to read
+    std::vector<float> verticesVector;
+
+    // fill the vertex list with the points from the segments
+    for (const auto& segment : trailSegmentList)
+    {
+        verticesVector.push_back(segment.x);
+        verticesVector.push_back(segment.y);
+        verticesVector.push_back(segment.z);
+    }
+
+    VBO->Bind();
+    glBufferData(GL_ARRAY_BUFFER, verticesVector.size() * sizeof(float), verticesVector.data(), GL_DYNAMIC_DRAW);
+    verticesCount = verticesVector.size() / 3;
 }
 
 void TrailMesh::Bind()

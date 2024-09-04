@@ -6,13 +6,13 @@
 #include "VertexBuffer.h"
 #include "Shader.h"
 #include "../game/Camera.h"
+#include "TrailSegment.h"
 
 class TrailMesh
 {
 private:
-	std::vector<float> verticesVector;
+	std::vector<TrailSegment> trailSegmentList;
 	unsigned int verticesCount;
-
 
 	VertexArray* VAO;
 	VertexBuffer* VBO;
@@ -26,7 +26,7 @@ public:
 	TrailMesh(std::vector<float> vertices);
 	~TrailMesh();
 
-	void addVertice(const glm::vec3 newVertice);
+	void addVertex(const glm::vec3 newVertice, float width);
 
 	int getVerticesCount() { return verticesCount; }
 
