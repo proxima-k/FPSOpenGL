@@ -50,14 +50,34 @@ void TrailMesh::addVertex(const glm::vec3 newVertice, float width)
     // fill the vertex list with the points from the segments
     for (const auto& segment : trailSegmentList)
     {
+        int determineValue = segment.yOrigin > segment.y ? 1 : -1;
+
+        auto it = std::find(trailSegmentList.begin(), trailSegmentList.end(), segment);
+        int posInList = std::distance(trailSegmentList.begin(), it) + 1;
+        float normalizedPos = static_cast<float>(posInList) / trailSegmentList.size(); // Normalize position (0 to 1)
+
+        // define the easeOutCirc function
+        auto easeOutCirc = [](float x) -> float {
+            return  1 - (1 - x) * (1 - x);
+            };
+
+        float easedValue = easeOutCirc(normalizedPos);
+        float segmentY = segment.yOrigin + (width * easedValue * determineValue);
+
         verticesVector.push_back(segment.x);
-        verticesVector.push_back(segment.y);
+        verticesVector.push_back(segmentY);
         verticesVector.push_back(segment.z);
     }
 
     VBO->Bind();
     glBufferData(GL_ARRAY_BUFFER, verticesVector.size() * sizeof(float), verticesVector.data(), GL_DYNAMIC_DRAW);
     verticesCount = verticesVector.size() / 3;
+}
+
+int TrailMesh::GetSegmentPositionInList(TrailSegment compareSegment)
+{
+
+    return 0;
 }
 
 void TrailMesh::Bind()

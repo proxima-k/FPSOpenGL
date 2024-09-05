@@ -33,13 +33,13 @@ void CubeEnemy::update(float deltaTime)
 	transform.position += physicsBody.velocity * deltaTime;
 	transform.rotation = glm::quatLookAt(glm::normalize(dir), glm::vec3(0, 1, 0));
 
-	if (glm::distance(lastPosition, transform.position) > 0.1f) 
+	if (glm::distance(lastPosition, transform.position) > 0.05f) 
 	{
 		TrailMesh* trailMesh = trailRenderer.getMesh();
 
 		glm::vec3 newPos = transform.position;
 
-		trailMesh->addVertex(glm::vec3(newPos), .15f);
+		trailMesh->addVertex(glm::vec3(newPos), .1f);
 		
 		lastPosition = transform.position;
 	}

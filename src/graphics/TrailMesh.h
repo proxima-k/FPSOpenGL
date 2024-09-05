@@ -27,6 +27,7 @@ public:
 	~TrailMesh();
 
 	void addVertex(const glm::vec3 newVertice, float width);
+	int GetSegmentPositionInList(TrailSegment segment);
 
 	int getVerticesCount() { return verticesCount; }
 
