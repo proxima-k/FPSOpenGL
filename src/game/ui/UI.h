@@ -15,6 +15,8 @@ public:
     static void Render();
     static void Shutdown();
 
+    static void CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor);
+
     static GLuint crosshair;
     static ImFont* kanitFont;
 private:

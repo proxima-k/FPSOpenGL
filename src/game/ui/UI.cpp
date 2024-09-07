@@ -57,7 +57,7 @@ void UI::Render()
 
     // draw current score
 
-    ImVec2 scoreposition(windowSize.x / 2 - 100, 0);
+    ImVec2 scoreposition(0, 0);
 
     int score = 0;
    
@@ -67,7 +67,16 @@ void UI::Render()
     const char* scoreText = scoreStr.c_str();
     
     ImGui::SetCursorPos(scoreposition);
-    ImGui::Text(scoreText);
+
+    float maxScore = 100;
+    float playerScore = game->playerScore;
+    float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
+    float crtScoreFraction = clampedScore / maxScore;
+
+    ImVec2 barSize(700, 25);
+    ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
+
+    CustomProgressBar(crtScoreFraction, barSize, barColor);
 
     if (kanitFont) 
     {
@@ -82,6 +91,19 @@ void UI::Render()
     ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
 
     ImGui::End();
+}
+
+void UI::CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
+{
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+
+    // progress
+    drawList->AddRectFilled(
+        pos,
+        ImVec2(pos.x + size.x * fraction, pos.y + size.y),
+        ImGui::GetColorU32(barColor)
+    );
 }
 
 void UI::Shutdown()
