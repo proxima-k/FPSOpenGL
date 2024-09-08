@@ -1,8 +1,10 @@
 #include "Camera.h"
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtc/type_ptr.hpp>
-#include<glm/glm.hpp>
-#include<iostream>
+#include "Game.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <iostream>
 
 Camera* Camera::mainCamera = nullptr;
 
@@ -17,6 +19,8 @@ Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsi
 
 void Camera::processMouseMovement(float xPos, float yPos)
 {
+    if (game->gameOver) return;
+
     if (firstMouse)
     {
         lastX = xPos;

@@ -32,7 +32,7 @@ void Game::update()
 		}
 	}
 
-	if (spawnEnemy) {
+	if (spawnEnemy && !gameOver) {
 
 		// spawn a new enemy when the timer reaches zero
 		if (timer.isZero())
@@ -82,6 +82,19 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 	}
 
 	return nullptr;
+}
+
+void Game::GameOver()
+{
+	currentGameState = Dead;
+
+	for (int i = 0; i < MAX_ENTITYS; i++)
+	{
+		if (entitys[i] != nullptr)
+		{
+			entitys[i]->destroy();
+		}
+	}
 }
 
 // saves the mesh, shader and camera to be used when spawning new entities

@@ -138,9 +138,6 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_movement_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
-    
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (glewInit() != GLEW_OK) {
         std::cout << "Error!" << std::endl;
@@ -197,7 +194,10 @@ int main(void)
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            player.update(window, deltaTime);
+            if (game->currentGameState == Game::GameStates::Playing)
+            {
+                player.update(window, deltaTime);
+            }
 
             game->update();
             game->render();
@@ -229,10 +229,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
+    if (game->currentGameState == Game::GameStates::Playing)
     playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+    if (game->currentGameState == Game::GameStates::Playing)
     player.mouse_button_callback(window, button, action, mods);
 }

@@ -31,7 +31,7 @@ public:
 	virtual void draw();
 
 	void destroy() { destroyed = true; }
-	// components
+
 	Transform transform;
 	MeshRenderer meshRenderer;
 

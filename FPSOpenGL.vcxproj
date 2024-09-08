@@ -244,6 +244,8 @@
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
     <None Include="res\shaders\grid.shader" />
+    <None Include="res\shaders\transition.frag" />
+    <None Include="res\shaders\transition.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

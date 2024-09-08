@@ -20,6 +20,7 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
     processKeyboard(window, deltaTime);
     tiltCamera(window, deltaTime);
+
     updateCameraPosition();
     checkCollision();
 
@@ -39,7 +40,7 @@ void Player::checkCollision()
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
-        transform.position = glm::vec3(10);
+        die();
     }
 
     Entity* hit_actor2 = game->get_coliding_entity(this, Collision_Channel::XP);
@@ -47,6 +48,11 @@ void Player::checkCollision()
     {
         hit_actor2->destroy();
     }
+}
+
+void Player::die()
+{
+    game->GameOver();
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -59,7 +65,7 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         physicsbody.acceleration += playerSpeed * camera->getCameraForward();
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         physicsbody.acceleration -= playerSpeed * camera->getCameraForward();
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) 
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         physicsbody.acceleration -= glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         physicsbody.acceleration += glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
@@ -113,31 +119,24 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
     }
     else
     {
-        targetTilt = 0.0f;  // no input, return to 0 tilt
+        targetTilt = 0.0f;
     }
 
-    // lerp current tilt towards the target tilt
     currentTilt = glm::mix(currentTilt, targetTilt, deltaTime * rotationSpeed);
-
-    // clamp the tilt to the maximum allowed tilt range
     currentTilt = glm::clamp(currentTilt, -maxTilt, maxTilt);
 
-    // calculate the difference in tilt from the last frame
     float tiltDifference = currentTilt - lastTilt;
 
-    // apply the tilt relative to the current camera rotation
     glm::quat tiltQuat = glm::quat(glm::vec3(0.0f, 0.0f, glm::radians(tiltDifference)));
 
-    // combine the tilt rotation with the existing camera rotation correctly
     camera->transform.rotation = glm::normalize(glm::quat(camera->transform.rotation) * tiltQuat);
 
-    // update last tilt value for the next frame
     lastTilt = currentTilt;
-
 }
 
 void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
         shooter.shootDefault(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());

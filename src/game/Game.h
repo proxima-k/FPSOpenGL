@@ -11,10 +11,34 @@
 class Game
 {
 public:
+    enum GameStates
+    {
+        Playing,
+        Dead,
+        Menu,
+    };
+
+    Game()
+    {
+        for (int i = 0; i < MAX_ENTITYS; ++i)
+        {
+            entitys[i] = nullptr;  // initialize all pointers to nullptr
+        }
+    }
+    ~Game()
+    {
+        playerScore = 0;
+
+        for (int i = 0; i < MAX_ENTITYS; ++i)
+        {
+            delete entitys[i];
+            entitys[i] = nullptr;
+        }
+    }
+
 	void update();
 	void render();
 
-    // spawn an entity of type "EntityType" at the given position with the given meshRenderer
     template<typename EntityType>
     EntityType* spawn_entity(glm::vec3 position, MeshRenderer meshRenderer)
     {
@@ -32,6 +56,8 @@ public:
         return nullptr;
     }
 
+    Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
+
     void spawnXP(glm::vec3 position, int xpamount) 
     {
         MeshRenderer xpMesh(cubeEnemyMesh, cubeEnemyShader, camera);
@@ -42,27 +68,10 @@ public:
 		}
     }
 
-    Game()
-    {
-        for (int i = 0; i < MAX_ENTITYS; ++i)
-        {
-            entitys[i] = nullptr;  // initialize all pointers to nullptr
-        }
-    }
-
-    // destructor to delete all entities when the game is destroyed to prevent memory leaks
-    ~Game()
-    {
-        for (int i = 0; i < MAX_ENTITYS; ++i)
-        {
-            delete entitys[i];
-            entitys[i] = nullptr;
-        }
-    }
-
-    Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
+    void GameOver();
 
     void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
+
     void timer_callback();
 
     float deltaTime = 0.f;
@@ -72,7 +81,11 @@ public:
     Shader* cubeEnemyShader;
     Camera* camera;
 
+    GameStates currentGameState = GameStates::Playing;
+
     int playerScore = 0;
+
+    bool gameOver = false;
 
 private:
 	Entity* entitys[MAX_ENTITYS] = { nullptr };

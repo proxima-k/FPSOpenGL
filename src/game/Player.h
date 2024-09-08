@@ -22,21 +22,23 @@ public:
 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	void updateCameraPosition();
 	void checkCollision();
+	void die();
 
-	float playerHeight = transform.scale.y / 2;
+	Camera* getCamera() const { return camera; }
 
 	Shooter shooter;
 
+	float playerHeight = transform.scale.y / 2;
 	float speed = 1600;
-
-	Camera* getCamera() const { return camera; }
 
 private:
 	Physicsbody physicsbody;
 	Camera* camera;
 
 	glm::vec3 lastVelocity = glm::vec3(0.0f);
-	bool canDash = true;
+
 	float dashCooldown = 2.0f;
 	float dashCooldownTimer = 0.0f;
+
+	bool canDash = true;
 };
