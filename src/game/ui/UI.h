@@ -15,23 +15,24 @@ public:
     UI();
     ~UI();
 
-    void Init(GLFWwindow* window);
-    void Begin();
-    void End();
-    void Render();
-    void Shutdown();
+    void init(GLFWwindow* window);
+    void begin();
+    void end();
+    void render(GLFWwindow* window);
+    void shutdown();
 
-    void RenderCardSelection(ImVec2 windowSize);
-    void RenderPlayModeUI(ImVec2 windowSize);
-    void RenderGameOverUI(ImVec2 windowSize);
+    void renderCardSelection(ImVec2 windowSize);
+    void renderPlayModeUI(ImVec2 windowSize);
+    void renderGameOverUI(ImVec2 windowSize);
 
-    void CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor);
+    void customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor);
 
     GLuint basicCardTexture;
 
 private:
-    GLuint LoadTextureFromFile(const char* filename);
+    GLuint loadTextureFromFile(const char* filename);
 
     GLuint crosshair;
     ImFont* kanitFont;
+    bool initialized;
 };

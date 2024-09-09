@@ -16,7 +16,6 @@ Player::Player(Camera* camera)
 void Player::update(GLFWwindow* window, float deltaTime) 
 {
     physicsbody.update();
-    shooter.update(deltaTime);
 
     processKeyboard(window, deltaTime);
     tiltCamera(window, deltaTime);

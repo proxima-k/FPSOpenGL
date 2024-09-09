@@ -7,10 +7,10 @@
 UI::UI() : crosshair(0), kanitFont(nullptr) {}
 
 UI::~UI() {
-    Shutdown();
+    shutdown();
 }
 
-void UI::Init(GLFWwindow* window)
+void UI::init(GLFWwindow* window)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -21,31 +21,30 @@ void UI::Init(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    crosshair = LoadTextureFromFile("res/sprites/crosshair177.png");
-    basicCardTexture = LoadTextureFromFile("res/sprites/basiccard.png");
+    crosshair = loadTextureFromFile("res/sprites/crosshair177.png");
+    basicCardTexture = loadTextureFromFile("res/sprites/basiccard.png");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
+
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
     }
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void UI::Begin()
+void UI::begin()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void UI::End()
+void UI::end()
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void UI::Render()
+void UI::render(GLFWwindow* window)
 {
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 windowSize = io.DisplaySize;
@@ -53,7 +52,7 @@ void UI::Render()
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(windowSize);
 
-    ImGui::Begin("Image Window", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
+    ImGui::Begin("UI Window", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
 
     if (kanitFont)
     {
@@ -63,15 +62,17 @@ void UI::Render()
     switch (game->currentGameState)
     {
     case Game::GameStates::Playing:
-            RenderCardSelection(windowSize);
+            renderPlayModeUI(windowSize);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         break;
 
     case Game::GameStates::SelectCards:
-            RenderPlayModeUI(windowSize);
+            renderCardSelection(windowSize);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         break;
 
     case Game::GameStates::Dead:
-        ImGui::Text("HA DEAD");
+            ImGui::Text("HA DEAD");
         break;
 
     }
@@ -84,7 +85,7 @@ void UI::Render()
     ImGui::End();
 }
 
-void UI::RenderCardSelection(ImVec2 windowSize)
+void UI::renderCardSelection(ImVec2 windowSize)
 {
     int selectionAmount = 2;
     float selectionXSpacing = 170.0f;
@@ -109,12 +110,21 @@ void UI::RenderCardSelection(ImVec2 windowSize)
         ImVec2 cardPos(cardPosCenter.x + offset.x, cardPosCenter.y + offset.y);
 
         ImGui::SetCursorPos(cardPos);
-        ImGui::ImageButton((void*)(intptr_t)basicCardTexture, cardSize);
+        ImGui::PushID(i);
+
+        if (ImGui::ImageButton((void*)(intptr_t)basicCardTexture, cardSize))
+        {
+            std::cout << "Pressed button " << i << std::endl;
+        }
+
+        ImGui::PopID();
     }
 
     float deckYSpacing = 90;
 
     // deck showcase
+    if (shooter->cardQueue.size() <= 0) return;
+
     for (int i = 0; i < shooter->cardQueue.size(); i++)
     {
         float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
@@ -127,7 +137,7 @@ void UI::RenderCardSelection(ImVec2 windowSize)
     }
 }
 
-void UI::RenderPlayModeUI(ImVec2 windowSize)
+void UI::renderPlayModeUI(ImVec2 windowSize)
 {
     float maxScore = game->maxPlayerXP;
     float playerScore = game->crtPlayerXP;
@@ -137,7 +147,7 @@ void UI::RenderPlayModeUI(ImVec2 windowSize)
     ImVec2 barSize(700, 25);
     ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
 
-    CustomProgressBar(crtScoreFraction, barSize, barColor);
+    customProgressBar(crtScoreFraction, barSize, barColor);
 
     ImVec2 crosshairSize(40, 40);
     ImVec2 crosshairPos((windowSize.x) / 2.0f - (crosshairSize.x / 2), (windowSize.y) / 2.0f - (crosshairSize.y / 2));
@@ -146,12 +156,12 @@ void UI::RenderPlayModeUI(ImVec2 windowSize)
     ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
 }
 
-void UI::RenderGameOverUI(ImVec2 windowSize)
+void UI::renderGameOverUI(ImVec2 windowSize)
 {
 
 }
 
-void UI::CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
+void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
 {
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -163,14 +173,17 @@ void UI::CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& bar
     );
 }
 
-void UI::Shutdown()
+void UI::shutdown()
 {
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    if (initialized) {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+        initialized = false; // Reset flag after shutdown
+    }
 }
 
-GLuint UI::LoadTextureFromFile(const char* filename)
+GLuint UI::loadTextureFromFile(const char* filename)
 {
     int width, height, channels;
     unsigned char* pixels = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);

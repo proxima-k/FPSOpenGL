@@ -14,15 +14,15 @@ Shooter::Shooter()
 	shooter = this;
 }
 
-void Shooter::update(float deltaTime)
-{
-	for (Entity* uiCard : uiCards) {
-		uiCard->transform.position = player->getCamera()->transform.position + player->getCamera()->transform.getForward();
-		//uiCard->transform.position = glm::vec3(1.f);
-		glm::vec3 faceDir = player->getCamera()->transform.getForward();
-		uiCard->transform.rotation = glm::quatLookAt(-faceDir, glm::vec3(0,1,0));
+void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
+	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
 
-		uiCard->update(deltaTime);
+	Card* newCard = game->spawn_entity<Card>(launchPosition, newMeshRenderer);
+	newCard->meshRenderer.setColor(card->getMeshColor());
+
+	if (newCard != nullptr) {
+		newCard->transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
+		newCard->launch(launchPosition, launchDirection, upDirection);
 	}
 }
 
@@ -35,18 +35,27 @@ void Shooter::setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera
 
 void Shooter::shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
-	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
-	//		spawnCard<SineCard>(launchPosition, launchDirection, upDirection);
-}
+	if (cardQueue.size() <= 0) return;
 
-void Shooter::setupUI() {
-	glm::vec3 offset = player->transform.position + player->transform.getForward();
+	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
+	Card* cardToSpawn = cardQueue.front();
+
+	spawnCard(cardToSpawn, launchPosition, launchDirection, upDirection);
+
+	cardQueue.pop();
+	cardQueue.push(cardToSpawn);
 }
 
 void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 
-	spawnCard<DefaultCard>(launchPosition, launchDirection, upDirection);
+	DefaultCard* defaultCard = new DefaultCard(launchPosition, newMeshRenderer);
+
+	spawnCard(defaultCard, launchPosition, launchDirection, upDirection);
+
+	delete defaultCard;
 }
+
+
 

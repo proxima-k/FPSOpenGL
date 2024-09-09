@@ -171,14 +171,11 @@ int main(void)
         // setup card mesh, shader and camera
         player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
 
-		player.shooter.setPlayer(&player);
-		player.shooter.setupUI();
-
         game->setMeshRenderer(&teapotMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
-        ui.Init(window);
+        ui.init(window);
 
         while (!glfwWindowShouldClose(window))
         {
@@ -205,15 +202,15 @@ int main(void)
             floorGrid.update();
             floorGrid.draw();
 
-            ui.Begin();
-            ui.Render();
-            ui.End();
+            ui.begin();
+            ui.render(window);
+            ui.end();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
         }
     }
-    ui.Shutdown();
+    ui.shutdown();
 
     glfwTerminate();
     return 0;
