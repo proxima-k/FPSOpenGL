@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <queue>
 
 #include "glm/glm.hpp"
 #include "../../graphics/Mesh.h"
@@ -19,12 +20,14 @@ public:
 
 	void update(float deltaTime);
 
-	void shootRandom(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
+	void shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void setupUI();
 
 	void setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
 	void setPlayer(Player* player) { this->player = player; }
+
+	std::queue<Entity*> cardQueue;
 
 private:	
 	template <typename CardType>
@@ -48,3 +51,5 @@ private:
 
 	Player* player;
 };
+
+extern Shooter* shooter;

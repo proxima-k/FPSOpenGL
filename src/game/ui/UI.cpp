@@ -4,8 +4,11 @@
 #include <sstream>
 #include <string>
 
-GLuint UI::crosshair = 0;
-ImFont* UI::kanitFont = nullptr;
+UI::UI() : crosshair(0), kanitFont(nullptr) {}
+
+UI::~UI() {
+    Shutdown();
+}
 
 void UI::Init(GLFWwindow* window)
 {
@@ -19,6 +22,7 @@ void UI::Init(GLFWwindow* window)
     ImGui_ImplOpenGL3_Init("#version 330");
 
     crosshair = LoadTextureFromFile("res/sprites/crosshair177.png");
+    basicCardTexture = LoadTextureFromFile("res/sprites/basiccard.png");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
     if (!kanitFont) {
@@ -44,32 +48,87 @@ void UI::End()
 void UI::Render()
 {
     ImGuiIO& io = ImGui::GetIO();
-
     ImVec2 windowSize = io.DisplaySize;
 
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(windowSize);
 
     ImGui::Begin("Image Window", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
-    
-    if (kanitFont) 
+
+    if (kanitFont)
     {
-        ImGui::PushFont(kanitFont); // use the loaded font
+        ImGui::PushFont(kanitFont);
     }
 
-    // draw current score
+    switch (game->currentGameState)
+    {
+    case Game::GameStates::Playing:
+            RenderCardSelection(windowSize);
+        break;
 
-    ImVec2 scoreposition(0, 0);
+    case Game::GameStates::SelectCards:
+            RenderPlayModeUI(windowSize);
+        break;
 
-    int score = 0;
-   
-    std::stringstream ss;
-    ss << "Score: " << game->crtPlayerXP;
-    std::string scoreStr = ss.str();
-    const char* scoreText = scoreStr.c_str();
-    
-    ImGui::SetCursorPos(scoreposition);
+    case Game::GameStates::Dead:
+        ImGui::Text("HA DEAD");
+        break;
 
+    }
+
+    if (kanitFont)
+    {
+        ImGui::PopFont();
+    }
+
+    ImGui::End();
+}
+
+void UI::RenderCardSelection(ImVec2 windowSize)
+{
+    int selectionAmount = 2;
+    float selectionXSpacing = 170.0f;
+    float selectionYSpacing = 250.0f;
+    float centerOffset = 100;
+
+    int cardsPerRow = (selectionAmount > 2) ? (selectionAmount + 1) / 2 : selectionAmount;
+    int rows = (selectionAmount + cardsPerRow - 1) / cardsPerRow;
+
+    float halfXOffset = (cardsPerRow - 1) / 2.0f;
+    float halfYOffset = (rows - 1) / 2.0f;
+
+    ImVec2 cardSize(150, 220);
+    ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) / 2.0f - (cardSize.y / 2));
+
+    for (int i = 0; i < selectionAmount; i++)
+    {
+        int row = i / cardsPerRow;
+        int indexInRow = i % cardsPerRow;
+
+        ImVec2 offset = ImVec2((indexInRow - halfXOffset) * selectionXSpacing - centerOffset, (row - halfYOffset) * selectionYSpacing);
+        ImVec2 cardPos(cardPosCenter.x + offset.x, cardPosCenter.y + offset.y);
+
+        ImGui::SetCursorPos(cardPos);
+        ImGui::ImageButton((void*)(intptr_t)basicCardTexture, cardSize);
+    }
+
+    float deckYSpacing = 90;
+
+    // deck showcase
+    for (int i = 0; i < shooter->cardQueue.size(); i++)
+    {
+        float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
+        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing);
+
+        ImVec2 cardPos(cardPosCenter.x + deckXOffset, cardPosCenter.y + deckYOffset);
+
+        ImGui::SetCursorPos(cardPos);
+        ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
+    }
+}
+
+void UI::RenderPlayModeUI(ImVec2 windowSize)
+{
     float maxScore = game->maxPlayerXP;
     float playerScore = game->crtPlayerXP;
     float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
@@ -80,19 +139,16 @@ void UI::Render()
 
     CustomProgressBar(crtScoreFraction, barSize, barColor);
 
-    if (kanitFont) 
-    {
-        ImGui::PopFont(); // revert to the default font
-    }
-
-    // draw crosshair
     ImVec2 crosshairSize(40, 40);
     ImVec2 crosshairPos((windowSize.x) / 2.0f - (crosshairSize.x / 2), (windowSize.y) / 2.0f - (crosshairSize.y / 2));
 
     ImGui::SetCursorPos(crosshairPos);
     ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
+}
 
-    ImGui::End();
+void UI::RenderGameOverUI(ImVec2 windowSize)
+{
+
 }
 
 void UI::CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
@@ -100,7 +156,6 @@ void UI::CustomProgressBar(float fraction, const ImVec2& size, const ImVec4& bar
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
 
-    // progress
     drawList->AddRectFilled(
         pos,
         ImVec2(pos.x + size.x * fraction, pos.y + size.y),
