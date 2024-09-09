@@ -74,12 +74,6 @@ void TrailMesh::addVertex(const glm::vec3 newVertice, float width)
     verticesCount = verticesVector.size() / 3;
 }
 
-int TrailMesh::GetSegmentPositionInList(TrailSegment compareSegment)
-{
-
-    return 0;
-}
-
 void TrailMesh::Bind()
 {
 	VAO->Bind();

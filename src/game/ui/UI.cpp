@@ -64,14 +64,14 @@ void UI::Render()
     int score = 0;
    
     std::stringstream ss;
-    ss << "Score: " << game->playerScore;
+    ss << "Score: " << game->crtPlayerXP;
     std::string scoreStr = ss.str();
     const char* scoreText = scoreStr.c_str();
     
     ImGui::SetCursorPos(scoreposition);
 
-    float maxScore = 100;
-    float playerScore = game->playerScore;
+    float maxScore = game->maxPlayerXP;
+    float playerScore = game->crtPlayerXP;
     float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
     float crtScoreFraction = clampedScore / maxScore;
 

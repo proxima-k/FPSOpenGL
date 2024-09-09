@@ -15,6 +15,7 @@ public:
     {
         Playing,
         Dead,
+        SelectCards,
         Menu,
     };
 
@@ -27,7 +28,7 @@ public:
     }
     ~Game()
     {
-        playerScore = 0;
+        crtPlayerXP = 0;
 
         for (int i = 0; i < MAX_ENTITYS; ++i)
         {
@@ -83,7 +84,8 @@ public:
 
     GameStates currentGameState = GameStates::Playing;
 
-    int playerScore = 0;
+    int crtPlayerXP = 0;
+    int maxPlayerXP = 100;
 
     bool gameOver = false;
 
