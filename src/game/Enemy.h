@@ -13,11 +13,13 @@ public:
 	
 	float health;
 	float maxHealth;
+	float xpAmount = 1.f;
 
 	// so all enemies simply can call die() to be removed from the game
-	void die(int xpAmount) 
+	void die(float xpSpawnAmount) 
 	{
-		game->spawnXP(transform.position, xpAmount);
+		game->addPlayerXP(xpAmount);
+		game->spawnXP(transform.position, xpSpawnAmount);
 		destroy();
 	}
 };

@@ -37,7 +37,7 @@ void Game::update()
 		// spawn a new enemy when the timer reaches zero
 		if (timer.isZero())
 		{
-			timer.setTimer(250);
+			timer.setTimer(20);
 			timer.setCallback([this]() { this->timer_callback(); });
 		}
 
