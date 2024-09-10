@@ -3,6 +3,10 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <random>
+
+#include "../shooting/cards/CosineCard.h"
+#include "../shooting/cards/SineCard.h"
 
 UI::UI() : crosshair(0), kanitFont(nullptr) {}
 
@@ -32,6 +36,8 @@ void UI::init(GLFWwindow* window)
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
     }
+
+    randomizeCards = false;
 }
 
 void UI::begin()
@@ -110,6 +116,18 @@ void UI::renderCardSelection(ImVec2 windowSize)
     ImVec2 cardSize(150, 220);
     ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) / 2.0f - (cardSize.y / 2));
 
+    std::vector<GLuint> cardTextures = { sineCardTexture, cosineCardTexture };
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    std::vector<GLuint> selectedTextures(selectionAmount);
+
+    for (int i = 0; i < selectionAmount; i++)
+    {
+        std::uniform_int_distribution<int> dist(0, cardTextures.size() - 1);
+        selectedTextures[i] = cardTextures[dist(rng)];
+    }
+
     for (int i = 0; i < selectionAmount; i++)
     {
         int row = i / cardsPerRow;
@@ -123,7 +141,7 @@ void UI::renderCardSelection(ImVec2 windowSize)
 
         ImVec2 currentCardSize = cardSize;
 
-        bool clicked = ImGui::ImageButton((void*)(intptr_t)basicCardTexture, currentCardSize);
+        bool clicked = ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], currentCardSize);
 
         if (ImGui::IsItemHovered())
         {
@@ -132,12 +150,19 @@ void UI::renderCardSelection(ImVec2 windowSize)
             ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
 
             ImGui::SetCursorPos(adjustedPos);
-            ImGui::ImageButton((void*)(intptr_t)basicCardTexture, scaledCardSize);
+            ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], scaledCardSize);
         }
 
         if (clicked)
         {
             std::cout << "Pressed button " << i << std::endl;
+
+            if (selectedTextures[i] == sineCardTexture)
+                shooter->cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+            else if (selectedTextures[i] == cosineCardTexture)
+                shooter->cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+
+            game->currentGameState == Game::GameStates::Playing;
         }
 
         ImGui::PopID();
@@ -180,7 +205,6 @@ void UI::renderCardSelection(ImVec2 windowSize)
                 ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
             break;
         }
-
     }
 }
 

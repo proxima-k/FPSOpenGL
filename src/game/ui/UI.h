@@ -16,9 +16,9 @@ public:
     ~UI();
 
     void init(GLFWwindow* window);
+    void render(GLFWwindow* window);
     void begin();
     void end();
-    void render(GLFWwindow* window);
     void shutdown();
 
     void renderCardSelection(ImVec2 windowSize);
@@ -36,5 +36,8 @@ private:
 
     GLuint crosshair;
     ImFont* kanitFont;
+
+    int selectionAmount = 2;
+
     bool initialized;
 };

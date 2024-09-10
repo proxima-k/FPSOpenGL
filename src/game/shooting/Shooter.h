@@ -28,11 +28,11 @@ public:
 
 	std::queue<Card*> cardQueue;
 
-private:	
-
 	Mesh* cardMesh;
 	Shader* cardShader;
 	Camera* camera;
+
+private:	
 
 	std::vector<Entity*> uiCards;
 
