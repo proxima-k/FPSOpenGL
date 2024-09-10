@@ -12,14 +12,11 @@ class Spawner
 {
 public:
 	// constructor
-	// a lambda function is created for the spawnFunction
 	Spawner(float spawnRate, MeshRenderer meshRenderer, Player* player) :
-		spawnFunction(
-			[=](glm::vec3 pos, MeshRenderer meshR) -> void* {
-				return static_cast<void*>(game->spawn_entity<EntityType>(pos, meshR));
-			}
-		),
-		spawnRate(spawnRate), timer(spawnRate), enemyMeshRenderer(meshRenderer), player(player) {}
+		spawnRate(spawnRate), timer(spawnRate), enemyMeshRenderer(meshRenderer), player(player),
+		// passing in a type for the spawn function
+		spawnFunction([=](glm::vec3 pos, MeshRenderer meshR) -> void* { return static_cast<void*>(game->spawn_entity<EntityType>(pos, meshR)); }) 
+	{}
 
 	void update(float deltaTime) {
 		timer -= deltaTime;
