@@ -12,13 +12,29 @@ Shooter* shooter = nullptr;
 Shooter::Shooter() 
 {
 	shooter = this;
+
+	// temporary add cards to queue to test UI
+	cardQueue.push(new DefaultCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
+	cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
+	cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
 }
 
 void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
 
-	Card* newCard = game->spawn_entity<Card>(launchPosition, newMeshRenderer);
-	newCard->meshRenderer.setColor(card->getMeshColor());
+	Card* newCard = nullptr;
+
+	switch (card->getCardType()) {
+	case Card::Normal:
+		newCard = game->spawn_entity<DefaultCard>(launchPosition, newMeshRenderer);
+		break;
+	case Card::Cosine:
+		newCard = game->spawn_entity<CosineCard>(launchPosition, newMeshRenderer);
+		break;
+	case Card::Sine:
+		newCard = game->spawn_entity<SineCard>(launchPosition, newMeshRenderer);
+		break;
+	}
 
 	if (newCard != nullptr) {
 		newCard->transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);

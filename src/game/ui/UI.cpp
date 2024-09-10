@@ -22,7 +22,10 @@ void UI::init(GLFWwindow* window)
     ImGui_ImplOpenGL3_Init("#version 330");
 
     crosshair = loadTextureFromFile("res/sprites/crosshair177.png");
+
     basicCardTexture = loadTextureFromFile("res/sprites/basiccard.png");
+    sineCardTexture = loadTextureFromFile("res/sprites/sinecard.png");
+    cosineCardTexture = loadTextureFromFile("res/sprites/cosinecard.png");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
 
@@ -59,6 +62,11 @@ void UI::render(GLFWwindow* window)
         ImGui::PushFont(kanitFont);
     }
 
+    if (game->currentGameState == Game::GameStates::Playing)
+    {
+		game->currentGameState = Game::GameStates::SelectCards;
+	}
+
     switch (game->currentGameState)
     {
     case Game::GameStates::Playing:
@@ -91,6 +99,7 @@ void UI::renderCardSelection(ImVec2 windowSize)
     float selectionXSpacing = 170.0f;
     float selectionYSpacing = 250.0f;
     float centerOffset = 100;
+    float scaleMultiplier = 1.1f;
 
     int cardsPerRow = (selectionAmount > 2) ? (selectionAmount + 1) / 2 : selectionAmount;
     int rows = (selectionAmount + cardsPerRow - 1) / cardsPerRow;
@@ -112,7 +121,21 @@ void UI::renderCardSelection(ImVec2 windowSize)
         ImGui::SetCursorPos(cardPos);
         ImGui::PushID(i);
 
-        if (ImGui::ImageButton((void*)(intptr_t)basicCardTexture, cardSize))
+        ImVec2 currentCardSize = cardSize;
+
+        bool clicked = ImGui::ImageButton((void*)(intptr_t)basicCardTexture, currentCardSize);
+
+        if (ImGui::IsItemHovered())
+        {
+            ImVec2 scaledCardSize = ImVec2(cardSize.x * scaleMultiplier, cardSize.y * scaleMultiplier);
+            ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
+            ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
+
+            ImGui::SetCursorPos(adjustedPos);
+            ImGui::ImageButton((void*)(intptr_t)basicCardTexture, scaledCardSize);
+        }
+
+        if (clicked)
         {
             std::cout << "Pressed button " << i << std::endl;
         }
@@ -120,12 +143,21 @@ void UI::renderCardSelection(ImVec2 windowSize)
         ImGui::PopID();
     }
 
-    float deckYSpacing = 90;
-
     // deck showcase
     if (shooter->cardQueue.size() <= 0) return;
 
-    for (int i = 0; i < shooter->cardQueue.size(); i++)
+    std::vector<Card*> tempVector;
+
+    std::queue<Card*> tempQueue = shooter->cardQueue;
+
+    float deckYSpacing = 20;
+
+    while (!tempQueue.empty()) {
+        tempVector.push_back(tempQueue.front());
+        tempQueue.pop();
+    }
+
+    for (int i = shooter->cardQueue.size() - 1; i >= 0; i--)
     {
         float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
         float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing);
@@ -133,7 +165,22 @@ void UI::renderCardSelection(ImVec2 windowSize)
         ImVec2 cardPos(cardPosCenter.x + deckXOffset, cardPosCenter.y + deckYOffset);
 
         ImGui::SetCursorPos(cardPos);
-        ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
+
+        switch (tempVector[i]->getCardType())
+        {
+            case Card::CardType::Sine:
+			ImGui::Image((void*)(intptr_t)sineCardTexture, cardSize);
+			break;
+
+            case Card::CardType::Cosine:
+                ImGui::Image((void*)(intptr_t)cosineCardTexture, cardSize);
+            break;
+
+        default:
+                ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
+            break;
+        }
+
     }
 }
 

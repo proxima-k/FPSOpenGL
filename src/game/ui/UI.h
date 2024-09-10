@@ -28,6 +28,8 @@ public:
     void customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor);
 
     GLuint basicCardTexture;
+    GLuint sineCardTexture;
+    GLuint cosineCardTexture;
 
 private:
     GLuint loadTextureFromFile(const char* filename);

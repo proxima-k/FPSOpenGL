@@ -14,6 +14,8 @@ public:
 
 	glm::vec3 getMeshColor() const override { return glm::vec3(1.f, 1.f, 1.f); }
 
+	CardType getCardType() const override { return Normal; }
+
 private:
 	float height = 0.f;
 	float timeElapsed = 0.f;
