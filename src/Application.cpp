@@ -40,6 +40,8 @@
 
 #include "game/ui/UI.h"
 
+#include "game/Spawner.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -150,8 +152,10 @@ int main(void)
     game = new Game();
     Camera::mainCamera = &playerCamera;
 
-    Logger logger;
-    Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));
+
+
+    /*Logger logger;
+    Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));*/
     
     {
         Grid floorGrid(1, 1, 16);
@@ -162,23 +166,25 @@ int main(void)
 
         // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-        Mesh teapotMesh(vertices);
+        Mesh cubeMesh(vertices);
 
         Shader meshShader("res/shaders/Basic.shader");
 
-        MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
+        MeshRenderer cubeMeshRenderer(&cubeMesh, &meshShader, Camera::mainCamera);
 
         // setup card mesh, shader and camera
-        player.shooter.setCardRenderer(&teapotMesh, &meshShader, &playerCamera);
+        player.shooter.setCardRenderer(&cubeMesh, &meshShader, &playerCamera);
 
 		player.shooter.setPlayer(&player);
 		player.shooter.setupUI();
 
-        game->setMeshRenderer(&teapotMesh, &meshShader, &playerCamera);
+        game->setMeshRenderer(&cubeMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
         ui.Init(window);
+
+		Spawner<CubeEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
 
         while (!glfwWindowShouldClose(window))
         {
@@ -199,8 +205,11 @@ int main(void)
                 player.update(window, deltaTime);
             }
 
+
             game->update();
             game->render();
+
+			cubeEnemySpawner.update(deltaTime);
 
             floorGrid.update();
             floorGrid.draw();

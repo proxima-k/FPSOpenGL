@@ -120,7 +120,7 @@ private:
 
     Timer timer;
 
-	bool spawnEnemy = true;
+	bool spawnEnemy = false;
 };
 
 extern Game* game;
