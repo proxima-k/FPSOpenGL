@@ -197,6 +197,7 @@
     <ClCompile Include="src\game\shooting\UI\UICard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\xyzmath.h" />
     <ClInclude Include="src\game\Spawner.h" />
     <ClInclude Include="src\engine\Trail.h" />
     <ClInclude Include="src\game\shooting\cards\CosineCard.h" />

@@ -18,7 +18,7 @@ CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
 
 	collision_channel = Collision_Channel::Enemy;
 
-	xpAmount = 10.f;
+	xpAmount = 50.f;
 }
 
 

@@ -45,10 +45,18 @@ private:
     float selectionXSpacing = 170.0f;
     float selectionYSpacing = 250.0f;
     float centerOffset = 100;
-    float scaleMultiplier = 1.1f;
+    float scaleMultiplier = 1.2f;
+    float scaleSpeed = 2.0f;
+
+    float highlightOffsetMax = 70.0f;
+    float highlightOffsetMin = 0.0f;
+    float highlightCurrentOffset = 0.0f;
+    float highlightProgress = 0.0f;
 
     bool cardsRandomized = false;
-    std::vector<GLuint> selectedTextures;
+    bool highlightCard = false;
     bool initialized;
+
+    std::vector<GLuint> selectedTextures;
 
 };

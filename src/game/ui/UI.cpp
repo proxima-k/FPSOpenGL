@@ -7,6 +7,7 @@
 
 #include "../shooting/cards/CosineCard.h"
 #include "../shooting/cards/SineCard.h"
+#include "../../engine/xyzmath.h"
 
 UI::UI() : crosshair(0), kanitFont(nullptr) {}
 
@@ -74,7 +75,9 @@ void UI::render(GLFWwindow* window)
     case Game::GameStates::Playing:
             renderPlayModeUI(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
             cardsRandomized = false;
+            highlightCard = false;
 
             deckShowcase(selectionXSpacing, cardPosCenter, cardSize);
         break;
@@ -82,6 +85,8 @@ void UI::render(GLFWwindow* window)
     case Game::GameStates::SelectCards:
             renderCardSelection(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            highlightCard = true;
 
             deckShowcase(selectionXSpacing, cardPosCenter, cardSize);
         break;
@@ -112,6 +117,11 @@ void UI::renderCardSelection(ImVec2 windowSize)
 
     randomizeCards();
 
+    // card states
+    static std::vector<float> cardScales(selectionAmount, 1.0f);
+    static std::vector<float> cardTimes(selectionAmount, 0.0f);
+    static std::vector<bool> cardIsAnimating(selectionAmount, false);
+
     for (int i = 0; i < selectionAmount; i++)
     {
         int row = i / cardsPerRow;
@@ -123,19 +133,37 @@ void UI::renderCardSelection(ImVec2 windowSize)
         ImGui::SetCursorPos(cardPos);
         ImGui::PushID(i);
 
-        ImVec2 currentCardSize = cardSize;
+        bool isHovered = ImGui::IsMouseHoveringRect(cardPos, ImVec2(cardPos.x + cardSize.x, cardPos.y + cardSize.y));
+        float targetScale = isHovered ? scaleMultiplier : 1.0f;
 
-        bool clicked = ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], currentCardSize);
-
-        if (ImGui::IsItemHovered())
-        {
-            ImVec2 scaledCardSize = ImVec2(cardSize.x * scaleMultiplier, cardSize.y * scaleMultiplier);
-            ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
-            ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
-
-            ImGui::SetCursorPos(adjustedPos);
-            ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], scaledCardSize);
+        if (isHovered && !cardIsAnimating[i]) {
+            cardIsAnimating[i] = true;
         }
+
+        // only update the animation if the card is currently scaling
+        if (cardIsAnimating[i]) {
+
+            cardTimes[i] += ImGui::GetIO().DeltaTime * scaleSpeed;
+            if (cardTimes[i] > 1.0f) cardTimes[i] = 1.0f; 
+
+            // apply the easing function for clear bouncing
+            cardScales[i] = 1.0f + (targetScale - 1.0f) * xyzmath::EaseOutElastic(cardTimes[i]);
+
+            // stop the animation if scaling down and finished
+            if (!isHovered && cardTimes[i] >= 1.0f) {
+                cardIsAnimating[i] = false;
+                cardTimes[i] = 0.0f;
+            }
+        }
+
+        ImVec2 scaledCardSize = ImVec2(cardSize.x * cardScales[i], cardSize.y * cardScales[i]);
+
+        // adjust position based on scaling to keep the card centered
+        ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
+        ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
+
+        ImGui::SetCursorPos(adjustedPos);
+        bool clicked = ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], scaledCardSize);
 
         if (clicked)
         {
@@ -152,15 +180,19 @@ void UI::renderCardSelection(ImVec2 windowSize)
 
             game->currentGameState = Game::GameStates::Playing;
 
-            if (shooter->cardQueue.size() > 3)
+            if (shooter->cardQueue.size() > maxCardHandSize)
             {
-				shooter->cardQueue.pop();
-			}
+                shooter->cardQueue.pop();
+            }
         }
 
         ImGui::PopID();
     }
 }
+
+
+
+
 void UI::deckShowcase(float selectionXSpacing, ImVec2 cardPosCenter, ImVec2 cardSize)
 {
     if (shooter->cardQueue.size() <= 0) return;
@@ -180,6 +212,18 @@ void UI::deckShowcase(float selectionXSpacing, ImVec2 cardPosCenter, ImVec2 card
     {
         float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
         float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing - (shooter->cardQueue.size() * deckYSpacing / 2));
+
+        if (highlightCard && i == 0) {
+            highlightProgress += ImGui::GetIO().DeltaTime * 5;
+
+            if (highlightProgress > 1.0f) highlightProgress = 1.0f;
+
+            highlightCurrentOffset = glm::mix(0.0f, highlightOffsetMax, highlightProgress);
+            deckYOffset -= highlightCurrentOffset;
+        }
+        else if (!highlightCard) {
+			highlightProgress = 0.0f;
+		}
 
         ImVec2 cardPos(cardPosCenter.x + deckXOffset, cardPosCenter.y + deckYOffset);
 
