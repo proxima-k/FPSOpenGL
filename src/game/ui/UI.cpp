@@ -36,8 +36,6 @@ void UI::init(GLFWwindow* window)
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
     }
-
-    randomizeCards = false;
 }
 
 void UI::begin()
@@ -68,16 +66,12 @@ void UI::render(GLFWwindow* window)
         ImGui::PushFont(kanitFont);
     }
 
-    if (game->currentGameState == Game::GameStates::Playing)
-    {
-		game->currentGameState = Game::GameStates::SelectCards;
-	}
-
     switch (game->currentGameState)
     {
     case Game::GameStates::Playing:
             renderPlayModeUI(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            cardsRandomized = false;
         break;
 
     case Game::GameStates::SelectCards:
@@ -116,17 +110,8 @@ void UI::renderCardSelection(ImVec2 windowSize)
     ImVec2 cardSize(150, 220);
     ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) / 2.0f - (cardSize.y / 2));
 
-    std::vector<GLuint> cardTextures = { sineCardTexture, cosineCardTexture };
-    std::random_device rd;
-    std::mt19937 rng(rd());
-
-    std::vector<GLuint> selectedTextures(selectionAmount);
-
-    for (int i = 0; i < selectionAmount; i++)
-    {
-        std::uniform_int_distribution<int> dist(0, cardTextures.size() - 1);
-        selectedTextures[i] = cardTextures[dist(rng)];
-    }
+    randomizeCards();
+    deckShowcase(selectionXSpacing, cardPosCenter, cardSize);
 
     for (int i = 0; i < selectionAmount; i++)
     {
@@ -167,8 +152,9 @@ void UI::renderCardSelection(ImVec2 windowSize)
 
         ImGui::PopID();
     }
-
-    // deck showcase
+}
+void UI::deckShowcase(float selectionXSpacing, ImVec2 cardPosCenter, ImVec2 cardSize)
+{
     if (shooter->cardQueue.size() <= 0) return;
 
     std::vector<Card*> tempVector;
@@ -185,7 +171,7 @@ void UI::renderCardSelection(ImVec2 windowSize)
     for (int i = shooter->cardQueue.size() - 1; i >= 0; i--)
     {
         float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
-        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing);
+        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing - (shooter->cardQueue.size() * deckYSpacing / 2));
 
         ImVec2 cardPos(cardPosCenter.x + deckXOffset, cardPosCenter.y + deckYOffset);
 
@@ -193,18 +179,35 @@ void UI::renderCardSelection(ImVec2 windowSize)
 
         switch (tempVector[i]->getCardType())
         {
-            case Card::CardType::Sine:
-			ImGui::Image((void*)(intptr_t)sineCardTexture, cardSize);
-			break;
+        case Card::CardType::Sine:
+            ImGui::Image((void*)(intptr_t)sineCardTexture, cardSize);
+            break;
 
-            case Card::CardType::Cosine:
-                ImGui::Image((void*)(intptr_t)cosineCardTexture, cardSize);
+        case Card::CardType::Cosine:
+            ImGui::Image((void*)(intptr_t)cosineCardTexture, cardSize);
             break;
 
         default:
-                ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
+            ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
             break;
         }
+    }
+}
+void UI::randomizeCards()
+{
+    std::vector<GLuint> cardTextures = { sineCardTexture, cosineCardTexture };
+
+    if (!cardsRandomized) {
+        std::random_device rd;
+        std::mt19937 rng(rd());
+
+        selectedTextures.resize(selectionAmount);
+        for (int i = 0; i < selectionAmount; i++) {
+            std::uniform_int_distribution<int> dist(0, cardTextures.size() - 1);
+            selectedTextures[i] = cardTextures[dist(rng)];
+        }
+
+        cardsRandomized = true;
     }
 }
 
@@ -226,12 +229,6 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     ImGui::SetCursorPos(crosshairPos);
     ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
 }
-
-void UI::renderGameOverUI(ImVec2 windowSize)
-{
-
-}
-
 void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
 {
     ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -242,6 +239,11 @@ void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& bar
         ImVec2(pos.x + size.x * fraction, pos.y + size.y),
         ImGui::GetColorU32(barColor)
     );
+}
+
+void UI::renderGameOverUI(ImVec2 windowSize)
+{
+
 }
 
 void UI::shutdown()

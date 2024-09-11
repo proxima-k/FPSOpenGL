@@ -22,6 +22,8 @@ public:
     void shutdown();
 
     void renderCardSelection(ImVec2 windowSize);
+    void deckShowcase(float selectionXSpacing, ImVec2 cardPosCenter, ImVec2 cardSize);
+    void randomizeCards();
     void renderPlayModeUI(ImVec2 windowSize);
     void renderGameOverUI(ImVec2 windowSize);
 
@@ -39,5 +41,8 @@ private:
 
     int selectionAmount = 2;
 
+    bool cardsRandomized = false;
+    std::vector<GLuint> selectedTextures;
     bool initialized;
+
 };

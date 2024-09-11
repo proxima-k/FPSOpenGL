@@ -13,8 +13,6 @@ Shooter::Shooter()
 {
 	shooter = this;
 
-	// temporary add cards to queue to test UI
-	cardQueue.push(new DefaultCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
 	cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
 	cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
 }
