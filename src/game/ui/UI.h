@@ -40,6 +40,12 @@ private:
     ImFont* kanitFont;
 
     int selectionAmount = 2;
+    int maxCardHandSize = 3;
+
+    float selectionXSpacing = 170.0f;
+    float selectionYSpacing = 250.0f;
+    float centerOffset = 100;
+    float scaleMultiplier = 1.1f;
 
     bool cardsRandomized = false;
     std::vector<GLuint> selectedTextures;

@@ -66,23 +66,29 @@ void UI::render(GLFWwindow* window)
         ImGui::PushFont(kanitFont);
     }
 
+    ImVec2 cardSize(150, 220);
+    ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) * 0.75f - (cardSize.y / 2));
+
     switch (game->currentGameState)
     {
     case Game::GameStates::Playing:
             renderPlayModeUI(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             cardsRandomized = false;
+
+            deckShowcase(selectionXSpacing, cardPosCenter, cardSize);
         break;
 
     case Game::GameStates::SelectCards:
             renderCardSelection(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            deckShowcase(selectionXSpacing, cardPosCenter, cardSize);
         break;
 
     case Game::GameStates::Dead:
             ImGui::Text("HA DEAD");
         break;
-
     }
 
     if (kanitFont)
@@ -95,12 +101,6 @@ void UI::render(GLFWwindow* window)
 
 void UI::renderCardSelection(ImVec2 windowSize)
 {
-    int selectionAmount = 2;
-    float selectionXSpacing = 170.0f;
-    float selectionYSpacing = 250.0f;
-    float centerOffset = 100;
-    float scaleMultiplier = 1.1f;
-
     int cardsPerRow = (selectionAmount > 2) ? (selectionAmount + 1) / 2 : selectionAmount;
     int rows = (selectionAmount + cardsPerRow - 1) / cardsPerRow;
 
@@ -111,7 +111,6 @@ void UI::renderCardSelection(ImVec2 windowSize)
     ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) / 2.0f - (cardSize.y / 2));
 
     randomizeCards();
-    deckShowcase(selectionXSpacing, cardPosCenter, cardSize);
 
     for (int i = 0; i < selectionAmount; i++)
     {
@@ -143,11 +142,20 @@ void UI::renderCardSelection(ImVec2 windowSize)
             std::cout << "Pressed button " << i << std::endl;
 
             if (selectedTextures[i] == sineCardTexture)
+            {
                 shooter->cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+            }
             else if (selectedTextures[i] == cosineCardTexture)
+            {
                 shooter->cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+            }
 
-            game->currentGameState == Game::GameStates::Playing;
+            game->currentGameState = Game::GameStates::Playing;
+
+            if (shooter->cardQueue.size() > 3)
+            {
+				shooter->cardQueue.pop();
+			}
         }
 
         ImGui::PopID();

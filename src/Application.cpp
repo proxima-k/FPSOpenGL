@@ -176,13 +176,12 @@ int main(void)
         player.shooter.setCardRenderer(&cubeMesh, &meshShader, &playerCamera);
 
 		player.shooter.setPlayer(&player);
-		player.shooter.setupUI();
 
         game->setMeshRenderer(&cubeMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
-        ui.Init(window);
+        ui.init(window);
 
 		Spawner<CubeEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
 
@@ -205,7 +204,6 @@ int main(void)
                 player.update(window, deltaTime);
             }
 
-
             game->update();
             game->render();
 
@@ -214,15 +212,15 @@ int main(void)
             floorGrid.update();
             floorGrid.draw();
 
-            ui.Begin();
-            ui.Render();
-            ui.End();
+            ui.begin();
+            ui.render(window);
+            ui.end();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
         }
     }
-    ui.Shutdown();
+    ui.shutdown();
 
     glfwTerminate();
     return 0;

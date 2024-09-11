@@ -84,7 +84,7 @@ public:
 			scaleMaxPlayerXP();
             
             // start select card state
-			//currentGameState = GameStates::SelectCards;
+			currentGameState = GameStates::SelectCards;
         }
     }
 
