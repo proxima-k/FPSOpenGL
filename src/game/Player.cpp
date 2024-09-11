@@ -36,11 +36,12 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::checkCollision() 
 {
-    Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
+
+    /*Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
         die();
-    }
+    }*/
 
     Entity* hit_actor2 = game->get_coliding_entity(this, Collision_Channel::XP);
     if (hit_actor2 != nullptr)

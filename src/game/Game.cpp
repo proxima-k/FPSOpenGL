@@ -32,26 +32,26 @@ void Game::update()
 		}
 	}
 
-	if (spawnEnemy && !gameOver) {
+	//if (spawnEnemy && !gameOver) {
 
-		// spawn a new enemy when the timer reaches zero
-		if (timer.isZero())
-		{
-			timer.setTimer(250);
-			timer.setCallback([this]() { this->timer_callback(); });
-		}
+	//	// spawn a new enemy when the timer reaches zero
+	//	if (timer.isZero())
+	//	{
+	//		timer.setTimer(20);
+	//		timer.setCallback([this]() { this->timer_callback(); });
+	//	}
 
-		timer.updateTimer(deltaTime);
-	}
+	//	timer.updateTimer(deltaTime);
+	//}
 }
 
 // callback function for the timer
-void Game::timer_callback()
-{
-	MeshRenderer newMeshRenderer(cubeEnemyMesh, cubeEnemyShader, camera);
-	Entity* newEnemy = game->spawn_entity<CubeEnemy>(glm::vec3(1), newMeshRenderer);
-	newEnemy->transform.position = camera->transform.position + newEnemy->transform.getRandomPointInRadius(10, 25);
-}
+//void Game::timer_callback()
+//{
+//	MeshRenderer newMeshRenderer(cubeEnemyMesh, cubeEnemyShader, camera);
+//	Entity* newEnemy = game->spawn_entity<CubeEnemy>(glm::vec3(1), newMeshRenderer);
+//	newEnemy->transform.position = camera->transform.position + newEnemy->transform.getRandomPointInRadius(10, 25);
+//}
 
 // calls the draw function on all the entities
 void Game::render()

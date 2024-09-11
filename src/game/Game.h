@@ -37,8 +37,8 @@ public:
         }
     }
 
-	void update();
-	void render();
+    void update();
+    void render();
 
     template<typename EntityType>
     EntityType* spawn_entity(glm::vec3 position, MeshRenderer meshRenderer)
@@ -59,16 +59,42 @@ public:
 
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
 
-    void spawnXP(glm::vec3 position, int xpamount) 
+    void spawnXP(glm::vec3 position, int xpamount)
     {
         MeshRenderer xpMesh(cubeEnemyMesh, cubeEnemyShader, camera);
 
-        for(int i = 0; i < xpamount; i++)
-		{
-			spawn_entity<XP>(position, xpMesh);
-		}
+        for (int i = 0; i < xpamount; i++)
+        {
+            spawn_entity<XP>(position, xpMesh);
+        }
     }
 
+    void addPlayerXP(int xp) {
+        crtPlayerXP += xp;
+        if (crtPlayerXP >= maxPlayerXP) {
+            // clear all enemies
+			for (int i = 0; i < MAX_ENTITYS; i++) {
+				if (entitys[i] != nullptr) {
+					if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
+						entitys[i]->destroyed = true;
+					}
+				}
+			}
+			crtPlayerXP = 0;
+			scaleMaxPlayerXP();
+            
+            // start select card state
+			//currentGameState = GameStates::SelectCards;
+        }
+    }
+
+    void scaleMaxPlayerXP() {
+        // NOTE TO DESIGNER
+        // implement your own scaling function here as you see fit
+
+		maxPlayerXP += 100;
+    }
+    
     void GameOver();
 
     void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
@@ -94,7 +120,7 @@ private:
 
     Timer timer;
 
-	bool spawnEnemy = true;
+	//bool spawnEnemy = false;
 };
 
 extern Game* game;
