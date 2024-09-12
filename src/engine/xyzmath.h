@@ -8,7 +8,7 @@
 
 namespace xyzmath
 {
-    float EaseOutElastic(float t) {
+    inline float EaseOutElastic(float t) {
         const float c4 = (2 * M_PI) / 2.5f;
 
         if (t == 0) return 0;
