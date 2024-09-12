@@ -48,11 +48,5 @@ void CubeEnemy::update(float deltaTime)
 
 	physicsBody.update();
 
-	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Projectile);
-	if (hit_actor != nullptr)
-	{
-		die(1);
-	}
-
 	trailRenderer.draw(transform.position, transform.rotation, glm::vec3(1.0f));
 }

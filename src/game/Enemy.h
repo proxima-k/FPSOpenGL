@@ -12,8 +12,18 @@ public:
 	Enemy(glm::vec3 position, MeshRenderer meshRenderer);
 	
 	float health;
-	float maxHealth;
+	float maxHealth = 10.0f;
 	float xpAmount = 1.f;
+
+	// deal damage to enemy
+	void take_damage(int damage)
+	{
+		health -= damage;
+		if (health <= 0)
+		{
+			die(1.f);
+		}
+	}
 
 	// so all enemies simply can call die() to be removed from the game
 	void die(float xpSpawnAmount) 

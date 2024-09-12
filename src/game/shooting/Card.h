@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../Entity.h"
+#include "../Enemy.h"
+#include "../Game.h"
 
 class Card : public Entity
 {
@@ -27,4 +29,7 @@ protected:
 	glm::vec3 launchPosition;
 	glm::vec3 launchDirection;
 	glm::vec3 upDirection;
+
+	float damage;
+	bool bDestroyOnHit;
 };

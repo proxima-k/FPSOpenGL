@@ -12,12 +12,22 @@ void DefaultCard::update(float deltaTime)
 	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
 	{
-		destroy();
+		Enemy* enemy = dynamic_cast<Enemy*>(hit_actor);
+		if (enemy != nullptr)
+		{
+			enemy->take_damage(damage);
+
+			if(bDestroyOnHit)
+				destroy();
+		}
 	}
 }
 
 void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
+	bDestroyOnHit = true;
+	damage = 5;
+
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 }

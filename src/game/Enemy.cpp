@@ -6,7 +6,6 @@ Enemy::Enemy(glm::vec3 position, MeshRenderer meshRenderer)
 {
     collision_channel = Collision_Channel::Enemy;
 
-    maxHealth = 10.0f;
     health = maxHealth;
 
     transform.scale = glm::vec3(.1f);

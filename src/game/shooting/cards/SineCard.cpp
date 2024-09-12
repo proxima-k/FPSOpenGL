@@ -12,10 +12,26 @@ void SineCard::update(float deltaTime)
 
 	transform.position = currentPosition + upDirection * height;
 	transform.rotation = glm::angleAxis(glm::radians(timeElapsed * 250), -transform.getUp());
+
+	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
+	if (hit_actor != nullptr)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(hit_actor);
+		if (enemy != nullptr)
+		{
+			enemy->take_damage(damage);
+
+			if (bDestroyOnHit)
+				destroy();
+		}
+	}
 }
 
 void SineCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
+	bDestroyOnHit = false;
+	damage = 10;
+
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 }
