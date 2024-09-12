@@ -12,8 +12,8 @@ public:
 	Enemy(glm::vec3 position, MeshRenderer meshRenderer);
 	
 	float health;
-	float maxHealth = 10.0f;
-	float xpAmount = 1.f;
+	float maxHealth;
+	float xpAmount;
 
 	// deal damage to enemy
 	void take_damage(int damage)

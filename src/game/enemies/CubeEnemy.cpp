@@ -18,7 +18,10 @@ CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
 
 	collision_channel = Collision_Channel::Enemy;
 
-	xpAmount = 50.f;
+	xpAmount = 10.0f;
+	maxHealth = 10.0f;
+
+	health = maxHealth;
 }
 
 
