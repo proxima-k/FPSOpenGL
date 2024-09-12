@@ -20,6 +20,8 @@ public:
 
     float getResolutionRatio() { return (float)screenWidth / screenHeight; }
 
+    void updateScreenSize(unsigned int width, unsigned int height) { screenWidth = width; screenHeight = height; }
+
     Transform transform;
 
 private:
@@ -34,6 +36,5 @@ private:
 
     unsigned int screenWidth, screenHeight;
 };
-
 
 #endif

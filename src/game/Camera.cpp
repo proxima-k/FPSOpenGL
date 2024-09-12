@@ -13,8 +13,8 @@ Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsi
 {
     cameraForward = glm::vec3(0.0f, 0.0f, 1.0f);
     transform.rotation = glm::vec3(0, 0, 0);
-    lastX = 640.0f / 2.0;  // assuming initial window width of 640
-    lastY = 640.0f / 2.0;  // assuming initial window height of 640
+    lastX = screenWidth / 2.0;  // assuming initial window width of 640
+    lastY = screenHeight / 2.0;  // assuming initial window height of 640
 }
 
 void Camera::processMouseMovement(float xPos, float yPos)

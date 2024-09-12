@@ -47,8 +47,8 @@ void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 // window settings
-unsigned int windowWidth = 700;
-unsigned int windowHeight = 700;
+unsigned int windowWidth;
+unsigned int windowHeight;
 
 // mouse input handling
 float mouseLastX = windowWidth / 2.f;
@@ -92,17 +92,23 @@ GLuint LoadTextureFromFile(const char* filename)
 
 int main(void)
 {
-    /* Initialize the library */
     if (!glfwInit())
         return -1;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_POSITION_X, windowWidth / 5 + windowWidth);
-    glfwWindowHint(GLFW_POSITION_Y, windowHeight / 3);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-    /* Create a windowed mode window and its OpenGL context */
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+    windowWidth = mode->width;
+    windowHeight = mode->height;
+
+    playerCamera.updateScreenSize(windowWidth, windowHeight);
+
     GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "(xyz)^0", NULL, NULL);
 
     int width, height;

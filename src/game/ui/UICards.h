@@ -6,10 +6,10 @@
 #include "../shooting/cards/SineCard.h"
 #include "../../engine/xyzmath.h"
 
+#include <glew/glew.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include <glew/glew.h>
 #include <vector>
 #include <random>
 
@@ -31,7 +31,6 @@ public:
 
     float selectionXSpacing = 170.0f;
     float selectionYSpacing = 250.0f;
-    float centerOffset = 100;
     float scaleMultiplier = 1.2f;
     float scaleSpeed = 2.0f;
 

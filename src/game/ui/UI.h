@@ -8,7 +8,7 @@
 
 #include "../Game.h"
 #include "../shooting/Shooter.h"
-#include "../ui/UICards.h"
+#include "UICards.h"
 
 class UI
 {

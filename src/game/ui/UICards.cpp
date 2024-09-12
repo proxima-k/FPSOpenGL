@@ -23,7 +23,7 @@ void UICards::renderCardSelection(ImVec2 windowSize)
         int row = i / cardsPerRow;
         int indexInRow = i % cardsPerRow;
 
-        ImVec2 offset = ImVec2((indexInRow - halfXOffset) * selectionXSpacing - centerOffset, (row - halfYOffset) * selectionYSpacing);
+        ImVec2 offset = ImVec2((indexInRow - halfXOffset) * selectionXSpacing, (row - halfYOffset) * selectionYSpacing);
         ImVec2 cardPos(cardPosCenter.x + offset.x, cardPosCenter.y + offset.y);
 
         ImGui::SetCursorPos(cardPos);
@@ -98,6 +98,11 @@ void UICards::deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize)
         tempQueue.pop();
     }
 
+    float windowWidth = ImGui::GetWindowWidth();
+    float windowHeight = ImGui::GetWindowHeight();
+
+    ImVec2 bottomRightCorner(windowWidth - cardSize.x - 20, windowHeight - cardSize.y - 20);
+
     for (int i = shooter->cardQueue.size() - 1; i >= 0; i--)
     {
         float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
@@ -115,7 +120,7 @@ void UICards::deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize)
             highlightProgress = 0.0f;
         }
 
-        ImVec2 cardPos(cardPosCenter.x + deckXOffset, cardPosCenter.y + deckYOffset);
+        ImVec2 cardPos(bottomRightCorner.x, bottomRightCorner.y + deckYOffset);
 
         ImGui::SetCursorPos(cardPos);
 
