@@ -3,6 +3,9 @@
 #include "../Game.h"
 #include "cards/SineCard.h"
 #include "cards/CosineCard.h"
+#include "cards/PlaceholderCard1.h"
+#include "cards/PlaceholderCard2.h"
+#include "cards/PlaceholderCard3.h"
 #include "cards/DefaultCard.h"
 #include "UI/UICard.h"
 #include "../Player.h"
@@ -32,6 +35,15 @@ void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDi
 		break;
 	case Card::Sine:
 		newCard = game->spawn_entity<SineCard>(launchPosition, newMeshRenderer);
+		break;
+	case Card::Placeholder1:
+		newCard = game->spawn_entity<PlaceHolderCard1>(launchPosition, newMeshRenderer);
+		break;
+	case Card::Placeholder2:
+		newCard = game->spawn_entity<PlaceHolderCard2>(launchPosition, newMeshRenderer);
+		break;
+	case Card::Placeholder3:
+		newCard = game->spawn_entity<PlaceHolderCard3>(launchPosition, newMeshRenderer);
 		break;
 	}
 

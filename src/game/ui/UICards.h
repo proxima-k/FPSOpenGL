@@ -4,6 +4,9 @@
 #include "../shooting/Shooter.h"
 #include "../shooting/cards/CosineCard.h"
 #include "../shooting/cards/SineCard.h"
+#include "../shooting/cards/PlaceholderCard1.h"
+#include "../shooting/cards/PlaceholderCard2.h"
+#include "../shooting/cards/PlaceholderCard3.h"
 #include "../../engine/xyzmath.h"
 
 #include <glew/glew.h>
@@ -23,6 +26,9 @@ public:
     GLuint basicCardTexture;
     GLuint sineCardTexture;
     GLuint cosineCardTexture;
+    GLuint placeholder1card;
+    GLuint placeholder2card;
+    GLuint placeholder3card;
 
     std::vector<GLuint> selectedTextures;
 

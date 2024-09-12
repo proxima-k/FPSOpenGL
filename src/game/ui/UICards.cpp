@@ -70,6 +70,18 @@ void UICards::renderCardSelection(ImVec2 windowSize)
             {
                 shooter->cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
             }
+            else if (selectedTextures[i] == placeholder1card)
+            {
+                shooter->cardQueue.push(new PlaceHolderCard1(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+            }
+            else if (selectedTextures[i] == placeholder2card)
+            {
+                shooter->cardQueue.push(new PlaceHolderCard2(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+            }
+            else if (selectedTextures[i] == placeholder3card)
+            {
+                shooter->cardQueue.push(new PlaceHolderCard3(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+            }
 
             game->currentGameState = Game::GameStates::Playing;
 
@@ -134,6 +146,18 @@ void UICards::deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize)
             ImGui::Image((void*)(intptr_t)cosineCardTexture, cardSize);
             break;
 
+        case Card::CardType::Placeholder1:
+            ImGui::Image((void*)(intptr_t)placeholder1card, cardSize);
+            break;
+
+        case Card::CardType::Placeholder2:
+            ImGui::Image((void*)(intptr_t)placeholder2card, cardSize);
+            break;
+
+        case Card::CardType::Placeholder3:
+            ImGui::Image((void*)(intptr_t)placeholder3card, cardSize);
+            break;
+
         default:
             ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
             break;
@@ -142,7 +166,7 @@ void UICards::deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize)
 }
 void UICards::randomizeCards()
 {
-    std::vector<GLuint> cardTextures = { sineCardTexture, cosineCardTexture };
+    std::vector<GLuint> cardTextures = { sineCardTexture, cosineCardTexture, placeholder1card, placeholder2card, placeholder3card };
 
     if (!cardsRandomized) {
         std::random_device rd;

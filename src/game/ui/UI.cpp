@@ -30,6 +30,9 @@ void UI::init(GLFWwindow* window)
     cards.basicCardTexture = loadTextureFromFile("res/sprites/basiccard.png");
     cards.sineCardTexture = loadTextureFromFile("res/sprites/sinecard.png");
     cards.cosineCardTexture = loadTextureFromFile("res/sprites/cosinecard.png");
+    cards.placeholder1card = loadTextureFromFile("res/sprites/placeholder1card.png");
+    cards.placeholder2card = loadTextureFromFile("res/sprites/placeholder2card.png");
+    cards.placeholder3card = loadTextureFromFile("res/sprites/placeholder3card.png");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
 
@@ -110,7 +113,9 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
     float crtScoreFraction = clampedScore / maxScore;
 
-    ImVec2 barSize(700, 25);
+    float windowWidth = ImGui::GetWindowWidth();
+
+    ImVec2 barSize(windowWidth, 25);
     ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
 
     customProgressBar(crtScoreFraction, barSize, barColor);

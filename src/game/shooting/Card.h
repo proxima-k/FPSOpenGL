@@ -12,6 +12,9 @@ public:
 		Normal,
 		Cosine,
 		Sine,
+		Placeholder1,
+		Placeholder2,
+		Placeholder3,
 	};
 
 	Card(glm::vec3 position, MeshRenderer meshRenderere);
