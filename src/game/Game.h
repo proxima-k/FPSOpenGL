@@ -111,6 +111,10 @@ public:
     int crtPlayerXP = 0;
     int maxPlayerXP = 100;
 
+    float playerDamageMultiplier = 1.0f;
+    float playerSpeedMultiplier = 1.0f;
+    float playerDashMultiplier = 1.0f;
+
     bool gameOver = false;
 
 private:

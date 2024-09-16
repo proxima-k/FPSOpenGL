@@ -51,6 +51,7 @@ void Player::checkCollision()
 }
 
 void Player::die()
+
 {
     game->GameOver();
 }
@@ -58,7 +59,7 @@ void Player::die()
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 {
     // movement
-    const float playerSpeed = speed * deltaTime;
+    const float playerSpeed = speed * game->playerSpeedMultiplier * deltaTime;
     physicsbody.acceleration = glm::vec3(0.0f);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -87,7 +88,7 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         glm::vec3 dashDirection = glm::normalize(physicsbody.velocity);
         if (glm::length(dashDirection) > 0.0f)
         {
-            const float dashSpeed = 40000.0f;
+            const float dashSpeed = 40000.0f * game->playerDashMultiplier;
             physicsbody.add_force(dashDirection * dashSpeed * deltaTime);
 
             dashCooldownTimer = dashCooldown;

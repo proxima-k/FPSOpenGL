@@ -33,6 +33,9 @@ void UI::init(GLFWwindow* window)
     cards.placeholder1card = loadTextureFromFile("res/sprites/placeholder1card.png");
     cards.placeholder2card = loadTextureFromFile("res/sprites/placeholder2card.png");
     cards.placeholder3card = loadTextureFromFile("res/sprites/placeholder3card.png");
+    cards.passivedamagecard = loadTextureFromFile("res/sprites/damagebuffcard.png");
+    cards.passivespeedcard = loadTextureFromFile("res/sprites/speedbuffcard.png");
+    cards.passivedashcard = loadTextureFromFile("res/sprites/dashbuffcard.png");
     cards.emptydeck = loadTextureFromFile("res/sprites/emptydeck.png");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
@@ -88,7 +91,6 @@ void UI::render(GLFWwindow* window)
             cards.cardsRandomized = false;
             cards.highlightCard = false;
 
-            // take pos into account and make seperate cardQueue
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
@@ -99,7 +101,6 @@ void UI::render(GLFWwindow* window)
 
             cards.highlightCard = true;
 
-            // take pos into account and make seperate cardQueue
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;

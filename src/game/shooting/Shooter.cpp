@@ -7,23 +7,19 @@
 #include "cards/PlaceholderCard2.h"
 #include "cards/PlaceholderCard3.h"
 #include "cards/DefaultCard.h"
+#include "cards/DamagePassive.h"
 #include "UI/UICard.h"
 #include "../Player.h"
 
 Shooter* shooter = nullptr;
 
-Shooter::Shooter() 
+Shooter::Shooter()
 {
 	shooter = this;
-
-	/*cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
-	cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));
-	cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(cardMesh, cardShader, camera)));*/
 }
 
 void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
-
 	Card* newCard = nullptr;
 
 	switch (card->getCardType()) {

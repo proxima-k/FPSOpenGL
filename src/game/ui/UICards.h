@@ -7,6 +7,9 @@
 #include "../shooting/cards/PlaceholderCard1.h"
 #include "../shooting/cards/PlaceholderCard2.h"
 #include "../shooting/cards/PlaceholderCard3.h"
+#include "../shooting/cards/DamagePassive.h"
+#include "../shooting/cards/SpeedPassive.h"
+#include "../shooting/cards/DashPassive.h"
 #include "../../engine/xyzmath.h"
 
 #include <glew/glew.h>
@@ -20,7 +23,7 @@ class UICards
 {
 public:
     void renderCardSelection(ImVec2 windowSize);
-    void deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize);
+    void deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool highlightCard = false);
     void randomizeCards();
 
     GLuint basicCardTexture;
@@ -29,6 +32,9 @@ public:
     GLuint placeholder1card;
     GLuint placeholder2card;
     GLuint placeholder3card;
+    GLuint passivedamagecard;
+    GLuint passivespeedcard;
+    GLuint passivedashcard;
     GLuint emptydeck;
 
     std::vector<GLuint> selectedTextures;

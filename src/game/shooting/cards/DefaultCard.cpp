@@ -15,7 +15,7 @@ void DefaultCard::update(float deltaTime)
 		Enemy* enemy = dynamic_cast<Enemy*>(hit_actor);
 		if (enemy != nullptr)
 		{
-			enemy->take_damage(damage);
+			enemy->take_damage(damage * game->playerDamageMultiplier);
 
 			if(bDestroyOnHit)
 				destroy();
