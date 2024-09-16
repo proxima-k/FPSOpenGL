@@ -95,30 +95,35 @@ void UICards::renderCardSelection(ImVec2 windowSize)
     }
 }
 
-void UICards::deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize)
+void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize)
 {
-    if (shooter->cardQueue.size() <= 0) return;
+    float deckYSpacing = 20;
+
+    float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
+    float deckYOffset((1 - (2 - 1) / 2.0f) * deckYSpacing - (shooter->cardQueue.size() * deckYSpacing / 2));
+
+    ImVec2 cardPos(deckPos.x, deckPos.y + deckYOffset);
 
     std::vector<Card*> tempVector;
+    std::queue<Card*> tempQueue = queue;
 
-    std::queue<Card*> tempQueue = shooter->cardQueue;
+    if (queue.size() <= 0)
+    {
+        ImGui::SetCursorPos(cardPos);
+        ImGui::Image((void*)(intptr_t)emptydeck, cardSize);
 
-    float deckYSpacing = 20;
+        return;
+    }
 
     while (!tempQueue.empty()) {
         tempVector.push_back(tempQueue.front());
         tempQueue.pop();
     }
 
-    float windowWidth = ImGui::GetWindowWidth();
-    float windowHeight = ImGui::GetWindowHeight();
-
-    ImVec2 bottomRightCorner(windowWidth - cardSize.x - 20, windowHeight - cardSize.y - 20);
-
-    for (int i = shooter->cardQueue.size() - 1; i >= 0; i--)
+    for (int i = queue.size() - 1; i >= 0; i--)
     {
         float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
-        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing - (shooter->cardQueue.size() * deckYSpacing / 2));
+        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing - (queue.size() * deckYSpacing / 2));
 
         if (highlightCard && i == 0) {
             highlightProgress += ImGui::GetIO().DeltaTime * 5;
@@ -132,7 +137,7 @@ void UICards::deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize)
             highlightProgress = 0.0f;
         }
 
-        ImVec2 cardPos(bottomRightCorner.x, bottomRightCorner.y + deckYOffset);
+        ImVec2 cardPos(deckPos.x, deckPos.y + deckYOffset);
 
         ImGui::SetCursorPos(cardPos);
 

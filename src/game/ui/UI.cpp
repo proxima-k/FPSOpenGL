@@ -33,6 +33,7 @@ void UI::init(GLFWwindow* window)
     cards.placeholder1card = loadTextureFromFile("res/sprites/placeholder1card.png");
     cards.placeholder2card = loadTextureFromFile("res/sprites/placeholder2card.png");
     cards.placeholder3card = loadTextureFromFile("res/sprites/placeholder3card.png");
+    cards.emptydeck = loadTextureFromFile("res/sprites/emptydeck.png");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
 
@@ -72,6 +73,12 @@ void UI::render(GLFWwindow* window)
     ImVec2 cardSize(150, 220);
     ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) * 0.75f - (cardSize.y / 2));
 
+    float windowWidth = ImGui::GetWindowWidth();
+    float windowHeight = ImGui::GetWindowHeight();
+
+    ImVec2 deckPosPassives(windowWidth - cardSize.x - 20, windowHeight - cardSize.y - 20);
+    ImVec2 deckPosActives(windowWidth - cardSize.x * 2 - 40, windowHeight - cardSize.y - 20);
+
     switch (game->currentGameState)
     {
     case Game::GameStates::Playing:
@@ -81,7 +88,9 @@ void UI::render(GLFWwindow* window)
             cards.cardsRandomized = false;
             cards.highlightCard = false;
 
-            cards.deckShowcase(cardPosCenter, cardSize);
+            // take pos into account and make seperate cardQueue
+            cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
+            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
     case Game::GameStates::SelectCards:
@@ -90,7 +99,9 @@ void UI::render(GLFWwindow* window)
 
             cards.highlightCard = true;
 
-            cards.deckShowcase(cardPosCenter, cardSize);
+            // take pos into account and make seperate cardQueue
+            cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
+            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
     case Game::GameStates::Dead:

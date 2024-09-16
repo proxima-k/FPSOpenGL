@@ -99,8 +99,6 @@ public:
 
     void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
 
-    void timer_callback();
-
     float deltaTime = 0.f;
     float lastFrameTime = 0.f;
 

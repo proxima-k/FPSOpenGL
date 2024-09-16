@@ -20,7 +20,7 @@ class UICards
 {
 public:
     void renderCardSelection(ImVec2 windowSize);
-    void deckShowcase(ImVec2 cardPosCenter, ImVec2 cardSize);
+    void deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize);
     void randomizeCards();
 
     GLuint basicCardTexture;
@@ -29,6 +29,7 @@ public:
     GLuint placeholder1card;
     GLuint placeholder2card;
     GLuint placeholder3card;
+    GLuint emptydeck;
 
     std::vector<GLuint> selectedTextures;
 

@@ -27,6 +27,7 @@ public:
 	void setPlayer(Player* player) { this->player = player; }
 
 	std::queue<Card*> cardQueue;
+	std::queue<Card*> cardPassivesQueue;
 
 	Mesh* cardMesh;
 	Shader* cardShader;
