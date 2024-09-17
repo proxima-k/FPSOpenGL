@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "Physicsbody.h"
 #include "shooting/Shooter.h"
+#include "AudioManager.h"
 
 class Camera;
 
@@ -18,6 +19,7 @@ public:
 
 	void update(GLFWwindow* window, float deltaTime);
 	void processKeyboard(GLFWwindow* window, float deltaTime);
+	void processAudioInput(GLFWwindow* window);
 	void tiltCamera(GLFWwindow* window, float deltaTime);
 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	void updateCameraPosition();
@@ -27,6 +29,12 @@ public:
 	Camera* getCamera() const { return camera; }
 
 	Shooter shooter;
+	AudioManager audioManager;
+
+	bool prevWState;
+	bool prevSState;
+	bool prevAState;
+	bool prevDState;
 
 	float playerHeight = transform.scale.y / 2;
 	float speed = 1600;
