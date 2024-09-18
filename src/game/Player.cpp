@@ -17,6 +17,7 @@ Player::Player(Camera* camera)
 
 void Player::update(GLFWwindow* window, float deltaTime) 
 {
+    audioManager.update();
     physicsbody.update();
 
     processKeyboard(window, deltaTime);
@@ -159,12 +160,14 @@ void Player::updateCameraPosition()
 
 void Player::processAudioInput(GLFWwindow* window)
 {
+    float volume = 0.05f;
+
     bool isWPressed = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS);
     if (isWPressed && !prevWState)
     {
         auto clip = audioManager.getAudioClip("MoveUp.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, 1);
+            audioManager.playSound(clip, transform.position, volume);
     }
 
     bool isSPressed = (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS);
@@ -172,7 +175,7 @@ void Player::processAudioInput(GLFWwindow* window)
     {
         auto clip = audioManager.getAudioClip("MoveBack.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, 1);
+            audioManager.playSound(clip, transform.position, volume);
     }
 
     bool isAPressed = (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS);
@@ -180,7 +183,7 @@ void Player::processAudioInput(GLFWwindow* window)
     {
         auto clip = audioManager.getAudioClip("MoveLeft.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, 1);
+            audioManager.playSound(clip, transform.position, volume);
     }
 
     bool isDPressed = (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS);
@@ -188,7 +191,7 @@ void Player::processAudioInput(GLFWwindow* window)
     {
         auto clip = audioManager.getAudioClip("MoveRight.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, 1);
+            audioManager.playSound(clip, transform.position, volume);
     }
 
     prevWState = isWPressed;

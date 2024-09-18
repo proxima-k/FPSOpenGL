@@ -1,28 +1,27 @@
 #include "AudioManager.h"
 #include "openAL/dr_mp3.h"
 
-void AudioManager::init()
-{
+// init audiomanger and load audio files
+void AudioManager::init() {
+
     drmp3_config config;
     drmp3_uint64 totalPCMFrameCount;
     std::vector<std::string> fileNames = {
-        "MoveUp.mp3",
-        "MoveBack.mp3",
-        "MoveLeft.mp3",
+        "MoveUp.mp3", 
+        "MoveBack.mp3", 
+        "MoveLeft.mp3", 
         "MoveRight.mp3",
-        "ShotsFired.mp3",
-        "XPGain.mp3",
+        "ShotsFired.mp3", 
+        "XPGain.mp3", 
         "GameOver.mp3"
     };
 
     std::string path = "res/audio/";
 
-    for (const auto& fileName : fileNames)
-    {
+    for (const auto& fileName : fileNames) {
         std::string fullPath = path + fileName;
         drmp3_int16* audioData = drmp3_open_file_and_read_pcm_frames_s16(fullPath.c_str(), &config, &totalPCMFrameCount, nullptr);
-        if (!audioData)
-        {
+        if (!audioData) {
             std::cerr << "Failed to load audio file: " << fullPath << std::endl;
             continue;
         }
@@ -54,53 +53,17 @@ void AudioManager::init()
     }
 }
 
-void AudioManager::cleanup()
-{
-    for (const auto& source : sources) {
-        alec(alSourceStop(source));
-        alec(alSourcei(source, AL_BUFFER, 0));
-        alec(alDeleteSources(1, &source));
-    }
-    sources.clear();
-
-    for (const auto& buffer : buffers) {
-        alec(alDeleteBuffers(1, &buffer));
-    }
-    buffers.clear();
-
-    if (context) {
-        alcMakeContextCurrent(nullptr);
-        alcDestroyContext(context);
-        context = nullptr;
-    }
-    if (device) {
-        alcCloseDevice(device);
-        device = nullptr;
-    }
-
+//get audio clip by file name
+AudioClip* AudioManager::getAudioClip(const std::string& fileName) {
     for (auto& audioClip : audioClips) {
-        if (audioClip) {
-            delete[] audioClip->audioData;
-            delete audioClip;
-        }
-    }
-    audioClips.clear();
-}
-
-AudioClip* AudioManager::getAudioClip(const std::string& fileName)
-{
-    for (auto& audioClip : audioClips)
-    {
-        if (audioClip->fileName == fileName)
-        {
+        if (audioClip->fileName == fileName) {
             return audioClip;
         }
     }
     return nullptr;
 }
 
-void AudioManager::playSound(AudioClip* audioClip, glm::vec3 location, float volume)
-{
+void AudioManager::playSound(AudioClip* audioClip, glm::vec3 location, float volume) {
     if (!audioClip) {
         std::cerr << "Invalid AudioClip" << std::endl;
         return;
@@ -114,7 +77,6 @@ void AudioManager::playSound(AudioClip* audioClip, glm::vec3 location, float vol
     drmp3_uint64 totalPCMFrameCount = audioClip->totalPCMFrameCount;
     drmp3_int16* audioData = audioClip->audioData;
 
-    // Create a copy of the audio data
     std::vector<uint16_t> pcmData(static_cast<size_t>(totalPCMFrameCount * config.channels));
     std::memcpy(pcmData.data(), audioData, pcmData.size() * sizeof(drmp3_int16));
 
@@ -133,4 +95,28 @@ void AudioManager::playSound(AudioClip* audioClip, glm::vec3 location, float vol
     alec(alSourcei(source, AL_BUFFER, buffer));
 
     alec(alSourcePlay(source));
+
+    activeSourceBuffers.push_back({ source, buffer });
+}
+
+void AudioManager::update() {
+    auto it = activeSourceBuffers.begin();
+    while (it != activeSourceBuffers.end()) {
+        ALint sourceState;
+        alec(alGetSourcei(it->source, AL_SOURCE_STATE, &sourceState));
+
+        if (sourceState == AL_STOPPED) {
+            alec(alSourceStop(it->source));
+            alec(alDeleteSources(1, &it->source));
+
+            if (alIsBuffer(it->buffer)) {
+                alec(alDeleteBuffers(1, &it->buffer));
+            }
+
+            it = activeSourceBuffers.erase(it);
+        }
+        else {
+            it++;
+        }
+    }
 }
