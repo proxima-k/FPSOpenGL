@@ -202,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\xyzmath.h" />
+    <ClInclude Include="src\game\AudioClip.h" />
     <ClInclude Include="src\game\shooting\cards\DamagePassive.h" />
     <ClInclude Include="src\game\shooting\cards\PassiveCard.h" />
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard1.h" />
