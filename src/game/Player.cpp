@@ -11,13 +11,10 @@ Player::Player(Camera* camera)
     transform.scale = glm::vec3(0.5f);
     physicsbody.bGravity = true;
     collision_channel = Collision_Channel::Player;
-
-    audioManager.init();
 }
 
 void Player::update(GLFWwindow* window, float deltaTime) 
 {
-    audioManager.update();
     physicsbody.update();
 
     processKeyboard(window, deltaTime);
@@ -42,15 +39,20 @@ void Player::update(GLFWwindow* window, float deltaTime)
 void Player::checkCollision() 
 {
 
-    /*Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
+    Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
+        auto xpSoundEffect = audioManager->getAudioClip("GameOver.mp3");
+        audioManager->playSound(xpSoundEffect, transform.position, 0.4f);
         die();
-    }*/
+    }
 
     Entity* hit_actor2 = game->get_coliding_entity(this, Collision_Channel::XP);
     if (hit_actor2 != nullptr)
     {
+        auto xpSoundEffect = audioManager->getAudioClip("XPGain.mp3");
+        audioManager->playSound(xpSoundEffect, transform.position, 0.2f);
+
         hit_actor2->destroy();
     }
 }
@@ -111,8 +113,8 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
     static float currentTilt = 0.0f;
     static float lastTilt = 0.0f;
 
-    float rotationSpeed = 10.0f;
-    float maxTilt = 5.0f;
+    const float rotationSpeed = 10.0f;
+    const float maxTilt = 5.0f;
     float targetTilt = 0.0f;
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -160,38 +162,38 @@ void Player::updateCameraPosition()
 
 void Player::processAudioInput(GLFWwindow* window)
 {
-    float volume = 0.05f;
+    const float volume = 0.05f;
 
     bool isWPressed = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS);
     if (isWPressed && !prevWState)
     {
-        auto clip = audioManager.getAudioClip("MoveUp.mp3");
+        auto clip = audioManager->getAudioClip("MoveUp.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     bool isSPressed = (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS);
     if (isSPressed && !prevSState)
     {
-        auto clip = audioManager.getAudioClip("MoveBack.mp3");
+        auto clip = audioManager->getAudioClip("MoveBack.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     bool isAPressed = (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS);
     if (isAPressed && !prevAState)
     {
-        auto clip = audioManager.getAudioClip("MoveLeft.mp3");
+        auto clip = audioManager->getAudioClip("MoveLeft.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     bool isDPressed = (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS);
     if (isDPressed && !prevDState)
     {
-        auto clip = audioManager.getAudioClip("MoveRight.mp3");
+        auto clip = audioManager->getAudioClip("MoveRight.mp3");
         if (clip)
-            audioManager.playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     prevWState = isWPressed;

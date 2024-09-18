@@ -29,7 +29,6 @@ public:
 	Camera* getCamera() const { return camera; }
 
 	Shooter shooter;
-	AudioManager audioManager;
 
 	bool prevWState;
 	bool prevSState;

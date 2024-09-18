@@ -21,13 +21,17 @@ void DefaultCard::update(float deltaTime)
 				destroy();
 		}
 	}
+
+	timer.updateTimer(deltaTime);
 }
 
 void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = true;
+	aliveTime = 200.0f;
 	damage = 5;
 
+	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 }

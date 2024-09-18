@@ -25,13 +25,17 @@ void SineCard::update(float deltaTime)
 				destroy();
 		}
 	}
+
+	timer.updateTimer(deltaTime);
 }
 
 void SineCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
+	aliveTime = 200.0f;
 	damage = 10;
 
+	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 }

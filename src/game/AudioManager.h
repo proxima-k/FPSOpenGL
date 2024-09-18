@@ -52,4 +52,5 @@ private:
     std::vector<SourceBuffer> activeSourceBuffers;
 };
 
+extern AudioManager* audioManager;
 #endif

@@ -63,6 +63,7 @@ Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), w
 Player player(&playerCamera);
 UI ui;
 Game* game = nullptr;
+AudioManager* audioManager = nullptr;
 
 GLuint LoadTextureFromFile(const char* filename)
 {
@@ -156,6 +157,8 @@ int main(void)
     bool show_log_window = true;
 
     game = new Game();
+    audioManager = new AudioManager();
+
     Camera::mainCamera = &playerCamera;
 
 
@@ -183,6 +186,7 @@ int main(void)
 
 		player.shooter.setPlayer(&player);
 
+        audioManager->init();
         game->setMeshRenderer(&cubeMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
@@ -212,6 +216,8 @@ int main(void)
 
             game->update();
             game->render();
+
+            audioManager->update();
 
 			cubeEnemySpawner.update(deltaTime);
 
