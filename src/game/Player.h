@@ -8,7 +8,6 @@
 #include "Entity.h"
 #include "Physicsbody.h"
 #include "shooting/Shooter.h"
-#include "AudioManager.h"
 
 class Camera;
 
@@ -29,7 +28,6 @@ public:
 	Camera* getCamera() const { return camera; }
 
 	Shooter shooter;
-	AudioManager audioManager;
 
 	bool prevWState;
 	bool prevSState;

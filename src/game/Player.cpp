@@ -18,7 +18,6 @@ void Player::update(GLFWwindow* window, float deltaTime)
     physicsbody.update();
 
     processKeyboard(window, deltaTime);
-    processAudioInput(window);
 
     tiltCamera(window, deltaTime);
 
@@ -153,36 +152,4 @@ void Player::mouse_button_callback(GLFWwindow* window, int button, int action, i
 void Player::updateCameraPosition() 
 {
     camera->transform.position = transform.position;
-}
-
-void Player::processAudioInput(GLFWwindow* window)
-{
-    bool isWPressed = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS);
-    if (isWPressed && !prevWState)
-    {
-        audioManager.playSound("../../res/audio/MoveUp.mp3", transform.position, 1);
-    }
-
-    bool isSPressed = (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS);
-    if (isSPressed && !prevSState)
-    {
-        audioManager.playSound("../../res/audio/MoveBack.mp3", transform.position, 1);
-    }
-
-    bool isAPressed = (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS);
-    if (isAPressed && !prevAState)
-    {
-        audioManager.playSound("../../res/audio/MoveLeft.mp3", transform.position, 1);
-    }
-
-    bool isDPressed = (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS);
-    if (isDPressed && !prevDState)
-    {
-        audioManager.playSound("../../res/audio/MoveRight.mp3", transform.position, 1);
-    }
-
-    prevWState = isWPressed;
-    prevSState = isSPressed;
-    prevAState = isAPressed;
-    prevDState = isDPressed;
 }

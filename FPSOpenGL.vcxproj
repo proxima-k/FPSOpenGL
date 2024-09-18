@@ -162,7 +162,6 @@
     <ClCompile Include="src\game\Spawner.cpp" />
     <ClCompile Include="src\engine\Trail.cpp" />
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
-    <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\shooting\cards\DefaultCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
     <ClCompile Include="src\game\ui\UI.cpp" />
@@ -213,7 +212,6 @@
     <ClInclude Include="src\engine\Trail.h" />
     <ClInclude Include="src\game\shooting\cards\CosineCard.h" />
     <ClInclude Include="src\engine\Timer.h" />
-    <ClInclude Include="src\game\AudioManager.h" />
     <ClInclude Include="src\game\shooting\cards\DefaultCard.h" />
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
     <ClInclude Include="src\game\ui\UI.h" />
