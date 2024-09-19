@@ -9,6 +9,9 @@ void DefaultCard::update(float deltaTime)
 
 	transform.position = currentPosition + rightVector * height;
 
+	glm::quat targetRotation = glm::quatLookAt(glm::normalize(launchDirection), upDirection);
+	transform.rotation = targetRotation;
+
 	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
 	{

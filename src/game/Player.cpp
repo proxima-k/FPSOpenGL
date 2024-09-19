@@ -66,6 +66,11 @@ void Player::die()
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 {
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    {
+	    game->addPlayerXP(50);
+	}
+
     // movement
     const float playerSpeed = speed * game->playerSpeedMultiplier * deltaTime;
     physicsbody.acceleration = glm::vec3(0.0f);
