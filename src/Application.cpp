@@ -42,6 +42,8 @@
 
 #include "game/Spawner.h"
 
+#include "game/AudioManager.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);

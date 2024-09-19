@@ -4,6 +4,7 @@
 #include"Transform.h"
 #include "Game.h"
 #include "imgui/imgui.h"
+#include "AudioManager.h"
 
 Player::Player(Camera* camera)
     : Entity(), camera(camera), physicsbody()
