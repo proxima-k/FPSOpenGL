@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
     <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\shooting\cards\DashPassive.h" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard1.cpp" />
