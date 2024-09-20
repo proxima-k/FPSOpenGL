@@ -44,6 +44,8 @@
 
 #include "game/AudioManager.h"
 
+#include "engine/HTTPRequest.hpp"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -196,6 +198,10 @@ int main(void)
         ui.init(window);
 
 		Spawner<CubeEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
+
+        http::Request request("https://discord.com/api/webhooks/1286625387412983869/gAWkT8KL9V9svwPt5UnMJ_tK7-_P6IdV-lAMPy_FiuIr2BPP142OwznyzzjzuqMVbAmp");
+
+        std::string message = "Someone just started the game!";
 
         while (!glfwWindowShouldClose(window))
         {
