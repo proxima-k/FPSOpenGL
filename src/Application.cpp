@@ -43,6 +43,7 @@
 #include "game/Spawner.h"
 
 #include "game/AudioManager.h"
+#include "engine/SteamManager.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
@@ -66,6 +67,7 @@ Player player(&playerCamera);
 UI ui;
 Game* game = nullptr;
 AudioManager* audioManager = nullptr;
+SteamManager* steamManager = nullptr;
 
 GLuint LoadTextureFromFile(const char* filename)
 {
@@ -160,10 +162,16 @@ int main(void)
 
     game = new Game();
     audioManager = new AudioManager();
-
+    steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
 
+    //SteamAPI_Init();
+    //if (SteamAPI_RestartAppIfNecessary(steamManager->getAppId()))
+    //{
+    //    return -1;
+    //}
 
+    std::cout << "Connecting to steam APP ID:" << steamManager->getAppId() << " is currently disabled in Application.cpp\n";
 
     /*Logger logger;
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));*/

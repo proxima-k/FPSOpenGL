@@ -123,16 +123,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include;$(SolutionDir)dependencies\steam\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\openAL\lib;$(SolutionDir)dependencies\GLFW\lib;$(SolutionDir)dependencies\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\openAL\lib;$(SolutionDir)dependencies\GLFW\lib;$(SolutionDir)dependencies\glew\lib;$(SolutionDir)dependencies\steam\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32s.lib;OpenAL32.lib;steam_api64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -203,6 +203,7 @@
     <ClCompile Include="src\game\shooting\UI\UICard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\SteamManager.h" />
     <ClInclude Include="src\engine\xyzmath.h" />
     <ClInclude Include="src\game\AudioClip.h" />
     <ClInclude Include="src\game\AudioManager.h" />
