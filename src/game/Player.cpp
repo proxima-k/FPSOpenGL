@@ -78,6 +78,8 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         physicsbody.acceleration -= glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         physicsbody.acceleration += glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+        game->addPlayerXP(10);
 
     // jumping and dampening
     bool bIsGrounded = transform.position.y < 0 + playerHeight + 0.1f;

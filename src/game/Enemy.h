@@ -29,7 +29,6 @@ public:
 	void die(float xpSpawnAmount) 
 	{
 		game->addPlayerXP(xpAmount);
-		game->spawnXP(transform.position, xpSpawnAmount);
 		destroy();
 	}
 };
