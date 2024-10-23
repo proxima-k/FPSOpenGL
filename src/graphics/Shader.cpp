@@ -127,6 +127,7 @@ unsigned int Shader::GetUniformLocation(const std::string& name)
         std::cout << "[Shader warning] uniform '" << name << "' doesn't exist or not being used!\n"
                   << ">> shader file: " << m_FilePath << std::endl;
     
+	// caching of uniform location
     m_UniformLocationCache[name] = location;
     return location;
 }

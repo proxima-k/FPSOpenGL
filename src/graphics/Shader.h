@@ -25,7 +25,14 @@ public:
 
 	unsigned int GetID() const;
 
+	// Set uniforms
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+	void SetInt(const std::string& name, int value);
+	void SetFloat(const std::string& name, float value);
+	void SetFloat2(const std::string& name, float v0, float v1);
+	void SetFloat3(const std::string& name, float v0, float v1, float v2);
+	void SetMat4(const std::string& name, const float* matrix);
+
 
 private:
 	ShaderProgramSource ParseShader(const std::string& filePath);
