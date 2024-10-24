@@ -29,7 +29,7 @@ void Renderer::Clear() const
 void Renderer::Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const
 {
     shader.Bind();
-    //shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+    //shader.SetFloat4("u_Color", r, 0.3f, 0.8f, 1.0f);
 
     vertexArray.Bind();
     indexBuffer.Bind();

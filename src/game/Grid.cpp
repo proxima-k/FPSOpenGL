@@ -108,12 +108,15 @@ void Grid::draw()
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
-	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
+	shader->SetMat4("u_Model", model);
+	shader->SetMat4("u_View", view);
+	shader->SetMat4("u_Projection", projection);
+	/*unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	unsigned int viewLoc = glGetUniformLocation(shader->GetID(), "u_View");
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));*/
 
 	glm::vec3 bgColor(0.1f);
 	unsigned int bgColorLoc = glGetUniformLocation(shader->GetID(), "u_bgColor");

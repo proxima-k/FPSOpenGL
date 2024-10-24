@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <glm/gtc/type_ptr.hpp>
 
 struct ShaderProgramSource
 {
@@ -26,12 +27,12 @@ public:
 	unsigned int GetID() const;
 
 	// Set uniforms
-	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void SetInt(const std::string& name, int value);
 	void SetFloat(const std::string& name, float value);
 	void SetFloat2(const std::string& name, float v0, float v1);
 	void SetFloat3(const std::string& name, float v0, float v1, float v2);
-	void SetMat4(const std::string& name, const float* matrix);
+	void SetFloat4(const std::string& name, float v0, float v1, float v2, float v3);
+	void SetMat4(const std::string& name, glm::mat4 matrix4x4);
 
 
 private:
