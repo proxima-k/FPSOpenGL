@@ -192,7 +192,7 @@ int main(void)
 
         std::vector<float> teapotVertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
         Mesh teapotMesh(teapotVertices);
-
+		MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
        
 
         // setup post process components 
@@ -304,7 +304,7 @@ int main(void)
             // geometry pass
             game->render();
             teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
-			enemyCubeMeshRenderer.draw(glm::vec3(3, 0.2f, 0), glm::quat(1, 0, 0, 0), glm::vec3(0.5f));
+			cubeMeshRenderer.draw(glm::vec3(3, 0.2f, 0), glm::quat(1, 0, 0, 0), glm::vec3(0.5f));
 
             ui.begin();
             ui.render(window);

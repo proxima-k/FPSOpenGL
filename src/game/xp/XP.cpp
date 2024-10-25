@@ -15,7 +15,7 @@ XP::XP(glm::vec3 position, MeshRenderer meshrenderer)
 	glm::vec3 xpColor = glm::vec3(1.0f, 1.0f, 0.0f);
 	meshRenderer.setColor(xpColor);
 
-	Shader* trailShader = new Shader("res/shaders/Basic.shader");
+	Shader* trailShader = new Shader("res/shaders/mesh.shader");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 20;

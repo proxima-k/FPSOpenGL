@@ -6,7 +6,7 @@
 CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
 	: Enemy(position, meshRenderer), physicsBody(), trailRenderer()
 {
-	Shader* trailShader = new Shader("res/shaders/Basic.shader");
+	Shader* trailShader = new Shader("res/shaders/mesh.shader");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 25;
