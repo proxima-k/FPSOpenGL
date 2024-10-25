@@ -25,18 +25,18 @@ void UI::init(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    crosshair = loadTextureFromFile("res/sprites/crosshair177.png");
+    crosshair = game->textureManager->getTexture("crosshair177");
 
-    cards.basicCardTexture = loadTextureFromFile("res/sprites/basiccard.png");
-    cards.sineCardTexture = loadTextureFromFile("res/sprites/sinecard.png");
-    cards.cosineCardTexture = loadTextureFromFile("res/sprites/cosinecard.png");
-    cards.placeholder1card = loadTextureFromFile("res/sprites/placeholder1card.png");
-    cards.placeholder2card = loadTextureFromFile("res/sprites/placeholder2card.png");
-    cards.placeholder3card = loadTextureFromFile("res/sprites/placeholder3card.png");
-    cards.passivedamagecard = loadTextureFromFile("res/sprites/damagebuffcard.png");
-    cards.passivespeedcard = loadTextureFromFile("res/sprites/speedbuffcard.png");
-    cards.passivedashcard = loadTextureFromFile("res/sprites/dashbuffcard.png");
-    cards.emptydeck = loadTextureFromFile("res/sprites/emptydeck.png");
+    cards.basicCardTexture = game->textureManager->getTexture("basiccard");
+    cards.sineCardTexture = game->textureManager->getTexture("sinecard");
+    cards.cosineCardTexture = game->textureManager->getTexture("cosinecard");
+    cards.placeholder1card = game->textureManager->getTexture("placeholder1card");
+    cards.placeholder2card = game->textureManager->getTexture("placeholder2card");
+    cards.placeholder3card = game->textureManager->getTexture("placeholder3card");
+    cards.passivedamagecard = game->textureManager->getTexture("damagebuffcard");
+    cards.passivespeedcard = game->textureManager->getTexture("speedbuffcard");
+    cards.passivedashcard = game->textureManager->getTexture("dashbuffcard");
+    cards.emptydeck = game->textureManager->getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
 
@@ -163,28 +163,4 @@ void UI::shutdown()
         ImGui::DestroyContext();
         initialized = false; // Reset flag after shutdown
     }
-}
-
-GLuint UI::loadTextureFromFile(const char* filename)
-{
-    int width, height, channels;
-    unsigned char* pixels = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
-    if (!pixels)
-    {
-        std::cerr << "Failed to load image: " << filename << std::endl;
-        return 0;
-    }
-
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    stbi_image_free(pixels);
-
-    return textureID;
 }

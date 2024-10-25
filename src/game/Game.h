@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Transform.h"
 #include "../engine/Timer.h"
+#include "../engine/TextureManager.h"
 #include "xp/XP.h"
 
 #include <iostream>
@@ -25,6 +26,9 @@ public:
         {
             entitys[i] = nullptr;  // initialize all pointers to nullptr
         }
+
+        textureManager = new TextureManager;
+        textureManager->init();
     }
     ~Game()
     {
@@ -35,6 +39,8 @@ public:
             delete entitys[i];
             entitys[i] = nullptr;
         }
+
+        delete textureManager;
     }
 
     void update();
@@ -105,6 +111,8 @@ public:
     Mesh* cubeEnemyMesh;
     Shader* cubeEnemyShader;
     Camera* camera;
+
+    TextureManager* textureManager;
 
     GameStates currentGameState = GameStates::Playing;
 

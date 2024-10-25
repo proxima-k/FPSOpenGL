@@ -30,8 +30,6 @@ public:
 private:
     UICards cards;
 
-    GLuint loadTextureFromFile(const char* filename);
-
     GLuint crosshair;
     ImFont* kanitFont;
 
