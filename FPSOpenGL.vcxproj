@@ -260,10 +260,11 @@
     <ClInclude Include="src\game\shooting\UI\UICard.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\mesh.shader" />
     <None Include="res\shaders\grid.shader" />
     <None Include="res\shaders\transition.frag" />
     <None Include="res\shaders\transition.vert" />
+    <None Include="res\shaders\postprocess.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

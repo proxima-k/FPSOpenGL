@@ -186,10 +186,79 @@ int main(void)
         // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         Mesh cubeMesh(vertices);
-
-        Shader meshShader("res/shaders/Basic.shader");
+        Shader meshShader("res/shaders/mesh.shader");
 
         MeshRenderer cubeMeshRenderer(&cubeMesh, &meshShader, Camera::mainCamera);
+
+        std::vector<float> teapotVertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
+        Mesh teapotMesh(teapotVertices);
+
+       
+
+        // setup post process components 
+        float texVertices[] = {
+            // positions   // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f,  1.0f,  0.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  1.0f,  1.0f, 1.0f
+        };
+        Shader outlineShader("res/shaders/postprocess.shader");
+        VertexArray quadVAO;
+        VertexBuffer quadVBO(texVertices, sizeof(texVertices));
+        VertexBufferLayout layout;
+        layout.Push<float>(2);
+        layout.Push<float>(2);
+        quadVAO.AddBuffer(quadVBO, layout);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, windowWidth, windowHeight);
+
+        unsigned int FBO;
+        glGenFramebuffers(1, &FBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		glViewport(0, 0, windowWidth, windowHeight);
+
+        unsigned int colorBufferTexture;
+        glGenTextures(1, &colorBufferTexture);
+        glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferTexture, 0);
+
+        unsigned int depthBufferTexture;
+        glGenTextures(1, &depthBufferTexture);
+        glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, windowWidth, windowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBufferTexture, 0);
+
+        GLuint normalTexture;
+        glGenTextures(1, &normalTexture);
+        glBindTexture(GL_TEXTURE_2D, normalTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, windowWidth, windowHeight, 0, GL_RGB, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
+
+        GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+        glDrawBuffers(2, attachments);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            std::cerr << "ERROR: FRAMEBUFFER NOT COMPLETE" << std::endl;
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 
         // setup card mesh, shader and camera
         player.shooter.setCardRenderer(&cubeMesh, &meshShader, &playerCamera);
@@ -207,10 +276,8 @@ int main(void)
 
         while (!glfwWindowShouldClose(window))
         {
+            // LOGICS =========================================================
             glfwPollEvents();
-
-            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
                 glfwTerminate();
@@ -223,20 +290,60 @@ int main(void)
             {
                 player.update(window, deltaTime);
             }
-
             game->update();
-            game->render();
-
             audioManager->update();
-
 			cubeEnemySpawner.update(deltaTime);
-
             floorGrid.update();
-            floorGrid.draw();
+
+            // GRAPHICS =======================================================
+            glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glEnable(GL_DEPTH_TEST);
+
+            // geometry pass
+            game->render();
+            teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
+			enemyCubeMeshRenderer.draw(glm::vec3(3, 0.2f, 0), glm::quat(1, 0, 0, 0), glm::vec3(0.5f));
 
             ui.begin();
             ui.render(window);
             ui.end();
+
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)
+
+            // Blit the depth buffer from the FBO to the default framebuffer
+            glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+            // post processing pass
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            outlineShader.Bind();
+            glDisable(GL_DEPTH_TEST);
+            
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
+            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_colorTexture"), 0);
+
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
+            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_depthTexture"), 1);
+
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, normalTexture);
+            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_normalTexture"), 2);
+
+            quadVAO.Bind();
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+            
+            // floor grid pass
+            floorGrid.draw();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
