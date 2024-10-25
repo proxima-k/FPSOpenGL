@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "../engine/Timer.h"
 #include "../engine/TextureManager.h"
+#include "../game/AudioManager.h"
 #include "xp/XP.h"
 
 #include <iostream>
@@ -29,6 +30,9 @@ public:
 
         textureManager = new TextureManager;
         textureManager->init();
+
+        audioManager = new AudioManager;
+        audioManager->init();
     }
     ~Game()
     {
@@ -41,6 +45,7 @@ public:
         }
 
         delete textureManager;
+        delete audioManager;
     }
 
     void update();
@@ -113,6 +118,7 @@ public:
     Camera* camera;
 
     TextureManager* textureManager;
+    AudioManager* audioManager;
 
     GameStates currentGameState = GameStates::Playing;
 

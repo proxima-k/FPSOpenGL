@@ -5,53 +5,46 @@
 
 TextureManager* textureManager = nullptr;
 
+const std::filesystem::path filePath = "res/sprites/";
+
 void TextureManager::init() {
     std::vector<std::string> loadStrings;
-    std::string folderPath = std::filesystem::current_path().string() + filePath;
+    std::filesystem::path folderPath = std::filesystem::current_path() / filePath;
 
     for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
         if (entry.is_regular_file()) {
             std::string textureName = entry.path().stem().string();
             loadStrings.push_back(textureName);
-            std::cout << "Found texture: " << textureName << std::endl; // log each found texture
         }
     }
 
     for (const std::string& textureName : loadStrings) {
-        std::cout << textureName << std::endl;
         loadTexture(textureName);
     }
+
+    std::cout << "Textures Loaded";
 }
 
 void TextureManager::loadTexture(std::string textureName) {
-    std::string _filePath = filePath + textureName + ".png";
+    std::filesystem::path fullFilePath = filePath / (textureName + ".png");
     int width, height, channels;
 
-    stbi_set_flip_vertically_on_load(true); // flip image if needed
-    unsigned char* data = stbi_load(_filePath.c_str(), &width, &height, &channels, 0);
+    unsigned char* data = stbi_load(fullFilePath.string().c_str(), &width, &height, &channels, 0);
 
     if (!data) {
-        std::cerr << "Failed to load texture: " << filePath << " Error: " << stbi_failure_reason() << std::endl;
+        std::cerr << "Failed to load texture: " << fullFilePath << " Error: " << stbi_failure_reason() << std::endl;
         return;
     }
 
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
 
-    // set texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // upload the texture data
-    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    stbi_image_free(data);
 
-    stbi_image_free(data); // free image data after uploading to GPU
-
-    textures[textureName] = texture;
-    std::cout << "Loaded texture: " << textureName << " with ID: " << texture << std::endl;
+    textures[textureName] = textureID;
 }

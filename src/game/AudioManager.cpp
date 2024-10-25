@@ -1,25 +1,29 @@
 #include "AudioManager.h"
 #include "openAL/dr_mp3.h"
+#include <filesystem>
 
-// init audiomanger and load audio files
+const std::filesystem::path filePath = "res/audio/";
+
 void AudioManager::init() {
 
     drmp3_config config;
     drmp3_uint64 totalPCMFrameCount;
-    std::vector<std::string> fileNames = {
-        "MoveUp.mp3", 
-        "MoveBack.mp3", 
-        "MoveLeft.mp3", 
-        "MoveRight.mp3",
-        "ShotsFired.mp3", 
-        "XPGain.mp3", 
-        "GameOver.mp3"
-    };
+
+    std::vector<std::string> fileNames;
+    std::filesystem::path folderPath = std::filesystem::current_path() / filePath;
+
+    for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+        if (entry.is_regular_file()) {
+            std::string textureName = entry.path().stem().string();
+            fileNames.push_back(textureName);
+        }
+    }
 
     std::string path = "res/audio/";
 
     for (const auto& fileName : fileNames) {
-        std::string fullPath = path + fileName;
+
+        std::string fullPath = path + fileName + ".mp3";
         drmp3_int16* audioData = drmp3_open_file_and_read_pcm_frames_s16(fullPath.c_str(), &config, &totalPCMFrameCount, nullptr);
         if (!audioData) {
             std::cerr << "Failed to load audio file: " << fullPath << std::endl;
@@ -35,8 +39,6 @@ void AudioManager::init() {
         audioClips.push_back(audioClip);
     }
 
-    std::cerr << "Audio clips loaded" << std::endl;
-
     const ALCchar* defaultDeviceString = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
     device = alcOpenDevice(defaultDeviceString);
     if (!device) {
@@ -51,12 +53,15 @@ void AudioManager::init() {
         device = nullptr;
         return;
     }
+
+    std::cout << "Audio Loaded" << std::endl;
 }
 
 //get audio clip by file name
 AudioClip* AudioManager::getAudioClip(const std::string& fileName) {
     for (auto& audioClip : audioClips) {
         if (audioClip->fileName == fileName) {
+            std::cout << "Success" << std::endl;
             return audioClip;
         }
     }
@@ -97,6 +102,8 @@ void AudioManager::playSound(AudioClip* audioClip, glm::vec3 location, float vol
     alec(alSourcePlay(source));
 
     activeSourceBuffers.push_back({ source, buffer });
+
+    std::cout << "Playing" << std::endl;
 }
 
 void AudioManager::update() {

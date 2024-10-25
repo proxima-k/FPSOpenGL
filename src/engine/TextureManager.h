@@ -23,8 +23,6 @@ public:
 
 		return 0;
 	}
-
-	const std::string filePath = "/res/sprites/";
 };
 
 extern TextureManager* textureManager;

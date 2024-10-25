@@ -32,6 +32,8 @@ void Game::update()
 		}
 	}
 
+	audioManager->update();
+
 	//if (spawnEnemy && !gameOver) {
 
 	//	// spawn a new enemy when the timer reaches zero
