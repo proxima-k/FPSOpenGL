@@ -120,8 +120,8 @@ void UI::render(GLFWwindow* window)
 
 void UI::renderPlayModeUI(ImVec2 windowSize)
 {
-    float maxScore = game->maxPlayerXP;
-    float playerScore = game->crtPlayerXP;
+    float maxScore = game->getPlayerMaxXP();
+    float playerScore = game->getPlayerXP();
     float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
     float crtScoreFraction = clampedScore / maxScore;
 

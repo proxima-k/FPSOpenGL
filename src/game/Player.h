@@ -24,6 +24,7 @@ public:
 	void updateCameraPosition();
 	void checkCollision();
 	void die();
+	void reset();
 
 	Camera* getCamera() const { return camera; }
 

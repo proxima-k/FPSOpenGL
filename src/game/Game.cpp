@@ -1,14 +1,43 @@
 #include <iostream>
 
 #include "Game.h"
+
 #include "Player.h"
+#include "enemies/CubeEnemy.h"
+
 #include "AABB.h"
+
 #include "../graphics/MeshRenderer.h"
 #include "../graphics/Mesh.h"
 #include "../graphics/Shader.h"
-#include "enemies/CubeEnemy.h"
 
-void Game::update() 
+Game::Game()
+{
+	for (int i = 0; i < MAX_ENTITYS; ++i)
+	{
+		entitys[i] = nullptr;  // initialize all pointers to nullptr
+	}
+
+	textureManager = new TextureManager;
+	textureManager->init();
+
+	audioManager = new AudioManager;
+	audioManager->init();
+}
+
+Game::~Game()
+{
+	for (int i = 0; i < MAX_ENTITYS; ++i)
+	{
+		delete entitys[i];
+		entitys[i] = nullptr;
+	}
+	
+	delete textureManager;
+	delete audioManager;
+}
+
+void Game::update()
 {
 	double currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrameTime;
@@ -33,27 +62,7 @@ void Game::update()
 	}
 
 	audioManager->update();
-
-	//if (spawnEnemy && !gameOver) {
-
-	//	// spawn a new enemy when the timer reaches zero
-	//	if (timer.isZero())
-	//	{
-	//		timer.setTimer(20);
-	//		timer.setCallback([this]() { this->timer_callback(); });
-	//	}
-
-	//	timer.updateTimer(deltaTime);
-	//}
 }
-
-// callback function for the timer
-//void Game::timer_callback()
-//{
-//	MeshRenderer newMeshRenderer(cubeEnemyMesh, cubeEnemyShader, camera);
-//	Entity* newEnemy = game->spawn_entity<CubeEnemy>(glm::vec3(1), newMeshRenderer);
-//	newEnemy->transform.position = camera->transform.position + newEnemy->transform.getRandomPointInRadius(10, 25);
-//}
 
 // calls the draw function on all the entities
 void Game::render()
@@ -86,7 +95,24 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 	return nullptr;
 }
 
-void Game::GameOver()
+void Game::enterSelectCardState()
+{
+	if (crtPlayerXP >= maxPlayerXP) {
+		for (int i = 0; i < MAX_ENTITYS; i++) {
+			if (entitys[i] != nullptr) {
+				if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
+					entitys[i]->destroyed = true;
+				}
+			}
+		}
+		crtPlayerXP = 0;
+		scaleMaxPlayerXP();
+
+		currentGameState = GameStates::SelectCards;
+	}
+}
+
+void Game::gameOver()
 {
 	currentGameState = Dead;
 
@@ -96,6 +122,26 @@ void Game::GameOver()
 		{
 			entitys[i]->destroy();
 		}
+	}
+}
+
+void Game::reset()
+{
+	crtPlayerXP = 0;
+	maxPlayerXP = 100;
+
+	playerDamageMultiplier = 1.0f;
+	playerSpeedMultiplier = 1.0f;
+	playerDashMultiplier = 1.0f;
+
+	bGameOver = false;
+
+	GameStates currentGameState = GameStates::Playing;
+
+	for (int i = 0; i < MAX_ENTITYS; ++i)
+	{
+		delete entitys[i];
+		entitys[i] = nullptr;
 	}
 }
 

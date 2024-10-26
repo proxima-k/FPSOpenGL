@@ -19,7 +19,7 @@ Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsi
 
 void Camera::processMouseMovement(float xPos, float yPos)
 {
-    if (game->gameOver) return;
+    if (game->bGameOver) return;
 
     if (firstMouse)
     {

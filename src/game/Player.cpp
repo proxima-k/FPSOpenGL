@@ -39,7 +39,6 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::checkCollision() 
 {
-
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
@@ -59,9 +58,12 @@ void Player::checkCollision()
 }
 
 void Player::die()
-
 {
-    game->GameOver();
+    game->gameOver();
+}
+
+void Player::reset()
+{
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -147,7 +149,6 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
 
 void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
         shooter.shootDefault(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());
