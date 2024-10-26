@@ -114,7 +114,7 @@ void Game::enterSelectCardState()
 
 void Game::gameOver()
 {
-	currentGameState = Dead;
+	currentGameState = Menu;
 
 	for (int i = 0; i < MAX_ENTITYS; i++)
 	{
@@ -135,6 +135,8 @@ void Game::reset()
 	playerDashMultiplier = 1.0f;
 
 	bGameOver = false;
+
+	player->reset();
 
 	GameStates currentGameState = GameStates::Playing;
 

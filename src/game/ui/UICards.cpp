@@ -14,9 +14,9 @@ void UICards::renderCardSelection(ImVec2 windowSize)
     randomizeCards();
 
     // card states
-    static std::vector<float> cardScales(selectionAmount, 1.0f);
-    static std::vector<float> cardTimes(selectionAmount, 0.0f);
-    static std::vector<bool> cardIsAnimating(selectionAmount, false);
+    std::vector<float> cardScales(selectionAmount, 1.0f);
+    std::vector<float> cardTimes(selectionAmount, 0.0f);
+    std::vector<bool> cardIsAnimating(selectionAmount, false);
 
     for (int i = 0; i < selectionAmount; i++)
     {
@@ -115,9 +115,6 @@ void UICards::renderCardSelection(ImVec2 windowSize)
         ImGui::PopID();
     }
 }
-
-
-
 
 void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool highlightCard)
 {

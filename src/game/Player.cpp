@@ -42,28 +42,26 @@ void Player::checkCollision()
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
-        auto xpSoundEffect = game->audioManager->getAudioClip("GameOver.mp3");
+        auto xpSoundEffect = game->audioManager->getAudioClip("GameOver");
         game->audioManager->playSound(xpSoundEffect, transform.position, 0.4f);
+
         die();
-    }
-
-    Entity* hit_actor2 = game->get_coliding_entity(this, Collision_Channel::XP);
-    if (hit_actor2 != nullptr)
-    {
-        auto xpSoundEffect = game->audioManager->getAudioClip("XPGain.mp3");
-        game->audioManager->playSound(xpSoundEffect, transform.position, 0.2f);
-
-        hit_actor2->destroy();
     }
 }
 
 void Player::die()
 {
     game->gameOver();
+
+    game->reset();
+    this->reset();
 }
 
 void Player::reset()
 {
+    shooter.emptyAllQueues();
+
+    transform.position = glm::vec3(0.0f);
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -80,8 +78,16 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         physicsbody.acceleration -= glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         physicsbody.acceleration += glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
+
+    // debug
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         game->addPlayerXP(10);
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+        game->reset();
+        this->reset();
+    }
+
 
     // jumping and dampening
     bool bIsGrounded = transform.position.y < 0 + playerHeight + 0.1f;

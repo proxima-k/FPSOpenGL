@@ -49,6 +49,11 @@ void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDi
 	}
 }
 
+void Shooter::emptyAllQueues() {
+	while (!cardQueue.empty()) cardQueue.pop();
+	while (!cardPassivesQueue.empty()) cardPassivesQueue.pop();
+}
+
 void Shooter::setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera)
 {
 	this->cardMesh = cardMesh;

@@ -108,6 +108,25 @@ void UI::render(GLFWwindow* window)
     case Game::GameStates::Dead:
             ImGui::Text("HA DEAD");
         break;
+
+    case Game::GameStates::Menu:
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            ImVec2 menuSpriteSize = { windowWidth, windowHeight };
+            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("menusprite"), menuSpriteSize);
+
+            float buttonSizeX = (windowWidth / 5);
+            float buttonSizeY = (windowHeight / 10);
+
+            ImGui::SetCursorPos({ (windowWidth / 7) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
+            ImVec2 buttonSize = { buttonSizeX , buttonSizeY };
+            bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("popcat"), buttonSize);
+
+            if (clicked) {
+                game->reset();
+                game->currentGameState = Game::GameStates::Playing;
+            }
+        break;
     }
 
     if (kanitFont)

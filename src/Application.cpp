@@ -159,6 +159,7 @@ int main(void)
     bool show_log_window = true;
 
     game = new Game();
+    game->player = &player;
     steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
 

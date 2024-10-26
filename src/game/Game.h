@@ -10,6 +10,9 @@
 
 #include "../game/AudioManager.h"
 
+class Player;
+class Shooter;
+
 #define MAX_ENTITYS 1000
 
 class Game
@@ -61,6 +64,7 @@ public:
     Mesh* cubeEnemyMesh;
     Shader* cubeEnemyShader;
     Camera* camera;
+    Player* player;
 
     TextureManager* textureManager;
     AudioManager* audioManager;
