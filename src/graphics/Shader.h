@@ -32,6 +32,7 @@ public:
 	void SetFloat2(const std::string& name, float v0, float v1);
 	void SetFloat3(const std::string& name, float v0, float v1, float v2);
 	void SetFloat4(const std::string& name, float v0, float v1, float v2, float v3);
+	void SetFloat3(const std::string& name, glm::vec3 vector3);
 	void SetMat4(const std::string& name, glm::mat4 matrix4x4);
 
 

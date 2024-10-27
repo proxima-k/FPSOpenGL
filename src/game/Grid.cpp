@@ -121,15 +121,16 @@ void Grid::draw()
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));*/
 
 	glm::vec3 bgColor(0.1f);
-	unsigned int bgColorLoc = glGetUniformLocation(shader->GetID(), "u_bgColor");
+	/*unsigned int bgColorLoc = glGetUniformLocation(shader->GetID(), "u_bgColor");
 	GLCall(glUniform3fv(bgColorLoc, 1, glm::value_ptr(bgColor)));
-
 	unsigned int renderRadiusLoc = glGetUniformLocation(shader->GetID(), "u_renderRadius");
 	glUniform1f(renderRadiusLoc, cellWidth * (cellsPerSideOfAxis - 1));
-
 	unsigned int gridWorldPosLoc = glGetUniformLocation(shader->GetID(), "u_gridWorldPos");
-	GLCall(glUniform3fv(gridWorldPosLoc, 1, glm::value_ptr(transform.position)));
-
+	GLCall(glUniform3fv(gridWorldPosLoc, 1, glm::value_ptr(transform.position)));*/
+	
+	shader->SetFloat3("u_bgColor", bgColor);
+	shader->SetFloat("u_renderRadius", cellWidth* (cellsPerSideOfAxis - 1));
+	shader->SetFloat3("u_gridWorldPos", transform.position);
 
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));
 }
