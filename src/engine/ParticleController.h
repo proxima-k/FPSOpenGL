@@ -11,8 +11,14 @@ public:
 	ParticleController(glm::vec3 startPos) {
 		std::cout << "Particle Controller Spawned at -> " << " X: " << startPos.x << " Y: " << startPos.y << " Z: " << startPos.z << std::endl;
 
-		for (int i = 0; i < 100; i++)
-			particles[i] = new Particle(startPos);
+		std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("../../res/models/cube.obj");
+		Mesh cubeMesh(vertices);
+
+		Shader meshShader("../../res/shaders/Basic.shader");
+
+		for (int i = 0; i < 100; i++) {
+			particles[i] = new Particle(startPos, &cubeMesh, &meshShader, Camera::mainCamera);
+		}
 	}
 
 	void render()
