@@ -8,6 +8,9 @@
 #include "Shader.h"
 #include "../game/Camera.h"
 
+/*
+	This class essentially stores vertices data of a mesh and allocates a buffer in the GPU and stores the data there
+*/
 class Mesh
 {
 private:
@@ -16,10 +19,6 @@ private:
 	
 	VertexArray* VAO;
 	VertexBuffer* VBO;
-
-	Shader* shader;
-	Camera* camera;
-	// pointer to a Transform
 
 public:
 	// todo: add indices

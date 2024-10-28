@@ -41,9 +41,6 @@ Mesh::~Mesh()
 
 	VAO = NULL;
 	VBO = NULL;
-
-	shader = NULL;
-	camera = NULL;
 }
 
 void Mesh::Bind()
