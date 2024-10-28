@@ -207,6 +207,8 @@
     <ClCompile Include="src\game\shooting\UI\UICard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Particle.h" />
+    <ClInclude Include="src\engine\ParticleController.h" />
     <ClInclude Include="src\engine\SteamManager.h" />
     <ClInclude Include="src\engine\xyzmath.h" />
     <ClInclude Include="src\game\AudioClip.h" />

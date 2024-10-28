@@ -74,6 +74,15 @@ void Game::render()
 			entitys[i]->draw();
 		}
 	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		auto* pCtrl = particleCtrl[i];
+
+		if (pCtrl != nullptr)
+			pCtrl->render();
+			
+	}
 }
 
 // compares the bounding boxes of all the entities to see if they are overlapping

@@ -17,6 +17,8 @@ void DefaultCard::update(float deltaTime)
 		{
 			enemy->take_damage(damage * game->playerDamageMultiplier);
 
+			game->spawn_particle_source(transform.position);
+
 			if(bDestroyOnHit)
 				destroy();
 		}
