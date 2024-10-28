@@ -1,30 +1,29 @@
 #include <iostream>
 
-#include "CubeEnemy.h"
+#include "CosineEnemy.h"
 #include "../Game.h"
 
-CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
-	: Enemy(position, meshRenderer), physicsBody(), trailRenderer()
+CosineEnemy::CosineEnemy(glm::vec3 position, MeshRenderer meshRenderer) : Enemy(position, meshRenderer), physicsBody(), trailRenderer()
 {
-	Shader* trailShader = new Shader("res/shaders/Basic.shader");
-	TrailMesh* trailMesh = new TrailMesh({});
+    Shader* trailShader = new Shader("res/shaders/Basic.shader");
+    TrailMesh* trailMesh = new TrailMesh({});
 
-	trailMesh->maxTrailPoints = 25;
+    trailMesh->maxTrailPoints = 25;
 
-	trailRenderer.setMesh(trailMesh);
-	trailRenderer.setShader(trailShader);
-	trailRenderer.setTargetCamera(game->camera);
-	trailRenderer.setColor(meshRenderer.getColor());
+    trailRenderer.setMesh(trailMesh);
+    trailRenderer.setShader(trailShader);
+    trailRenderer.setTargetCamera(game->camera);
+    trailRenderer.setColor(meshRenderer.getColor());
 
-	collision_channel = Collision_Channel::Enemy;
+    collision_channel = Collision_Channel::Enemy;
 
-	xpAmount = 10.0f;
-	maxHealth = 10.0f;
+    xpAmount = 10.0f;
+    maxHealth = 10.0f;
 
-	health = maxHealth;
+    health = maxHealth;
 }
 
-void CubeEnemy::update(float deltaTime)
+void CosineEnemy::update(float deltaTime)
 {
     glm::vec3 camPos = Camera::mainCamera->transform.position;
     glm::vec3 dirToCamera = glm::normalize(camPos - transform.position);

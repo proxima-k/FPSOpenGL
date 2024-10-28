@@ -159,6 +159,8 @@
     <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
     <ClCompile Include="src\engine\TextureManager.cpp" />
     <ClCompile Include="src\game\AudioManager.cpp" />
+    <ClCompile Include="src\game\enemies\CosineEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\SineEnemy.cpp" />
     <ClCompile Include="src\game\shooting\cards\DashPassive.h" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard1.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard2.cpp" />
@@ -209,6 +211,8 @@
     <ClInclude Include="src\engine\xyzmath.h" />
     <ClInclude Include="src\game\AudioClip.h" />
     <ClInclude Include="src\game\AudioManager.h" />
+    <ClInclude Include="src\game\enemies\CosineEnemy.h" />
+    <ClInclude Include="src\game\enemies\SineEnemy.h" />
     <ClInclude Include="src\game\shooting\cards\DamagePassive.h" />
     <ClInclude Include="src\game\shooting\cards\PassiveCard.h" />
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard1.h" />
