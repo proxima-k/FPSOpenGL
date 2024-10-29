@@ -54,6 +54,7 @@ public:
             if (particleCtrl[i] == nullptr)
             {
                 particleCtrl[i] = new ParticleController(startPos);
+                break;
             }
         }
     }
