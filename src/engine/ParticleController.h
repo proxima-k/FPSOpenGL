@@ -9,18 +9,18 @@ class ParticleController
 {
 public:
 	ParticleController(glm::vec3 startPos) {
-		std::cout << "Particle Controller Spawned at -> " << " X: " << startPos.x << " Y: " << startPos.y << " Z: " << startPos.z << std::endl;
-
 		std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-		Mesh cubeMesh(vertices);
+		mesh = new Mesh(vertices);
 
-		std::cout << "Vertices " << cubeMesh.getVerticesCount() << std::endl;
+		shader = new Shader("res/shaders/Basic.shader");
 
-		Shader meshShader("res/shaders/Basic.shader");
+		std::cout << mesh->getVerticesCount() << std::endl;
 
 		for (int i = 0; i < 2; i++) {
-			particles[i] = new Particle(startPos, &cubeMesh, &meshShader, Camera::mainCamera);
+			particles[i] = new Particle(startPos, mesh, shader, Camera::mainCamera);
 		}
+
+		std::cout << "Particle Controller Spawned at -> " << " X: " << startPos.x << " Y: " << startPos.y << " Z: " << startPos.z << std::endl;
 	}
 
 	void render()
@@ -39,4 +39,6 @@ public:
 
 private:
 	Particle* particles[100];
+	Shader* shader;
+	Mesh* mesh;
 };
