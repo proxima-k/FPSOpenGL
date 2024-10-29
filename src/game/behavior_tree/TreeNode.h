@@ -1,7 +1,8 @@
+
 #pragma once
 #include <vector>
 
-namespace BehaviorTree
+namespace BT
 {
 	enum class NodeState
 	{
@@ -17,15 +18,16 @@ namespace BehaviorTree
 		TreeNode(TreeNode* parent) : parent(parent) {}
 		TreeNode(std::vector<TreeNode*> children) : children(children) {
 			for (TreeNode* child : children) 
-				child->AttachSelfToParent(this);
+				child->attachSelfToParent(this);
 		}
 		virtual ~TreeNode() = default;
 
-		// for handling operations every frame
-		virtual void OnNodeEnter() {}
-		virtual void OnNodeExit() {}
-		virtual 
-		virtual NodeState Evaluate(float deltaTime) { return state; }
+		// events 
+		virtual void onNodeEnter() {}
+		virtual void onNodeExit() {}
+		virtual void onNodeAborted() {}
+		
+		virtual NodeState evaluate(float deltaTime) { return state; }
 
 	protected:
 		TreeNode* parent = nullptr;
@@ -33,7 +35,7 @@ namespace BehaviorTree
 		NodeState state = NodeState::RUNNING;
 
 	private:
-		void AttachSelfToParent(TreeNode* parent) {
+		void attachSelfToParent(TreeNode* parent) {
 			this->parent = parent;
 			parent->children.push_back(this);
 		}
