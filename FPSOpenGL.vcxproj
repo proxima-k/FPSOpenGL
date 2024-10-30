@@ -155,12 +155,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\behavior_tree\nodes\CompositeNode.cpp" />
+    <ClCompile Include="src\game\behavior_tree\nodes\Root.cpp" />
     <ClCompile Include="src\game\enemies\BossEnemy.cpp" />
     <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
     <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\behavior_tree\BehaviorTree.cpp" />
     <ClCompile Include="src\game\behavior_tree\Blackboard.cpp" />
-    <ClCompile Include="src\game\behavior_tree\TreeNode.cpp" />
     <ClCompile Include="src\game\shooting\cards\DashPassive.h" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard1.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard2.cpp" />
@@ -207,6 +208,9 @@
     <ClCompile Include="src\game\shooting\UI\UICard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\game\behavior_tree\nodes\CompositeNode.h" />
+    <ClInclude Include="src\game\behavior_tree\nodes\Root.h" />
+    <ClInclude Include="src\game\behavior_tree\nodes\SequenceNode.h" />
     <ClInclude Include="src\game\enemies\BossEnemy.h" />
     <ClInclude Include="src\engine\SteamManager.h" />
     <ClInclude Include="src\engine\xyzmath.h" />
@@ -214,7 +218,7 @@
     <ClInclude Include="src\game\AudioManager.h" />
     <ClInclude Include="src\game\behavior_tree\BehaviorTree.h" />
     <ClInclude Include="src\game\behavior_tree\Blackboard.h" />
-    <ClInclude Include="src\game\behavior_tree\TreeNode.h" />
+    <ClInclude Include="src\game\behavior_tree\BaseNode.h" />
     <ClInclude Include="src\game\shooting\cards\DamagePassive.h" />
     <ClInclude Include="src\game\shooting\cards\PassiveCard.h" />
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard1.h" />

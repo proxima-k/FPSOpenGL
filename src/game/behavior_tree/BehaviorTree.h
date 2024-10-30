@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Blackboard.h"
-#include "TreeNode.h"
+#include "BaseNode.h"
 
 namespace BT
 {
@@ -14,10 +14,10 @@ namespace BT
 		BehaviorTree();
 		~BehaviorTree();
 
-		void update(float deltaTime) { rootNode->evaluate(deltaTime); }
+		void update(float deltaTime) { rootNode->update(deltaTime); }
 
 	private:
-		TreeNode* rootNode;
+		BaseNode* rootNode;
 		Blackboard blackboard;
 	};
 }

@@ -12,7 +12,7 @@ namespace BT {
 		Blackboard() = default;
 		~Blackboard() = default;
 
-		// T represents any type 
+		
 		template <typename T>
 		void setValue(const std::string& key, T value) {
 			data[key] = { std::type_index(typeid(T)), std::make_shared<T>(std::move(value)) };
