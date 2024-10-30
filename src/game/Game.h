@@ -53,13 +53,14 @@ public:
 
     void enterSelectCardState();
     void addPlayerXP(int xp) { crtPlayerXP += xp; enterSelectCardState(); }
-    void scaleMaxPlayerXP() { maxPlayerXP += 100; } // implement scaling function here
+    void level_up_player() { maxPlayerXP += 100; } // implement scaling function here
 
     void gameOver();
     void reset();
 
     int getPlayerXP() { return crtPlayerXP; }
     int getPlayerMaxXP() { return maxPlayerXP; }
+    int get_player_level() { return playerLevel; }
 
     Mesh* cubeEnemyMesh;
     Shader* cubeEnemyShader;
@@ -83,6 +84,7 @@ private:
 
     int crtPlayerXP = 0;
     int maxPlayerXP = 100;
+    int playerLevel = 1;
 
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
     Timer timer;
