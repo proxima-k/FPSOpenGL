@@ -170,6 +170,9 @@
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
     <ClCompile Include="src\game\ui\UI.cpp" />
     <ClCompile Include="src\game\ui\UICards.cpp" />
+    <ClCompile Include="src\game\ui\UIParticle.cpp" />
+    <ClCompile Include="src\game\ui\UIParticleController.cpp" />
+    <ClCompile Include="src\game\ui\UIParticleController.h" />
     <ClCompile Include="src\game\xp\XP.cpp" />
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
@@ -223,6 +226,7 @@
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
     <ClInclude Include="src\game\ui\UI.h" />
     <ClInclude Include="src\game\ui\UICards.h" />
+    <ClInclude Include="src\game\ui\UIParticle.h" />
     <ClInclude Include="src\game\xp\XP.h" />
     <ClInclude Include="src\graphics\MeshRenderer.h" />
     <ClInclude Include="src\game\shooting\Card.h" />

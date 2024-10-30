@@ -43,6 +43,24 @@ void UI::init(GLFWwindow* window)
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
     }
+
+    particleControllers.reserve(20);
+}
+
+void UI::spawn_particle_ctrl()
+{
+    auto particleCtrl = new UIParticleController(ImVec2(200, 200), 20, 20);
+    particleControllers.push_back(particleCtrl);
+}
+
+void UI::update(float dt)
+{
+    for (auto particleCtrl : particleControllers)
+    {
+        if (particleCtrl == nullptr) return;
+
+        particleCtrl->update(dt);
+    }
 }
 
 void UI::begin()
@@ -72,6 +90,14 @@ void UI::render(GLFWwindow* window)
     {
         ImGui::PushFont(kanitFont);
     }
+
+    for (auto particleCtrl : particleControllers)
+    {
+        if (particleCtrl == nullptr) return;
+
+        particleCtrl->render();
+    }
+
 
     ImVec2 cardSize(150, 220);
     ImVec2 cardPosCenter((windowSize.x) / 2.0f - (cardSize.x / 2), (windowSize.y) * 0.75f - (cardSize.y / 2));
@@ -181,10 +207,10 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     }
     void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
     {
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    ImVec2 pos = ImGui::GetCursorScreenPos();
+        ImDrawList* drawList = ImGui::GetWindowDrawList();
+        ImVec2 pos = ImGui::GetCursorScreenPos();
 
-    drawList->AddRectFilled(
+        drawList->AddRectFilled(
         pos,
         ImVec2(pos.x + size.x * fraction, pos.y + size.y),
         ImGui::GetColorU32(barColor)
