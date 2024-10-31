@@ -211,6 +211,7 @@
   <ItemGroup>
     <ClInclude Include="src\game\behavior_tree\nodes\CompositeNode.h" />
     <ClInclude Include="src\game\behavior_tree\nodes\Root.h" />
+    <ClInclude Include="src\game\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\game\behavior_tree\nodes\SequenceNode.h" />
     <ClInclude Include="src\game\enemies\BossEnemy.h" />
     <ClInclude Include="src\engine\SteamManager.h" />

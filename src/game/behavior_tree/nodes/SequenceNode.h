@@ -16,12 +16,8 @@ namespace BT {
 			while (currentChild < children.size()) {
 				NodeState childState = children[currentChild]->update(deltaTime);
 
-				if (childState == NodeState::RUNNING) {
-					return NodeState::RUNNING;
-				}
-				else if (childState == NodeState::FAILURE) {
-					return NodeState::FAILURE;
-				}
+				if (childState == NodeState::RUNNING || childState != NodeState::FAILURE)
+					return childState;
 
 				currentChild++;
 			}

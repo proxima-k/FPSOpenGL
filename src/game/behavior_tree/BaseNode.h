@@ -18,13 +18,13 @@ namespace BT {
 		NodeState update(float deltaTime);
 		NodeState finishExecuteNode(bool success);
 
+	protected:
 		// events to be used for custom nodes, 
 		virtual void onNodeStart() = 0;
 		virtual NodeState onNodeUpdate(float deltaTime) = 0;
 		virtual void onNodeFinish() = 0;
 		//virtual void onNodeAborted() {}
 
-	protected:
 		NodeState state = NodeState::READY;
 		//bool hasStarted = false;
 	};
