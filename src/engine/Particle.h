@@ -8,7 +8,7 @@
 class Particle
 {
 public:
-	Particle(glm::vec3 startPos, Mesh* mesh, Shader* shader, Camera* camera);
+	Particle(glm::vec3 startPos, glm::vec3 scale, Mesh* mesh, Shader* shader, Camera* camera);
 	~Particle();
 
 	void render();
@@ -16,7 +16,7 @@ public:
 	void isDestroyed();
 
 private:
-	MeshRenderer meshRenderer;
+	MeshRenderer* meshRenderer;
 
 	glm::vec3 position;
 	glm::quat rotation;

@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
     <ClCompile Include="src\engine\Particle.cpp" />
+    <ClCompile Include="src\engine\ParticleController.cpp" />
     <ClCompile Include="src\engine\TextureManager.cpp" />
     <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\game\enemies\CosineEnemy.cpp" />
