@@ -8,7 +8,7 @@ namespace BT {
 			currentChild = 0;
 		}
 
-		void onNodeExit() override {
+		void onNodeFinish() override {
 			currentChild = -1;
 		}
 

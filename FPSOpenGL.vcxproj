@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\behavior_tree\BaseNode.cpp" />
     <ClCompile Include="src\game\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\game\behavior_tree\nodes\Root.cpp" />
     <ClCompile Include="src\game\enemies\BossEnemy.cpp" />

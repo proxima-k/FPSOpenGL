@@ -3,6 +3,7 @@
 namespace BT {
 	enum class NodeState
 	{
+		READY,
 		RUNNING,
 		SUCCESS,
 		FAILURE,
@@ -14,31 +15,17 @@ namespace BT {
 		BaseNode() = default;
 		virtual ~BaseNode() = default;
 
-		// events
+		NodeState update(float deltaTime);
+		NodeState finishExecuteNode(bool success);
+
+		// events to be used for custom nodes, 
 		virtual void onNodeStart() = 0;
 		virtual NodeState onNodeUpdate(float deltaTime) = 0;
-		virtual void onNodeExit() = 0;
+		virtual void onNodeFinish() = 0;
 		//virtual void onNodeAborted() {}
 
-		NodeState update(float deltaTime) {
-			if (!hasStarted) {
-				onNodeStart();
-				hasStarted = true;
-			}
-
-			state = onNodeUpdate(deltaTime);
-
-			if (state != NodeState::RUNNING) {
-				onNodeExit();
-				hasStarted = false;
-			}
-
-			return state;
-		}
-
 	protected:
-		NodeState state = NodeState::RUNNING;
-		bool hasStarted = false;
+		NodeState state = NodeState::READY;
+		//bool hasStarted = false;
 	};
-
 }

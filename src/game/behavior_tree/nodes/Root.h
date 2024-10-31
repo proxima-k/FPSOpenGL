@@ -11,7 +11,7 @@ namespace BT {
 
 	protected:
 		void onNodeStart() override {}
-		void onNodeExit() override {}
+		void onNodeFinish() override {}
 
 		NodeState onNodeUpdate(float deltaTime) override {
 			if (child != nullptr) {
