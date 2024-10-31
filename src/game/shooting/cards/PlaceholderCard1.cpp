@@ -31,28 +31,37 @@ void PlaceHolderCard1::update(float deltaTime)
 void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
-	damage = 10;
+	damage = 50;
 
 	if (bCanSpawnChildren)
 	{
-		glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
+		float spreadAngle = glm::radians(3.0f);
 
-		float spreadAngle = glm::radians(10.0f);
+		glm::vec3 leftDirection = glm::vec3(
+			launchDirection.x * glm::cos(spreadAngle) - launchDirection.z * glm::sin(spreadAngle),
+			launchDirection.y,
+			launchDirection.x * glm::sin(spreadAngle) + launchDirection.z * glm::cos(spreadAngle)
+		);
 
-		/*PlaceHolderCard1* leftCard;
-		game->player->shooter.spawnCard(leftCard, transform.position, launchDirection + spreadAngle, upDirection);
-		leftCard->bCanSpawnChildren = false;
-		leftCard->launch(launchPosition, launchDirection + spreadAngle, upDirection);
+		glm::vec3 rightDirection = glm::vec3(
+			launchDirection.x * glm::cos(-spreadAngle) - launchDirection.z * glm::sin(-spreadAngle),
+			launchDirection.y,
+			launchDirection.x * glm::sin(-spreadAngle) + launchDirection.z * glm::cos(-spreadAngle)
+		);
 
-		PlaceHolderCard1* rightCard;
-		game->player->shooter.spawnCard(rightCard, transform.position, launchDirection + -spreadAngle, upDirection);
-		rightCard->bCanSpawnChildren = false;
-		rightCard->launch(launchPosition, launchDirection + -spreadAngle, upDirection);*/
+		MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 
-		game->player->shooter.shootDefault(transform.position, launchDirection + spreadAngle, upDirection);
-		game->player->shooter.shootDefault(transform.position, launchDirection - spreadAngle, upDirection);
+		DefaultCard* leftCard = new DefaultCard(launchPosition, newMeshRenderer);
+		DefaultCard* rightCard = new DefaultCard(launchPosition, newMeshRenderer);;
+
+		game->player->shooter.spawnCard(leftCard, transform.position, leftDirection, upDirection);
+		game->player->shooter.spawnCard(rightCard, transform.position, rightDirection, upDirection);
+
+		leftCard->damage = damage;
+		rightCard->damage = damage;
 	}
 
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
+	transform.position = launchPosition;
 }
