@@ -2,26 +2,38 @@
 
 #include "../game/Game.h"
 
-ParticleController::ParticleController(glm::vec3 startPos)
+ParticleController::ParticleController(glm::vec3 startPos, const int particleAmount, const float duration)
 {
 	std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
 	mesh = new Mesh(vertices);
-
 	shader = new Shader("res/shaders/Basic.shader");
 
-	std::cout << "Vertex count : " << mesh->getVerticesCount() << std::endl;
-
-	for (int i = 0; i <= 2; i++) {
-		particles[i] = new Particle(startPos, glm::vec3(0.1f), mesh, shader, Camera::mainCamera);
+	for (int i = 0; i <= particleAmount; i++) {
+		particles[i] = new Particle(startPos, glm::vec3(0.03f), duration, mesh, shader, Camera::mainCamera);
 	}
-
-	std::cout << "Particle Controller Spawned at -> " << " X: " << startPos.x << " Y: " << startPos.y << " Z: " << startPos.z << std::endl;
 }
 
 void ParticleController::render()
 {
 	for (auto p : particles) {
-		if (p != nullptr)
-			p->render();
+		if (p == nullptr) continue;
+
+		if (p->isDestroyed())
+		{
+			p = nullptr;
+			delete p;
+			continue;
+		}
+		p->render();
+	}
+}
+
+void ParticleController::update(float dt)
+{
+	for (auto p : particles) {
+
+		if (p == nullptr) continue;
+
+		p->update(dt);
 	}
 }

@@ -61,6 +61,21 @@ void Game::update()
 		}
 	}
 
+	for (int i = 0; i < 20; i++)
+	{
+		auto* pCtrl = particleCtrl[i];
+
+		if (pCtrl == nullptr) return;
+
+		pCtrl->update(deltaTime);
+
+		if (pCtrl->isEmpty()) {
+			particleCtrl[i] = nullptr;
+			delete pCtrl;
+			return;
+		}
+	}
+
 	audioManager->update();
 }
 
@@ -81,7 +96,6 @@ void Game::render()
 
 		if (pCtrl != nullptr)
 			pCtrl->render();
-			
 	}
 }
 

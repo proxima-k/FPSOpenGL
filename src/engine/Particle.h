@@ -8,12 +8,12 @@
 class Particle
 {
 public:
-	Particle(glm::vec3 startPos, glm::vec3 scale, Mesh* mesh, Shader* shader, Camera* camera);
-	~Particle();
+	Particle(glm::vec3 startPos, glm::vec3 scale, const float duration, Mesh* mesh, Shader* shader, Camera* camera);
 
 	void render();
+	void update(float dt);
 
-	void isDestroyed();
+	bool isDestroyed() { return bDestroyed; }
 
 private:
 	MeshRenderer* meshRenderer;
@@ -23,6 +23,7 @@ private:
 	glm::vec3 scale;
 
 	float duration;
-
 	float speed;
+
+	bool bDestroyed = false;
 };
