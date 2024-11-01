@@ -40,7 +40,7 @@ void CubeEnemy::update(float deltaTime)
     float rotationSpeed = 3.0f;
     transform.rotation = glm::slerp(transform.rotation, targetRotation, rotationSpeed * deltaTime);
 
-    if (glm::distance(lastPosition, transform.position) > 0.05f)
+    if (glm::distance(lastPosition, transform.position) > 0.02f)
     {
         TrailMesh* trailMesh = trailRenderer.getMesh();
         glm::vec3 newPos = transform.position;

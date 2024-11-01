@@ -3,19 +3,24 @@
 #include <random>
 #include "xyzmath.h"
 
-Particle::Particle(glm::vec3 startPos, glm::vec3 scale, const float duration, const float speed, Mesh* mesh, Shader* shader, Camera* camera)
-    : position(startPos), scale(scale), initialScale(scale), duration(duration), currentDuration(duration), speed(speed)
+Particle::Particle(glm::vec3 startPos, glm::vec3 scale, const float dur, const float speed, Mesh* mesh, Shader* shader, Camera* camera)
+    : position(startPos), scale(scale), initialScale(scale), duration(dur), currentDuration(duration), speed(speed)
 {
     meshRenderer = new MeshRenderer(mesh, shader, camera);
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dist(0.0f, glm::two_pi<float>());
+    std::uniform_real_distribution<float> scaleDist(0.5f, 1.5f);
+    std::uniform_real_distribution<float> durationDist(0.5f, 1.5f);
 
     glm::vec3 randomEuler(dist(gen), dist(gen), dist(gen));
 
-    // apply a slight offset for variety in the particles!
+    // apply a slight offset for scale in the particles!
+    scale = initialScale *= scaleDist(gen);
+
     // apply a slight offset for duration in the particles!
+    currentDuration = duration *= durationDist(gen);
 
     rotation = glm::quat(randomEuler);
 }

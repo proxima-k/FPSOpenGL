@@ -29,7 +29,7 @@ public:
 	void die(float xpSpawnAmount) 
 	{
 		game->addPlayerXP(xpAmount);
-		game->spawn_particle_source(transform.position, 40.0f, 0.3f, 3.0f);
+		game->spawn_particle_source(transform.position, 40.0f, 0.3f, 2.0f);
 		destroy();
 	}
 };
