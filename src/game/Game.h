@@ -9,8 +9,6 @@
 #include "../engine/TextureManager.h"
 #include "../engine/ParticleController.h"
 
-#include "../game/AudioManager.h"
-
 class Player;
 class Shooter;
 
@@ -79,7 +77,6 @@ public:
     Player* player;
 
     TextureManager* textureManager;
-    AudioManager* audioManager;
 
     GameStates currentGameState = GameStates::Playing;
 

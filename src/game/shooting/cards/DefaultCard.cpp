@@ -2,8 +2,9 @@
 #include "../../game.h"
 
 DefaultCard::DefaultCard(glm::vec3 position, MeshRenderer meshRenderer)
-	: Card(position, meshRenderer)
+	: Card(position, meshRenderer), currentPosition(position)
 {
+
 }
 
 void DefaultCard::update(float deltaTime)

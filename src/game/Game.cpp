@@ -20,9 +20,6 @@ Game::Game()
 
 	textureManager = new TextureManager;
 	textureManager->init();
-
-	audioManager = new AudioManager;
-	audioManager->init();
 }
 
 Game::~Game()
@@ -34,7 +31,6 @@ Game::~Game()
 	}
 	
 	delete textureManager;
-	delete audioManager;
 }
 
 void Game::update()
@@ -75,8 +71,6 @@ void Game::update()
 			return;
 		}
 	}
-
-	audioManager->update();
 }
 
 // calls the draw function on all the entities
