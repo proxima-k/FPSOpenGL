@@ -15,8 +15,7 @@ Particle::Particle(glm::vec3 startPos, glm::vec3 scale, const float duration, co
     glm::vec3 randomEuler(dist(gen), dist(gen), dist(gen));
 
     // apply a slight offset for variety in the particles!
-
-    std::cout << "current pos" << initialScale.x << std::endl;
+    // apply a slight offset for duration in the particles!
 
     rotation = glm::quat(randomEuler);
 }
