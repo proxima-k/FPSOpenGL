@@ -47,11 +47,11 @@ public:
         return nullptr;
     }
 
-    void spawn_particle_source(glm::vec3 startPos, const int particleAmount, const float duration) {
-        for (int i = 0; i < 20; i++) {
+    void spawn_particle_source(glm::vec3 startPos, const int particleAmount, const float duration, const float speed) {
+        for (int i = 0; i < 5; i++) {
             if (particleCtrl[i] == nullptr)
             {
-                particleCtrl[i] = new ParticleController(startPos, particleAmount, duration);
+                particleCtrl[i] = new ParticleController(startPos, particleAmount, duration, speed);
                 break;
             }
         }

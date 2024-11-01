@@ -61,15 +61,17 @@ void Game::update()
 	{
 		auto* pCtrl = particleCtrl[i];
 
-		if (pCtrl == nullptr) return;
-
-		pCtrl->update(deltaTime);
+		if (pCtrl == nullptr) continue;
 
 		if (pCtrl->isEmpty()) {
 			particleCtrl[i] = nullptr;
 			delete pCtrl;
+
+			std::cout << "Destroy Particle Controller" << std::endl;
 			return;
 		}
+
+		pCtrl->update(deltaTime);
 	}
 }
 

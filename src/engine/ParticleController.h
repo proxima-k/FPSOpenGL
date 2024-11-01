@@ -8,7 +8,7 @@
 class ParticleController
 {
 public:
-	ParticleController(glm::vec3 startPos, const int particleAmount, const float duration);
+	ParticleController(glm::vec3 startPos, const int particleAmount, const float duration, const float speed);
 
 	void render();
 	void update(float dt);
