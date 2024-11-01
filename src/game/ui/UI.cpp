@@ -38,7 +38,7 @@ void UI::init(GLFWwindow* window)
     cards.passivedashcard = game->textureManager->getTexture("dashbuffcard");
     cards.emptydeck = game->textureManager->getTexture("emptydeck");
 
-    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
+    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
 
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
@@ -96,6 +96,7 @@ void UI::render(GLFWwindow* window)
         break;
 
     case Game::GameStates::SelectCards:
+            renderPlayModeUI(windowSize);
             cards.renderCardSelection(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -143,22 +144,43 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     float playerScore = game->getPlayerXP();
     float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
     float crtScoreFraction = clampedScore / maxScore;
-
+    float lerpSpeed = 0.1f;
+    
+    static float currentCrosshairSize = 40.0f;
+    static float targetCrosshairSize = 40.0f;
+    const float lerpSpeedCrosshair = 0.2f;
+    const float enlargedSize = 55.0f;
+    
     float windowWidth = ImGui::GetWindowWidth();
-
+    
+    ImVec2 levelPos((windowSize.x) / 2.0f - (40 / 2), 0);
+    ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
     ImVec2 barSize(windowWidth, 25);
     ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
-
-    customProgressBar(crtScoreFraction, barSize, barColor);
-
-    ImVec2 crosshairSize(40, 40);
-    ImVec2 crosshairPos((windowSize.x) / 2.0f - (crosshairSize.x / 2), (windowSize.y) / 2.0f - (crosshairSize.y / 2));
-
+    
+    displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
+    
+    customProgressBar(displayedScoreFraction, barSize, barColor);
+    
+    ImGui::SetCursorPos(levelPos);
+    ImGui::Text("Lvl %d", game->get_player_level());
+    
+    if (ImGui::IsMouseClicked(0))
+    {
+        targetCrosshairSize = enlargedSize;
+    }
+    currentCrosshairSize += (targetCrosshairSize - currentCrosshairSize) * lerpSpeedCrosshair;
+    
+    if (currentCrosshairSize >= enlargedSize - 5)
+    {
+        targetCrosshairSize = 40.0f;
+    }
+    
     ImGui::SetCursorPos(crosshairPos);
-    ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
-}
-void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
-{
+    ImGui::Image((void*)(intptr_t)crosshair, ImVec2(currentCrosshairSize, currentCrosshairSize));
+    }
+    void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
+    {
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
 

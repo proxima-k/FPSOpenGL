@@ -125,7 +125,8 @@ void Game::enterSelectCardState()
 			}
 		}
 		crtPlayerXP = 0;
-		scaleMaxPlayerXP();
+		level_up_player();
+		playerLevel++;
 
 		currentGameState = GameStates::SelectCards;
 	}
@@ -148,6 +149,7 @@ void Game::reset()
 {
 	crtPlayerXP = 0;
 	maxPlayerXP = 100;
+	playerLevel = 1;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
