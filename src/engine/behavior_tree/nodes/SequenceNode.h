@@ -4,17 +4,17 @@
 namespace BT {
 	class SequenceNode : public CompositeNode {
 	protected:
-		void onNodeStart() override {
+		void onNodeStart(Blackboard& blackboard) override {
 			currentChild = 0;
 		}
 
-		void onNodeFinish() override {
+		void onNodeFinish(Blackboard& blackboard) override {
 			currentChild = -1;
 		}
 
-		NodeState onNodeUpdate(float deltaTime) override {
+		NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) override {
 			while (currentChild < children.size()) {
-				NodeState childState = children[currentChild]->update(deltaTime);
+				NodeState childState = children[currentChild]->update(deltaTime, blackboard);
 
 				if (childState == NodeState::RUNNING || childState != NodeState::FAILURE)
 					return childState;

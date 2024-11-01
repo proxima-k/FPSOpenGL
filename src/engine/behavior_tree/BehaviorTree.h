@@ -14,7 +14,8 @@ namespace BT
 		BehaviorTree(BaseNode* rootNode) : rootNode(rootNode) {}
 		~BehaviorTree();
 
-		void update(float deltaTime) { rootNode->update(deltaTime); }
+		void update(float deltaTime) { rootNode->update(deltaTime, blackboard); }
+		Blackboard getBlackboard() { return blackboard; }
 
 	private:
 		BaseNode* rootNode;

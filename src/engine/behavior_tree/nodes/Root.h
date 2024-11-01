@@ -16,12 +16,12 @@ namespace BT {
 		}
 
 	protected:
-		void onNodeStart() override {}
-		void onNodeFinish() override {}
+		void onNodeStart(Blackboard& blackboard) override {}
+		void onNodeFinish(Blackboard& blackboard) override {}
 
-		NodeState onNodeUpdate(float deltaTime) override {
+		NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) override {
 			if (child != nullptr) {
-				return child->update(deltaTime);
+				return child->update(deltaTime, blackboard);
 			}
 
 			return NodeState::SUCCESS;

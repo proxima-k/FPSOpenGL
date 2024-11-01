@@ -5,17 +5,17 @@
 namespace BT {
 	class SelectorNode : public CompositeNode {
 	protected:
-		void onNodeStart() override {
+		void onNodeStart(Blackboard& blackboard) override {
 			currentChildIndex = 0;
 		}
 
-		void onNodeFinish() override {
+		void onNodeFinish(Blackboard& blackboard) override {
 			currentChildIndex = -1;
 		}
 
-		NodeState onNodeUpdate(float deltaTime) override {
+		NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) override {
 			while (currentChildIndex < children.size()) {
-				NodeState childState = children[currentChildIndex]->update(deltaTime);
+				NodeState childState = children[currentChildIndex]->update(deltaTime, blackboard);
 
 				if (childState == NodeState::RUNNING || childState != NodeState::SUCCESS)
 					return childState;
