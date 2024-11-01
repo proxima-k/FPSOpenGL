@@ -1,10 +1,16 @@
 #pragma once
 
-#include "../BaseNode.h"
+#include "BaseNode.h"
 
 namespace BT {
 	class RootNode : public BaseNode {
 	public:
+		~RootNode() override {
+			if (child != nullptr) {
+				delete child;
+			}
+		}
+
 		void setChild(BaseNode* node) {
 			child = node;
 		}

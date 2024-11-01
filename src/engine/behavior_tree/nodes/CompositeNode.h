@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../BaseNode.h"
+#include "BaseNode.h"
 #include <vector>
 
 namespace BT {
@@ -8,12 +8,12 @@ namespace BT {
 	class CompositeNode : public BaseNode
 	{
 	public:
-		/*~CompositeNode() {
+		~CompositeNode() override {
 			for (auto child : children) {
-				delete child;
-				child = nullptr;
+				if (child != nullptr)
+					delete child;
 			}
-		}*/
+		}
 
 		void addChild(BaseNode* node) {
 			children.push_back(node);
