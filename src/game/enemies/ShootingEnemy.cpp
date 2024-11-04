@@ -1,43 +1,45 @@
 #include <iostream>
 
-#include "SineEnemy.h"
+#include "ShootingEnemy.h"
 #include "../Game.h"
 
-SineEnemy::SineEnemy(glm::vec3 position, MeshRenderer meshRenderer) : Enemy(position, meshRenderer), physicsBody(), trailRenderer()
+ShootingEnemy::ShootingEnemy(glm::vec3 position, MeshRenderer meshRenderer)
+	: Enemy(position, meshRenderer), physicsBody(), trailRenderer()
 {
-    Shader* trailShader = new Shader("res/shaders/Basic.shader");
-    TrailMesh* trailMesh = new TrailMesh({});
+	Shader* trailShader = new Shader("res/shaders/Basic.shader");
+	TrailMesh* trailMesh = new TrailMesh({});
 
-    trailMesh->maxTrailPoints = 25;
+	trailMesh->maxTrailPoints = 25;
 
-    trailRenderer.setMesh(trailMesh);
-    trailRenderer.setShader(trailShader);
-    trailRenderer.setTargetCamera(game->camera);
-    trailRenderer.setColor(meshRenderer.getColor());
+	trailRenderer.setMesh(trailMesh);
+	trailRenderer.setShader(trailShader);
+	trailRenderer.setTargetCamera(game->camera);
+	trailRenderer.setColor(meshRenderer.getColor());
 
-    collision_channel = Collision_Channel::Enemy;
+	collision_channel = Collision_Channel::Enemy;
 
-    xpAmount = 10.0f;
-    maxHealth = 10.0f;
+	xpAmount = 10.0f;
+	maxHealth = 10.0f;
 
-    health = maxHealth;
+	health = maxHealth;
 }
 
-void SineEnemy::update(float deltaTime)
+void ShootingEnemy::update(float deltaTime)
 {
     glm::vec3 camPos = Camera::mainCamera->transform.position;
     glm::vec3 dirToCamera = glm::normalize(camPos - transform.position);
+    float distanceToCamera =  transform.getVectorMagnitude(transform.position - camPos);
+
+    if (distanceToCamera < 2) return;
 
     glm::vec3 speed = glm::vec3(20);
     glm::vec3 forwardDir = -transform.getForward();
     physicsBody.acceleration = glm::vec3(0.0f);
     physicsBody.acceleration += forwardDir * speed;
 
-    if (transform.getVectorMagnitude(transform.position - camPos) > 2) {
-        float sineFrequency = 3;
-        float sineAmplitude = 0.03f;
-        transform.position.y += sineAmplitude * sin(sineFrequency * glfwGetTime());
-    }
+    float sineFrequency = 3;
+    float sineAmplitude = 0.01f;
+    transform.position.y += sineAmplitude * sin(sineFrequency * glfwGetTime());
 
     transform.position += physicsBody.velocity * deltaTime;
 
@@ -45,7 +47,7 @@ void SineEnemy::update(float deltaTime)
     float rotationSpeed = 3.0f;
     transform.rotation = glm::slerp(transform.rotation, targetRotation, rotationSpeed * deltaTime);
 
-    if (glm::distance(lastPosition, transform.position) > 0.05f)
+    if (glm::distance(lastPosition, transform.position) > 0.02f)
     {
         TrailMesh* trailMesh = trailRenderer.getMesh();
         glm::vec3 newPos = transform.position;

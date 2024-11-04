@@ -28,6 +28,7 @@
 #include "game/Game.h"
 #include "game/Entity.h"
 #include "game/enemies/CubeEnemy.h"
+#include "game/enemies/ShootingEnemy.h"
 
 #include "game/shooting/Card.h"
 
@@ -203,7 +204,7 @@ int main(void)
 
         ui.init(window);
 
-		Spawner<CubeEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
+		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
 
         while (!glfwWindowShouldClose(window))
         {

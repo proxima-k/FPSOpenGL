@@ -33,6 +33,12 @@ void CosineEnemy::update(float deltaTime)
     physicsBody.acceleration = glm::vec3(0.0f);
     physicsBody.acceleration += forwardDir * speed;
 
+    if (transform.getVectorMagnitude(transform.position - camPos) > 2) {
+        float cosineFrequency = 2.0f;
+        float cosineAmplitude = 0.03f;
+        transform.position.x += cosineAmplitude * cos(cosineFrequency * glfwGetTime());
+    }
+
     transform.position += physicsBody.velocity * deltaTime;
 
     glm::quat targetRotation = glm::quatLookAt(dirToCamera, glm::vec3(0, 1, 0));
