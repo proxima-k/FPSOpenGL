@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "CubeEnemy.h"
+#include "ShootingEnemy.h"
 #include "../Game.h"
 
-CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
+ShootingEnemy::ShootingEnemy(glm::vec3 position, MeshRenderer meshRenderer)
 	: Enemy(position, meshRenderer), physicsBody(), trailRenderer()
 {
-	Shader* trailShader = new Shader("res/shaders/mesh.shader");
+	Shader* trailShader = new Shader("res/shaders/Basic.shader");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 25;
@@ -24,15 +24,22 @@ CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
 	health = maxHealth;
 }
 
-void CubeEnemy::update(float deltaTime)
+void ShootingEnemy::update(float deltaTime)
 {
     glm::vec3 camPos = Camera::mainCamera->transform.position;
     glm::vec3 dirToCamera = glm::normalize(camPos - transform.position);
+    float distanceToCamera =  transform.getVectorMagnitude(transform.position - camPos);
+
+    if (distanceToCamera < 2) return;
 
     glm::vec3 speed = glm::vec3(20);
     glm::vec3 forwardDir = -transform.getForward();
     physicsBody.acceleration = glm::vec3(0.0f);
     physicsBody.acceleration += forwardDir * speed;
+
+    float sineFrequency = 3;
+    float sineAmplitude = 0.01f;
+    transform.position.y += sineAmplitude * sin(sineFrequency * glfwGetTime());
 
     transform.position += physicsBody.velocity * deltaTime;
 

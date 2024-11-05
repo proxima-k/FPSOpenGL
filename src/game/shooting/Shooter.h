@@ -8,7 +8,6 @@
 #include "../../graphics/Shader.h"
 #include "../Camera.h"
 #include "../Entity.h"
-//#include "../Player.h"
 #include "../Game.h"
 #include "Card.h"
 
@@ -22,6 +21,8 @@ public:
 	void shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
+
+	void emptyAllQueues();
 
 	void setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
 	void setPlayer(Player* player) { this->player = player; }

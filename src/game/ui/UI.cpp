@@ -25,20 +25,20 @@ void UI::init(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    crosshair = loadTextureFromFile("res/sprites/crosshair177.png");
+    crosshair = game->textureManager->getTexture("crosshair177");
 
-    cards.basicCardTexture = loadTextureFromFile("res/sprites/basiccard.png");
-    cards.sineCardTexture = loadTextureFromFile("res/sprites/sinecard.png");
-    cards.cosineCardTexture = loadTextureFromFile("res/sprites/cosinecard.png");
-    cards.placeholder1card = loadTextureFromFile("res/sprites/placeholder1card.png");
-    cards.placeholder2card = loadTextureFromFile("res/sprites/placeholder2card.png");
-    cards.placeholder3card = loadTextureFromFile("res/sprites/placeholder3card.png");
-    cards.passivedamagecard = loadTextureFromFile("res/sprites/damagebuffcard.png");
-    cards.passivespeedcard = loadTextureFromFile("res/sprites/speedbuffcard.png");
-    cards.passivedashcard = loadTextureFromFile("res/sprites/dashbuffcard.png");
-    cards.emptydeck = loadTextureFromFile("res/sprites/emptydeck.png");
+    cards.basicCardTexture = game->textureManager->getTexture("basiccard");
+    cards.sineCardTexture = game->textureManager->getTexture("sinecard");
+    cards.cosineCardTexture = game->textureManager->getTexture("cosinecard");
+    cards.placeholder1card = game->textureManager->getTexture("placeholder1card");
+    cards.placeholder2card = game->textureManager->getTexture("placeholder2card");
+    cards.placeholder3card = game->textureManager->getTexture("placeholder3card");
+    cards.passivedamagecard = game->textureManager->getTexture("damagebuffcard");
+    cards.passivespeedcard = game->textureManager->getTexture("speedbuffcard");
+    cards.passivedashcard = game->textureManager->getTexture("dashbuffcard");
+    cards.emptydeck = game->textureManager->getTexture("emptydeck");
 
-    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 60.0f);
+    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
 
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
@@ -96,6 +96,7 @@ void UI::render(GLFWwindow* window)
         break;
 
     case Game::GameStates::SelectCards:
+            renderPlayModeUI(windowSize);
             cards.renderCardSelection(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -107,6 +108,25 @@ void UI::render(GLFWwindow* window)
 
     case Game::GameStates::Dead:
             ImGui::Text("HA DEAD");
+        break;
+
+    case Game::GameStates::Menu:
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            ImVec2 menuSpriteSize = { windowWidth, windowHeight };
+            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("menusprite"), menuSpriteSize);
+
+            float buttonSizeX = (windowWidth / 5);
+            float buttonSizeY = (windowHeight / 10);
+
+            ImGui::SetCursorPos({ (windowWidth / 7) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
+            ImVec2 buttonSize = { buttonSizeX , buttonSizeY };
+            bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("popcat"), buttonSize);
+
+            if (clicked) {
+                game->reset();
+                game->currentGameState = Game::GameStates::Playing;
+            }
         break;
     }
 
@@ -120,26 +140,47 @@ void UI::render(GLFWwindow* window)
 
 void UI::renderPlayModeUI(ImVec2 windowSize)
 {
-    float maxScore = game->maxPlayerXP;
-    float playerScore = game->crtPlayerXP;
+    float maxScore = game->getPlayerMaxXP();
+    float playerScore = game->getPlayerXP();
     float clampedScore = glm::clamp(playerScore, 0.0f, maxScore);
     float crtScoreFraction = clampedScore / maxScore;
-
+    float lerpSpeed = 0.1f;
+    
+    static float currentCrosshairSize = 40.0f;
+    static float targetCrosshairSize = 40.0f;
+    const float lerpSpeedCrosshair = 0.2f;
+    const float enlargedSize = 55.0f;
+    
     float windowWidth = ImGui::GetWindowWidth();
-
+    
+    ImVec2 levelPos((windowSize.x) / 2.0f - (40 / 2), 0);
+    ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
     ImVec2 barSize(windowWidth, 25);
     ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
-
-    customProgressBar(crtScoreFraction, barSize, barColor);
-
-    ImVec2 crosshairSize(40, 40);
-    ImVec2 crosshairPos((windowSize.x) / 2.0f - (crosshairSize.x / 2), (windowSize.y) / 2.0f - (crosshairSize.y / 2));
-
+    
+    displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
+    
+    customProgressBar(displayedScoreFraction, barSize, barColor);
+    
+    ImGui::SetCursorPos(levelPos);
+    ImGui::Text("Lvl %d", game->get_player_level());
+    
+    if (ImGui::IsMouseClicked(0))
+    {
+        targetCrosshairSize = enlargedSize;
+    }
+    currentCrosshairSize += (targetCrosshairSize - currentCrosshairSize) * lerpSpeedCrosshair;
+    
+    if (currentCrosshairSize >= enlargedSize - 5)
+    {
+        targetCrosshairSize = 40.0f;
+    }
+    
     ImGui::SetCursorPos(crosshairPos);
-    ImGui::Image((void*)(intptr_t)crosshair, crosshairSize);
-}
-void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
-{
+    ImGui::Image((void*)(intptr_t)crosshair, ImVec2(currentCrosshairSize, currentCrosshairSize));
+    }
+    void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
+    {
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
 
@@ -163,28 +204,4 @@ void UI::shutdown()
         ImGui::DestroyContext();
         initialized = false; // Reset flag after shutdown
     }
-}
-
-GLuint UI::loadTextureFromFile(const char* filename)
-{
-    int width, height, channels;
-    unsigned char* pixels = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
-    if (!pixels)
-    {
-        std::cerr << "Failed to load image: " << filename << std::endl;
-        return 0;
-    }
-
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    stbi_image_free(pixels);
-
-    return textureID;
 }

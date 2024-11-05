@@ -60,7 +60,6 @@ std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 		if (!reader.Error().empty()) {
 			std::cerr << "TinyObjReader Error: " << reader.Error();
 		}
-		exit(1);
 	}
 
 	if (!reader.Warning().empty()) {

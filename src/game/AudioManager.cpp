@@ -7,12 +7,12 @@ void AudioManager::init() {
     drmp3_config config;
     drmp3_uint64 totalPCMFrameCount;
     std::vector<std::string> fileNames = {
-        "MoveUp.mp3", 
-        "MoveBack.mp3", 
-        "MoveLeft.mp3", 
+        "MoveUp.mp3",
+        "MoveBack.mp3",
+        "MoveLeft.mp3",
         "MoveRight.mp3",
-        "ShotsFired.mp3", 
-        "XPGain.mp3", 
+        "ShotsFired.mp3",
+        "XPGain.mp3",
         "GameOver.mp3"
     };
 

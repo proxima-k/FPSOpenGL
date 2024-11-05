@@ -1,7 +1,5 @@
 #include <glew/glew.h>
 #include <GLFW/glfw3.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
 
 #include <iostream>
 #include <fstream>
@@ -30,6 +28,7 @@
 #include "game/Game.h"
 #include "game/Entity.h"
 #include "game/enemies/CubeEnemy.h"
+#include "game/enemies/ShootingEnemy.h"
 
 #include "game/shooting/Card.h"
 
@@ -67,6 +66,7 @@ Player player(&playerCamera);
 UI ui;
 Game* game = nullptr;
 AudioManager* audioManager = nullptr;
+
 SteamManager* steamManager = nullptr;
 
 GLuint LoadTextureFromFile(const char* filename)
@@ -162,6 +162,7 @@ int main(void)
 
     game = new Game();
     audioManager = new AudioManager();
+    game->player = &player;
     steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
 
@@ -272,7 +273,7 @@ int main(void)
 
         ui.init(window);
 
-		Spawner<CubeEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
+		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
 
         while (!glfwWindowShouldClose(window))
         {
@@ -291,7 +292,8 @@ int main(void)
                 player.update(window, deltaTime);
             }
             game->update();
-            audioManager->update();
+            game->render();
+
 			cubeEnemySpawner.update(deltaTime);
             floorGrid.update();
 
@@ -344,6 +346,9 @@ int main(void)
             
             // floor grid pass
             floorGrid.draw();
+
+            // audio
+            audioManager->update();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

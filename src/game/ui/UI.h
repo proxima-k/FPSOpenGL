@@ -27,10 +27,10 @@ public:
 
     void customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor);
 
+    float displayedScoreFraction = 0.0f;
+
 private:
     UICards cards;
-
-    GLuint loadTextureFromFile(const char* filename);
 
     GLuint crosshair;
     ImFont* kanitFont;

@@ -32,6 +32,8 @@ public:
 
 	virtual CardType getCardType() const = 0;
 
+	float damage;
+
 protected:
 	CardType cardType;
 
@@ -41,7 +43,6 @@ protected:
 	glm::vec3 launchDirection;
 	glm::vec3 upDirection;
 
-	float damage;
 	float aliveTime;
 	bool bDestroyOnHit;
 };

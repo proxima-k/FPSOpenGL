@@ -39,29 +39,29 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::checkCollision() 
 {
-
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
-        auto xpSoundEffect = audioManager->getAudioClip("GameOver.mp3");
-        audioManager->playSound(xpSoundEffect, transform.position, 0.4f);
+        auto gameOverSoundEffect = audioManager->getAudioClip("GameOver.mp3");
+        audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
+
         die();
-    }
-
-    Entity* hit_actor2 = game->get_coliding_entity(this, Collision_Channel::XP);
-    if (hit_actor2 != nullptr)
-    {
-        auto xpSoundEffect = audioManager->getAudioClip("XPGain.mp3");
-        audioManager->playSound(xpSoundEffect, transform.position, 0.2f);
-
-        hit_actor2->destroy();
     }
 }
 
 void Player::die()
-
 {
-    game->GameOver();
+    game->gameOver();
+
+    game->reset();
+    this->reset();
+}
+
+void Player::reset()
+{
+    shooter.emptyAllQueues();
+
+    transform.position = glm::vec3(0.0f);
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -78,6 +78,16 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         physicsbody.acceleration -= glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         physicsbody.acceleration += glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
+
+    // debug
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+        game->addPlayerXP(10);
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+        game->reset();
+        this->reset();
+    }
+
 
     // jumping and dampening
     bool bIsGrounded = transform.position.y < 0 + playerHeight + 0.1f;
@@ -145,7 +155,6 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
 
 void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
         shooter.shootDefault(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());

@@ -1,6 +1,12 @@
 #include "DefaultCard.h"
 #include "../../game.h"
 
+DefaultCard::DefaultCard(glm::vec3 position, MeshRenderer meshRenderer)
+	: Card(position, meshRenderer), currentPosition(position)
+{
+
+}
+
 void DefaultCard::update(float deltaTime)
 {
 	glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
@@ -16,6 +22,8 @@ void DefaultCard::update(float deltaTime)
 		if (enemy != nullptr)
 		{
 			enemy->take_damage(damage * game->playerDamageMultiplier);
+
+			game->spawn_particle_source(transform.position, 20.0f, 0.3f, 0.8f);
 
 			if(bDestroyOnHit)
 				destroy();

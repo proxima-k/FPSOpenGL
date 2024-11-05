@@ -1,14 +1,39 @@
 #include <iostream>
 
 #include "Game.h"
+
 #include "Player.h"
+#include "enemies/CubeEnemy.h"
+
 #include "AABB.h"
+
 #include "../graphics/MeshRenderer.h"
 #include "../graphics/Mesh.h"
 #include "../graphics/Shader.h"
-#include "enemies/CubeEnemy.h"
 
-void Game::update() 
+Game::Game()
+{
+	for (int i = 0; i < MAX_ENTITYS; ++i)
+	{
+		entitys[i] = nullptr;  // initialize all pointers to nullptr
+	}
+
+	textureManager = new TextureManager;
+	textureManager->init();
+}
+
+Game::~Game()
+{
+	for (int i = 0; i < MAX_ENTITYS; ++i)
+	{
+		delete entitys[i];
+		entitys[i] = nullptr;
+	}
+	
+	delete textureManager;
+}
+
+void Game::update()
 {
 	double currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrameTime;
@@ -32,26 +57,23 @@ void Game::update()
 		}
 	}
 
-	//if (spawnEnemy && !gameOver) {
+	for (int i = 0; i < 20; i++)
+	{
+		auto* pCtrl = particleCtrl[i];
 
-	//	// spawn a new enemy when the timer reaches zero
-	//	if (timer.isZero())
-	//	{
-	//		timer.setTimer(20);
-	//		timer.setCallback([this]() { this->timer_callback(); });
-	//	}
+		if (pCtrl == nullptr) continue;
 
-	//	timer.updateTimer(deltaTime);
-	//}
+		if (pCtrl->isEmpty()) {
+			particleCtrl[i] = nullptr;
+			delete pCtrl;
+
+			std::cout << "Destroy Particle Controller" << std::endl;
+			return;
+		}
+
+		pCtrl->update(deltaTime);
+	}
 }
-
-// callback function for the timer
-//void Game::timer_callback()
-//{
-//	MeshRenderer newMeshRenderer(cubeEnemyMesh, cubeEnemyShader, camera);
-//	Entity* newEnemy = game->spawn_entity<CubeEnemy>(glm::vec3(1), newMeshRenderer);
-//	newEnemy->transform.position = camera->transform.position + newEnemy->transform.getRandomPointInRadius(10, 25);
-//}
 
 // calls the draw function on all the entities
 void Game::render()
@@ -62,6 +84,14 @@ void Game::render()
 		{
 			entitys[i]->draw();
 		}
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		auto* pCtrl = particleCtrl[i];
+
+		if (pCtrl != nullptr)
+			pCtrl->render();
 	}
 }
 
@@ -84,9 +114,27 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 	return nullptr;
 }
 
-void Game::GameOver()
+void Game::enterSelectCardState()
 {
-	currentGameState = Dead;
+	if (crtPlayerXP >= maxPlayerXP) {
+		for (int i = 0; i < MAX_ENTITYS; i++) {
+			if (entitys[i] != nullptr) {
+				if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
+					entitys[i]->destroyed = true;
+				}
+			}
+		}
+		crtPlayerXP = 0;
+		level_up_player();
+		playerLevel++;
+
+		currentGameState = GameStates::SelectCards;
+	}
+}
+
+void Game::gameOver()
+{
+	currentGameState = Menu;
 
 	for (int i = 0; i < MAX_ENTITYS; i++)
 	{
@@ -94,6 +142,29 @@ void Game::GameOver()
 		{
 			entitys[i]->destroy();
 		}
+	}
+}
+
+void Game::reset()
+{
+	crtPlayerXP = 0;
+	maxPlayerXP = 100;
+	playerLevel = 1;
+
+	playerDamageMultiplier = 1.0f;
+	playerSpeedMultiplier = 1.0f;
+	playerDashMultiplier = 1.0f;
+
+	bGameOver = false;
+
+	player->reset();
+
+	GameStates currentGameState = GameStates::Playing;
+
+	for (int i = 0; i < MAX_ENTITYS; ++i)
+	{
+		delete entitys[i];
+		entitys[i] = nullptr;
 	}
 }
 
