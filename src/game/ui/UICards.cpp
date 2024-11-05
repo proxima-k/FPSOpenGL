@@ -1,7 +1,33 @@
 #include "../ui/UICards.h"
 
+#include <map>
+
 void UICards::renderCardSelection(ImVec2 windowSize)
 {
+    ImVec2 descriptionBoxSize = { windowSize.x / 1.5f, 120 };
+
+    ImGui::SetCursorPos({ (windowSize.x / 2 - descriptionBoxSize.x / 2), (windowSize.y * 0.7f - descriptionBoxSize.y / 2) });
+    ImGui::Image((void*)(intptr_t)game->textureManager->getTexture(""), descriptionBoxSize);
+
+    ImVec2 textSize = ImGui::CalcTextSize(descriptionTxt.c_str());
+    float textX = (windowSize.x / 2) - (textSize.x / 2);
+    float textY = (windowSize.y * 0.7f) - descriptionBoxSize.y / 4;
+
+    ImGui::SetCursorPos({ textX, textY });
+    ImGui::Text(descriptionTxt.c_str());
+
+    std::map<GLuint, std::string> cardDescriptions = {
+    {sineCardTexture, "sin(x) — Applies a sine wave effect with amplitude modulation."},
+    {cosineCardTexture, "cos(x) — Applies a cosine wave effect with frequency adjustment."},
+    {placeholder1card, "f(x) = x^2 — Placeholder effect representing a quadratic increase."},
+    {placeholder2card, "f(x) = log(x) — Placeholder effect representing logarithmic scaling."},
+    {placeholder3card, "f(x) = e^x — Placeholder effect representing exponential growth."},
+    {passivedamagecard, "dmg(x) = base_damage * (1 + 0.1x) — Increases damage by 10% per level."},
+    {passivespeedcard, "spd(x) = base_speed * (1 + 0.05x) — Increases speed by 5% per level."},
+    {passivedashcard, "dash(x) = base_dash_distance * (1 + 0.2x) — Increases dash distance by 20% per level."}
+    };
+
+
     int cardsPerRow = (selectionAmount > 2) ? (selectionAmount + 1) / 2 : selectionAmount;
     int rows = (selectionAmount + cardsPerRow - 1) / cardsPerRow;
 
@@ -32,8 +58,11 @@ void UICards::renderCardSelection(ImVec2 windowSize)
         bool isHovered = ImGui::IsMouseHoveringRect(cardPos, ImVec2(cardPos.x + cardSize.x, cardPos.y + cardSize.y));
         float targetScale = isHovered ? scaleMultiplier : 1.0f;
 
-        if (isHovered && !cardIsAnimating[i]) {
-            cardIsAnimating[i] = true;
+        if (isHovered) {
+            descriptionTxt = cardDescriptions[selectedTextures[i]];
+
+            if (!cardIsAnimating[i])
+                cardIsAnimating[i] = true;
         }
 
         if (cardIsAnimating[i]) {
@@ -50,8 +79,6 @@ void UICards::renderCardSelection(ImVec2 windowSize)
         }
 
         ImVec2 scaledCardSize = ImVec2(cardSize.x * cardScales[i], cardSize.y * cardScales[i]);
-
-        // adjust position based on scaling to keep the card centered
         ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
         ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
 

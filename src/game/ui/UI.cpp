@@ -170,13 +170,24 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     float windowWidth = ImGui::GetWindowWidth();
     
     ImVec2 levelPos((windowSize.x) / 2.0f - (40 / 2), 0);
+    ImVec2 clockPos((windowSize.x) / 2.0f - (40 / 2), windowSize.y - 40);
     ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
     ImVec2 barSize(windowWidth, 25);
     ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
     
-    displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
-    
+    int minutes = static_cast<int>(game->timeLeftUntilBoss) / 60;
+    int seconds = static_cast<int>(game->timeLeftUntilBoss) % 60;
+
     customProgressBar(displayedScoreFraction, barSize, barColor);
+
+    char timeText[16];
+    std::snprintf(timeText, sizeof(timeText), "%02d:%02d", minutes, seconds);
+
+    ImGui::SetCursorPos(clockPos);
+    ImGui::Text("%s", timeText);
+
+    displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
+   
     
     ImGui::SetCursorPos(levelPos);
     ImGui::Text("Lvl %d", game->get_player_level());

@@ -73,6 +73,8 @@ void Game::update()
 
 		pCtrl->update(deltaTime);
 	}
+
+	timeLeftUntilBoss -= deltaTime;
 }
 
 // calls the draw function on all the entities
@@ -150,6 +152,8 @@ void Game::reset()
 	crtPlayerXP = 0;
 	maxPlayerXP = 100;
 	playerLevel = 1;
+
+	timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
