@@ -1,5 +1,6 @@
 #pragma once
 #include "CompositeNode.h"
+#include <iostream>
 
 namespace BT {
 	class SequenceNode : public CompositeNode {
@@ -16,7 +17,7 @@ namespace BT {
 			while (currentChild < children.size()) {
 				NodeState childState = children[currentChild]->update(deltaTime, blackboard);
 
-				if (childState == NodeState::RUNNING || childState != NodeState::FAILURE)
+				if (childState == NodeState::RUNNING || childState == NodeState::FAILURE)
 					return childState;
 
 				currentChild++;

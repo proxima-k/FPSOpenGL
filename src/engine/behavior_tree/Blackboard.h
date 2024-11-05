@@ -11,24 +11,23 @@ namespace BT {
 	public:
 		Blackboard() = default;
 		~Blackboard() = default;
-
 		
 		template <typename T>
 		void setValue(const std::string& key, T value) {
-			data[key] = { std::type_index(typeid(T)), std::make_shared<T>(std::move(value)) };
+			data.insert_or_assign(key, std::make_pair(std::type_index(typeid(T)), std::make_shared<T>(std::move(value))));
 		}
 
 		template <typename T>
-		T get(const std::string& key) const {
+		T getValue(const std::string& key) const {
 			auto it = data.find(key);
 			if (it == data.end()) {
 				std::cout << "[Blackboard] Key <" << key << "> not found." << std::endl;
-				return;
+				return T{};
 			}
 
 			if (it->second.first != std::type_index(typeid(T))) {
 				std::cout << "[Blackboard] Type mismatch when getting for key <" << key << ">" << std::endl;
-				return;
+				return T{};
 			}
 
 			return *std::static_pointer_cast<T>(it->second.second);
@@ -44,6 +43,7 @@ namespace BT {
 
 	private:
 		std::unordered_map<std::string, std::pair<std::type_index, std::shared_ptr<void>>> data;
+
 	};
 
 }

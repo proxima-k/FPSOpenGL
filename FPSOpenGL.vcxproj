@@ -126,7 +126,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include;$(SolutionDir)dependencies\steam\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include;$(SolutionDir)dependencies\steam\include;$(SolutionDir)src\engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -144,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\openAL\include;$(SolutionDir)dependencies\GLFW\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\imgui\include;$(SolutionDir)dependencies\stb\include;$(SolutionDir)dependencies\tinyobj\include;$(SolutionDir)dependencies\steam\include;$(SolutionDir)src\engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -168,6 +168,10 @@
     <ClCompile Include="src\engine\behavior_tree\BehaviorTree.cpp" />
     <ClCompile Include="src\engine\behavior_tree\Blackboard.cpp" />
     <ClCompile Include="src\game\enemies\CosineEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\pillar_enemy\AttackTask.cpp" />
+    <ClCompile Include="src\game\enemies\pillar_enemy\PillarEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\pillar_enemy\WarningTask.cpp" />
+    <ClCompile Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClCompile Include="src\game\enemies\ShootingEnemy.cpp" />
     <ClCompile Include="src\game\enemies\SineEnemy.cpp" />
     <ClCompile Include="src\game\shooting\cards\DashPassive.h" />
@@ -231,6 +235,8 @@
     <ClInclude Include="src\engine\behavior_tree\Blackboard.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\BaseNode.h" />
     <ClInclude Include="src\game\enemies\CosineEnemy.h" />
+    <ClInclude Include="src\game\enemies\pillar_enemy\AttackTask.h" />
+    <ClInclude Include="src\game\enemies\pillar_enemy\PillarEnemy.h" />
     <ClInclude Include="src\game\enemies\ShootingEnemy.h" />
     <ClInclude Include="src\game\enemies\SineEnemy.h" />
     <ClInclude Include="src\game\shooting\cards\DamagePassive.h" />

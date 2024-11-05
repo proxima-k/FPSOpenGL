@@ -10,12 +10,13 @@ namespace BT
 		// stores a blackboard
 
 	public:
-		BehaviorTree() : rootNode(nullptr) {}
-		BehaviorTree(BaseNode* rootNode) : rootNode(rootNode) {}
+		BehaviorTree() : rootNode(nullptr) {  }
+		BehaviorTree(BaseNode* rootNode) : rootNode(rootNode) {  }
 		~BehaviorTree();
 
 		void update(float deltaTime) { rootNode->update(deltaTime, blackboard); }
 		Blackboard getBlackboard() { return blackboard; }
+		void setRootNode(BaseNode* rootNode) { this->rootNode = rootNode; }
 
 	private:
 		BaseNode* rootNode;
