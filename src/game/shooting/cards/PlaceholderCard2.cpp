@@ -2,14 +2,14 @@
 
 void PlaceHolderCard2::update(float deltaTime)
 {
-	timeElapsed += deltaTime * 5;
+
 	glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
 
-	height = glm::sin(timeElapsed) / 6;
-	currentPosition += launchDirection * deltaTime * 3.f;
+	currentPosition += launchDirection * deltaTime * speed;
 
 	transform.position = currentPosition + rightVector * height;
-	transform.rotation = glm::angleAxis(glm::radians(timeElapsed * 250), -transform.getUp());
+
+	speed -= deltaTime * 20.0f;
 
 	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
@@ -23,13 +23,19 @@ void PlaceHolderCard2::update(float deltaTime)
 				destroy();
 		}
 	}
+
+	timer.updateTimer(deltaTime);
 }
 
 void PlaceHolderCard2::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
-	damage = 10;
+	damage = 20;
+	speed = 10.0f;
+	aliveTime = 200.0f;
+	transform.scale = glm::vec3(1.f, 0.005f, 0.1f);
 
+	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 }
