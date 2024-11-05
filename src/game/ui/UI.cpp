@@ -39,6 +39,7 @@ void UI::init(GLFWwindow* window)
     cards.emptydeck = game->textureManager->getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
+    menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 120.0f);
 
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
@@ -121,12 +122,27 @@ void UI::render(GLFWwindow* window)
 
             ImGui::SetCursorPos({ (windowWidth / 7) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
             ImVec2 buttonSize = { buttonSizeX , buttonSizeY };
-            bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("popcat"), buttonSize);
+            //ImGui::PushStyleColor(ImGuiCol_Button, { 2, 2, 2, 2 });
+            bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("play"), buttonSize);
 
             if (clicked) {
                 game->reset();
                 game->currentGameState = Game::GameStates::Playing;
             }
+
+            if (menuFont)
+            {
+                ImGui::PopFont();
+                ImGui::PushFont(menuFont);
+            }
+
+            float titleSizeX = (windowWidth / 1.5f);
+            float titleSizeY = (windowHeight / 2);
+            ImVec2 titleSize = { titleSizeX , titleSizeY };
+
+            ImGui::SetCursorPos({ (windowWidth / 7) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
+            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
+
         break;
     }
 

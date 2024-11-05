@@ -280,7 +280,6 @@
     <Image Include="res\sprites\placeholder1card.png" />
     <Image Include="res\sprites\placeholder2card.png" />
     <Image Include="res\sprites\placeholder3card.png" />
-    <Image Include="res\sprites\popcat.png" />
     <Image Include="res\sprites\sinecard.png" />
     <Image Include="res\sprites\speedbuffcard.png" />
   </ItemGroup>

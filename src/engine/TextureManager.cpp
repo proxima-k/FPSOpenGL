@@ -15,6 +15,8 @@ void TextureManager::init() {
         if (entry.is_regular_file()) {
             std::string textureName = entry.path().stem().string();
             loadStrings.push_back(textureName);
+
+            std::cout << "Texture Loaded :: " << textureName << std::endl;
         }
     }
 
