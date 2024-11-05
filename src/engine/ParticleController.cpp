@@ -6,7 +6,7 @@ ParticleController::ParticleController(glm::vec3 startPos, const int particleAmo
 {
 	std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
 	mesh = new Mesh(vertices);
-	shader = new Shader("res/shaders/Basic.shader");
+	shader = new Shader("res/shaders/mesh.shader");
 
 	for (int i = 0; i <= particleAmount; i++) {
 		glm::vec3 scale = glm::vec3(0.01f);

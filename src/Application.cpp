@@ -308,10 +308,6 @@ int main(void)
             teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
 			cubeMeshRenderer.draw(glm::vec3(3, 0.2f, 0), glm::quat(1, 0, 0, 0), glm::vec3(0.5f));
 
-            ui.begin();
-            ui.render(window);
-            ui.end();
-
             glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)
 
@@ -347,8 +343,12 @@ int main(void)
             // floor grid pass
             floorGrid.draw();
 
+            ui.begin();
+            ui.render(window);
+            ui.end();
+
             // audio
-            audioManager->update();
+            //audioManager->update();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
