@@ -19,6 +19,8 @@ public:
 private:
 	float height = 0.f;
 	float timeElapsed = 0.f;
+	float elapsedTime = 0.f;
+	float speed = 0.f;
 
 	glm::vec3 currentPosition;
 };
