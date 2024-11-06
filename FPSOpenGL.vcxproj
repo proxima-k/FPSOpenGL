@@ -159,7 +159,7 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\BaseNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
-    <ClCompile Include="src\game\enemies\BossEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
     <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
     <ClCompile Include="src\engine\Particle.cpp" />
     <ClCompile Include="src\engine\ParticleController.cpp" />
@@ -224,7 +224,7 @@
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
-    <ClInclude Include="src\game\enemies\BossEnemy.h" />
+    <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />
     <ClInclude Include="src\engine\Particle.h" />
     <ClInclude Include="src\engine\ParticleController.h" />
     <ClInclude Include="src\engine\SteamManager.h" />

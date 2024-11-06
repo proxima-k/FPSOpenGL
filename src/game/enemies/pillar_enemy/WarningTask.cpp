@@ -4,9 +4,15 @@
 
 void WarningTask::onNodeStart(BT::Blackboard& blackboard)
 {
-	// todo: set collision channel to none
 	std::cout << "WarningTask started +++++++++++++++++++++++++++++" << std::endl;
 	timer = waitTime;
+
+	Entity* entity = blackboard.getValue<Entity*>("entity");
+	if (entity != nullptr) {
+		entity->transform.scale.y = 0.01f;
+		entity->transform.position.y = 0.01f;
+		entity->collision_channel = Collision_Channel::None;
+	}
 }
 
 BT::NodeState WarningTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)

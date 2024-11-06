@@ -149,3 +149,23 @@ void Grid::setPlayer(Player* _player)
 {
 	player = _player;
 }
+
+glm::vec2 Grid::getCellPosInt(glm::vec3 position) 
+{
+	int x = position.x / cellWidth;
+	int y = position.z / cellHeight;
+
+	return glm::vec2(x, y);
+}
+
+void Grid::getCellCenter(int x, int y, glm::vec3& center)
+{
+	center.x = x * cellWidth + cellWidth / 2;
+	center.y = 0;
+	center.z = y * cellHeight + cellHeight / 2;
+
+}
+
+void Grid::getCellCenter(glm::vec3 position, glm::vec3& center)
+{
+}

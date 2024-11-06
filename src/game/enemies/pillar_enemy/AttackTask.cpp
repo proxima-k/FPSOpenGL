@@ -4,20 +4,26 @@
 
 void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 {
-	currentHeight = 0.01f;
 	std::cout << "AttackTask started" << std::endl;
+
+	currentHeight = 0.01f;
+	Entity* entity = blackboard.getValue<Entity*>("entity");
+	if (entity != nullptr) {
+		entity->transform.scale.y = currentHeight;
+		entity->transform.position.y = currentHeight;
+		entity->collision_channel = Collision_Channel::Enemy;
+	}
 }
 
 BT::NodeState AttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
 {
 	Entity* entity = blackboard.getValue<Entity*>("entity");
 
-
-	currentHeight += deltaTime * 2.0f;
+	currentHeight = glm::mix(currentHeight, MAX_HEIGHT, 0.1f);
 	entity->transform.scale.y = currentHeight;
 	entity->transform.position.y = currentHeight;
 
-	if (currentHeight >= MAX_HEIGHT) {
+	if (MAX_HEIGHT - currentHeight <= 0.0001) {
 		return BT::NodeState::SUCCESS;
 	}
 	return BT::NodeState::RUNNING;
@@ -26,7 +32,6 @@ BT::NodeState AttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboa
 void AttackTask::onNodeFinish(BT::Blackboard& blackboard)
 {
 }
-
 
 // update entity position and scale
 // something like the following

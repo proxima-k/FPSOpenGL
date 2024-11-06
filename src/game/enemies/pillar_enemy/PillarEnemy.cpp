@@ -10,21 +10,18 @@
 PillarEnemy::PillarEnemy(glm::vec3 position, MeshRenderer meshRenderer)
     : Entity(position, meshRenderer)
 {
-	// create nodes for the behavior tree
-
-	behaviorTree.getBlackboard().setValue<Entity*>("entity", this);
-
+	// setup nodes for behavior tree
 	WarningTask* warningTask = new WarningTask();
 	AttackTask* attackTask = new AttackTask();
-
 	BT::SequenceNode* sequence = new BT::SequenceNode();
 	sequence->addChild(warningTask);
 	sequence->addChild(attackTask);
 
 	BT::RootNode* root = new BT::RootNode();
 	root->setChild(sequence);
-
 	behaviorTree.setRootNode(root);
+
+	behaviorTree.getBlackboard().setValue<Entity*>("entity", this);
 
     collision_channel = Collision_Channel::Enemy;
 
