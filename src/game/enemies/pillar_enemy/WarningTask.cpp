@@ -5,8 +5,7 @@
 void WarningTask::onNodeStart(BT::Blackboard& blackboard)
 {
 	// todo: set collision channel to none
-
-	std::cout << "WarningTask started" << std::endl;
+	std::cout << "WarningTask started +++++++++++++++++++++++++++++" << std::endl;
 	timer = waitTime;
 }
 

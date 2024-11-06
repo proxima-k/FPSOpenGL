@@ -1,5 +1,6 @@
 #include "AttackTask.h"
 #include <iostream>
+#include "../../Entity.h"
 
 void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 {
@@ -9,7 +10,13 @@ void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 
 BT::NodeState AttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
 {
+	Entity* entity = blackboard.getValue<Entity*>("entity");
+
+
 	currentHeight += deltaTime * 2.0f;
+	entity->transform.scale.y = currentHeight;
+	entity->transform.position.y = currentHeight;
+
 	if (currentHeight >= MAX_HEIGHT) {
 		return BT::NodeState::SUCCESS;
 	}

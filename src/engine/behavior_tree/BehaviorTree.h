@@ -15,7 +15,7 @@ namespace BT
 		~BehaviorTree();
 
 		void update(float deltaTime) { rootNode->update(deltaTime, blackboard); }
-		Blackboard getBlackboard() { return blackboard; }
+		Blackboard& getBlackboard() { return blackboard; }
 		void setRootNode(BaseNode* rootNode) { this->rootNode = rootNode; }
 
 	private:
