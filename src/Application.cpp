@@ -44,7 +44,7 @@
 #include "game/AudioManager.h"
 #include "engine/SteamManager.h"
 
-#include "game/enemies/pillar_enemy/PillarEnemy.h"
+#include "game/enemies/boss/BossEnemy.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
@@ -67,6 +67,7 @@ Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), w
 Player player(&playerCamera);
 UI ui;
 Game* game = nullptr;
+Grid* floorGrid = nullptr;
 AudioManager* audioManager = nullptr;
 
 SteamManager* steamManager = nullptr;
@@ -180,11 +181,12 @@ int main(void)
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));*/
     
     {
-        Grid floorGrid(1, 1, 16);
+        //Grid floorGrid(1, 1, 16);
+        floorGrid = new Grid(1, 1, 16);
         Shader gridShader("res/shaders/grid.shader");
-        floorGrid.setShader(&gridShader);
-        floorGrid.setCamera(&playerCamera);
-        floorGrid.setPlayer(&player);
+        floorGrid->setShader(&gridShader);
+        floorGrid->setCamera(&playerCamera);
+        floorGrid->setPlayer(&player);
 
         // Entity (mesh path, shader, camera)
         std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
@@ -277,7 +279,10 @@ int main(void)
 
 		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
 
-		PillarEnemy pillar(glm::vec3(0.5f, 0, 10.5f), cubeMeshRenderer);
+		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f), cubeMeshRenderer);
+        game->add_entity<BossEnemy>(pillar);
+
+
 
         while (!glfwWindowShouldClose(window))
         {
@@ -299,7 +304,7 @@ int main(void)
             game->render();
 
 			//cubeEnemySpawner.update(deltaTime);
-            floorGrid.update();
+            floorGrid->update();
 
             // GRAPHICS =======================================================
             glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -307,8 +312,8 @@ int main(void)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
             
-            pillar.update(deltaTime);
-            pillar.draw();
+            //pillar->update(deltaTime);
+            //pillar->draw();
 
             // geometry pass
             game->render();
@@ -348,7 +353,7 @@ int main(void)
 			glDepthFunc(GL_LESS);
             
             // floor grid pass
-            floorGrid.draw();
+            floorGrid->draw();
 
             ui.begin();
             ui.render(window);

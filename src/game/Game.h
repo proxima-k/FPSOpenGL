@@ -33,7 +33,7 @@ public:
 
     template<typename EntityType>
     EntityType* spawn_entity(glm::vec3 position, MeshRenderer meshRenderer) {
-        for (int i = 0; i < MAX_ENTITYS; ++i)
+        for (int i = 0; i < MAX_ENTITYS; i++)
         {
             if (entitys[i] == nullptr)
             {
@@ -43,6 +43,26 @@ public:
                 return new_entity;
             }
         }
+        std::cerr << "Entity array is full, cannot spawn more entities." << std::endl;
+        return nullptr;
+    }
+
+    template<typename EntityType>
+    EntityType* add_entity(EntityType* entity) {
+        if (entity == nullptr) {
+            std::cerr << "Entity to add is null" << std::endl;
+            return nullptr;
+        }
+
+        for (int i = 0; i < MAX_ENTITYS; i++) 
+        {
+            if (entitys[i] == nullptr)
+            {
+                entitys[i] = entity;
+                return entity;
+            }
+        }
+
         std::cerr << "Entity array is full, cannot spawn more entities." << std::endl;
         return nullptr;
     }

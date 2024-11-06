@@ -167,6 +167,7 @@
     <ClCompile Include="src\game\AudioManager.cpp" />
     <ClCompile Include="src\engine\behavior_tree\BehaviorTree.cpp" />
     <ClCompile Include="src\engine\behavior_tree\Blackboard.cpp" />
+    <ClCompile Include="src\game\enemies\boss\LaunchPillarTask.cpp" />
     <ClCompile Include="src\game\enemies\CosineEnemy.cpp" />
     <ClCompile Include="src\game\enemies\pillar_enemy\AttackTask.cpp" />
     <ClCompile Include="src\game\enemies\pillar_enemy\PillarEnemy.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="src\engine\behavior_tree\BehaviorTree.h" />
     <ClInclude Include="src\engine\behavior_tree\Blackboard.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\BaseNode.h" />
+    <ClInclude Include="src\game\enemies\boss\LaunchPillarTask.h" />
     <ClInclude Include="src\game\enemies\CosineEnemy.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\AttackTask.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\PillarEnemy.h" />

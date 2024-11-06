@@ -20,8 +20,10 @@ BT::NodeState AttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboa
 	Entity* entity = blackboard.getValue<Entity*>("entity");
 
 	currentHeight = glm::mix(currentHeight, MAX_HEIGHT, 0.1f);
-	entity->transform.scale.y = currentHeight;
-	entity->transform.position.y = currentHeight;
+	if (entity != nullptr) {
+		entity->transform.scale.y = currentHeight;
+		entity->transform.position.y = currentHeight;
+	}
 
 	if (MAX_HEIGHT - currentHeight <= 0.0001) {
 		return BT::NodeState::SUCCESS;
@@ -31,6 +33,11 @@ BT::NodeState AttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboa
 
 void AttackTask::onNodeFinish(BT::Blackboard& blackboard)
 {
+	Entity* entity = blackboard.getValue<Entity*>("entity");
+
+	if (entity != nullptr) {
+		entity->destroy();
+	}
 }
 
 // update entity position and scale

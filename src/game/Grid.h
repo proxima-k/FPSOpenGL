@@ -41,3 +41,4 @@ public:
 	Transform transform;
 };
 
+extern Grid* floorGrid;

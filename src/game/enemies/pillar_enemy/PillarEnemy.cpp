@@ -11,15 +11,15 @@ PillarEnemy::PillarEnemy(glm::vec3 position, MeshRenderer meshRenderer)
     : Entity(position, meshRenderer)
 {
 	// setup nodes for behavior tree
+	BT::RootNode* root = new BT::RootNode();
+	BT::SequenceNode* sequence = new BT::SequenceNode();
 	WarningTask* warningTask = new WarningTask();
 	AttackTask* attackTask = new AttackTask();
-	BT::SequenceNode* sequence = new BT::SequenceNode();
+
+	behaviorTree.setRootNode(root);
+	root->setChild(sequence);
 	sequence->addChild(warningTask);
 	sequence->addChild(attackTask);
-
-	BT::RootNode* root = new BT::RootNode();
-	root->setChild(sequence);
-	behaviorTree.setRootNode(root);
 
 	behaviorTree.getBlackboard().setValue<Entity*>("entity", this);
 
