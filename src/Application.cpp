@@ -43,6 +43,8 @@
 
 #include "game/AudioManager.h"
 #include "engine/SteamManager.h"
+#include "engine/MeshManager.h"
+#include "engine/ShaderManager.h"
 
 #include "game/enemies/boss/BossEnemy.h"
 
@@ -169,6 +171,9 @@ int main(void)
     steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
 
+	meshManager = new MeshManager();
+	shaderManager = new ShaderManager();
+
     //SteamAPI_Init();
     //if (SteamAPI_RestartAppIfNecessary(steamManager->getAppId()))
     //{
@@ -181,19 +186,31 @@ int main(void)
     Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));*/
     
     {
+		meshManager->init();
+        shaderManager->init();
+
         //Grid floorGrid(1, 1, 16);
         floorGrid = new Grid(1, 1, 16);
-        Shader gridShader("res/shaders/grid.shader");
-        floorGrid->setShader(&gridShader);
+        //Shader gridShader("res/shaders/grid.shader");
+		Shader* gridShader = shaderManager->getShader("grid");
+
+        floorGrid->setShader(gridShader);
         floorGrid->setCamera(&playerCamera);
         floorGrid->setPlayer(&player);
 
+
+
+
         // Entity (mesh path, shader, camera)
-        std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-        Mesh cubeMesh(vertices);
+        //std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
+        //Mesh cubeMesh(vertices);
         Shader meshShader("res/shaders/mesh.shader");
 
-        MeshRenderer cubeMeshRenderer(&cubeMesh, &meshShader, Camera::mainCamera);
+		Mesh* cubeMesh = meshManager->getMesh("cube");
+
+		std::cout << cubeMesh->getVerticesCount() << std::endl;
+
+        MeshRenderer cubeMeshRenderer(cubeMesh, &meshShader, Camera::mainCamera);
 
         std::vector<float> teapotVertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
         Mesh teapotMesh(teapotVertices);
@@ -266,12 +283,12 @@ int main(void)
 
 
         // setup card mesh, shader and camera
-        player.shooter.setCardRenderer(&cubeMesh, &meshShader, &playerCamera);
+        player.shooter.setCardRenderer(cubeMesh, &meshShader, &playerCamera);
 
 		player.shooter.setPlayer(&player);
 
         audioManager->init();
-        game->setMeshRenderer(&cubeMesh, &meshShader, &playerCamera);
+        game->setMeshRenderer(cubeMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
