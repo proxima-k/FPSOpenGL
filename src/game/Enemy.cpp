@@ -1,8 +1,8 @@
 #include "Enemy.h"
 #include <iostream>
 
-Enemy::Enemy(glm::vec3 position, MeshRenderer meshRenderer)
-    : Entity(position, meshRenderer)
+Enemy::Enemy(glm::vec3 position)
+    : Entity(position)
 {
     collision_channel = Collision_Channel::Enemy;
 

@@ -24,22 +24,22 @@ void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDi
 
 	switch (card->getCardType()) {
 	case Card::Normal:
-		newCard = game->spawn_entity<DefaultCard>(launchPosition, newMeshRenderer);
+		newCard = game->spawn_entity<DefaultCard>(launchPosition);
 		break;
 	case Card::Cosine:
-		newCard = game->spawn_entity<CosineCard>(launchPosition, newMeshRenderer);
+		newCard = game->spawn_entity<CosineCard>(launchPosition);
 		break;
 	case Card::Sine:
-		newCard = game->spawn_entity<SineCard>(launchPosition, newMeshRenderer);
+		newCard = game->spawn_entity<SineCard>(launchPosition);
 		break;
 	case Card::Placeholder1:
-		newCard = game->spawn_entity<PlaceHolderCard1>(launchPosition, newMeshRenderer);
+		newCard = game->spawn_entity<PlaceHolderCard1>(launchPosition);
 		break;
 	case Card::Placeholder2:
-		newCard = game->spawn_entity<PlaceHolderCard2>(launchPosition, newMeshRenderer);
+		newCard = game->spawn_entity<PlaceHolderCard2>(launchPosition);
 		break;
 	case Card::Placeholder3:
-		newCard = game->spawn_entity<PlaceHolderCard3>(launchPosition, newMeshRenderer);
+		newCard = game->spawn_entity<PlaceHolderCard3>(launchPosition);
 		break;
 	}
 
@@ -78,7 +78,7 @@ void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, 
 {
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 
-	DefaultCard* defaultCard = new DefaultCard(launchPosition, newMeshRenderer);
+	DefaultCard* defaultCard = new DefaultCard(launchPosition);
 
 	spawnCard(defaultCard, launchPosition, launchDirection, upDirection);
 

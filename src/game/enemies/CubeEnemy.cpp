@@ -3,10 +3,12 @@
 #include "CubeEnemy.h"
 #include "../Game.h"
 
-CubeEnemy::CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer)
-	: Enemy(position, meshRenderer), physicsBody(), trailRenderer()
+#include <ShaderManager.h>
+
+CubeEnemy::CubeEnemy(glm::vec3 position)
+	: Enemy(position), physicsBody(), trailRenderer()
 {
-	Shader* trailShader = new Shader("res/shaders/mesh.shader");
+	Shader* trailShader = shaderManager->getShader("mesh");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 25;

@@ -5,8 +5,8 @@
 class DamagePassive : public PassiveCard
 {
 public:
-	DamagePassive(glm::vec3 position = glm::vec3(0), MeshRenderer meshRenderer = MeshRenderer())
-		: PassiveCard(position, meshRenderer)
+	DamagePassive(glm::vec3 position = glm::vec3(0))
+		: PassiveCard(position)
 	{
 
 	}

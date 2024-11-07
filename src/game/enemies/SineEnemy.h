@@ -8,14 +8,14 @@
 class SineEnemy : public Enemy
 {
 public:
-	SineEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	SineEnemy(glm::vec3 position);
 
 	void update(float deltaTime) override;
 
 	Physicsbody physicsBody;
 
 private:
-	Camera* camera;
+	Camera* camera = nullptr;
 	TrailRenderer trailRenderer;
 
 	glm::vec3 lastPosition;

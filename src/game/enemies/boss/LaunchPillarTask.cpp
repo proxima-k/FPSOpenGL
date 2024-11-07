@@ -16,13 +16,13 @@ BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& bl
     timer -= deltaTime;
     if (timer <= 0)
     {
-        MeshRenderer* pillarMeshRenderer = blackboard.getValue<MeshRenderer*>("pillarMeshRenderer");
-        if (pillarMeshRenderer == nullptr)
-            return BT::NodeState::FAILURE;
+        //MeshRenderer* pillarMeshRenderer = blackboard.getValue<MeshRenderer*>("pillarMeshRenderer");
+        //if (pillarMeshRenderer == nullptr)
+            //return BT::NodeState::FAILURE;
 
         // todo: make a simple algorithm to spawn the pillar in front of where the player is moving
         // maybe based on where the velocity is would be good.
-        game->spawn_entity<PillarEnemy>(glm::vec3(currentAttackCount + 2.5f, 0, currentAttackCount + 2.5f), *pillarMeshRenderer);
+        game->spawn_entity<PillarEnemy>(glm::vec3(currentAttackCount + 2.5f, 0, currentAttackCount + 2.5f));
 
         currentAttackCount++;
         timer = attackCooldown;

@@ -2,10 +2,11 @@
 
 #include "SineEnemy.h"
 #include "../Game.h"
+#include <ShaderManager.h>
 
-SineEnemy::SineEnemy(glm::vec3 position, MeshRenderer meshRenderer) : Enemy(position, meshRenderer), physicsBody(), trailRenderer()
+SineEnemy::SineEnemy(glm::vec3 position) : Enemy(position), physicsBody(), trailRenderer()
 {
-    Shader* trailShader = new Shader("res/shaders/mesh.shader");
+    Shader* trailShader = shaderManager->getShader("mesh");
     TrailMesh* trailMesh = new TrailMesh({});
 
     trailMesh->maxTrailPoints = 25;

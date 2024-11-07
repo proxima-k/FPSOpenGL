@@ -51,8 +51,9 @@ void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 
 		MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 
-		DefaultCard* leftCard = new DefaultCard(launchPosition, newMeshRenderer);
-		DefaultCard* rightCard = new DefaultCard(launchPosition, newMeshRenderer);;
+		// todo: potential memory leak
+		DefaultCard* leftCard = new DefaultCard(launchPosition);
+		DefaultCard* rightCard = new DefaultCard(launchPosition);;
 
 		game->player->shooter.spawnCard(leftCard, transform.position, leftDirection, upDirection);
 		game->player->shooter.spawnCard(rightCard, transform.position, rightDirection, upDirection);

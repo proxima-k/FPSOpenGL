@@ -1,14 +1,13 @@
 #include"Entity.h";
 #include<iostream>
 
-Entity::Entity(glm::vec3 position, MeshRenderer meshRenderer)
-	: Entity()
+Entity::Entity(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
+	: transform(position, rotation, scale)
 {
-	this->meshRenderer = meshRenderer;
-	transform.position = position;
 	collision_channel = Collision_Channel::None;
 
-	//std::cout << "Pos : " << transform.position.x << transform.position.y << transform.position.z << "\nScale : " << transform.scale.x << transform.scale.y << transform.scale.z << "\nMesh : " << meshToDraw << "\nCamera :" << camera << "\nShader :" << shader << std::endl;
+	// note: for child classes of entity, you have to create your own meshrenderer within the constructor
+	initMeshRenderer();
 }
 
 void Entity::update(float deltaTime)

@@ -3,9 +3,12 @@
 #include "CosineEnemy.h"
 #include "../Game.h"
 
-CosineEnemy::CosineEnemy(glm::vec3 position, MeshRenderer meshRenderer) : Enemy(position, meshRenderer), physicsBody(), trailRenderer()
+#include <ShaderManager.h>
+
+CosineEnemy::CosineEnemy(glm::vec3 position) 
+    : Enemy(position), physicsBody(), trailRenderer()
 {
-    Shader* trailShader = new Shader("res/shaders/mesh.shader");
+    Shader* trailShader = shaderManager->getShader("mesh");
     TrailMesh* trailMesh = new TrailMesh({});
 
     trailMesh->maxTrailPoints = 25;

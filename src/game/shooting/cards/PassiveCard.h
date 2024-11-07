@@ -5,8 +5,8 @@
 class PassiveCard : public Card
 {
 public:
-	PassiveCard(glm::vec3 position = glm::vec3(0), MeshRenderer meshRenderer = MeshRenderer())
-		: Card(position, meshRenderer)
+	PassiveCard(glm::vec3 position = glm::vec3(0))
+		: Card(position)
 	{
 
 	}

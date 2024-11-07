@@ -8,7 +8,7 @@
 class CosineEnemy : public Enemy
 {
 public:
-	CosineEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	CosineEnemy(glm::vec3 position);
 
 	void update(float deltaTime) override;
 

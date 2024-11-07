@@ -162,18 +162,12 @@ int main(void)
     }
     //std::cout << glGetString(GL_VERSION) << std::endl;
 
-    bool show_demo_window = true;
-    bool show_log_window = true;
-
     game = new Game();
     audioManager = new AudioManager();
     game->player = &player;
     steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
-
-	meshManager = new MeshManager();
-	shaderManager = new ShaderManager();
-
+	
     //SteamAPI_Init();
     //if (SteamAPI_RestartAppIfNecessary(steamManager->getAppId()))
     //{
@@ -182,16 +176,14 @@ int main(void)
 
     std::cout << "Connecting to steam APP ID:" << steamManager->getAppId() << " is currently disabled in Application.cpp\n";
 
-    /*Logger logger;
-    Debug::setCallback(std::bind(&Logger::onLog, &logger, std::placeholders::_1, std::placeholders::_2));*/
-    
     {
+        meshManager = new MeshManager();
+        shaderManager = new ShaderManager();
+
 		meshManager->init();
         shaderManager->init();
 
-        //Grid floorGrid(1, 1, 16);
         floorGrid = new Grid(1, 1, 16);
-        //Shader gridShader("res/shaders/grid.shader");
 		Shader* gridShader = shaderManager->getShader("grid");
 
         floorGrid->setShader(gridShader);
@@ -199,23 +191,12 @@ int main(void)
         floorGrid->setPlayer(&player);
 
 
-
-
         // Entity (mesh path, shader, camera)
         //std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
         //Mesh cubeMesh(vertices);
-        Shader meshShader("res/shaders/mesh.shader");
-
+        Shader* meshShader = shaderManager->getShader("mesh");
 		Mesh* cubeMesh = meshManager->getMesh("cube");
 
-		std::cout << cubeMesh->getVerticesCount() << std::endl;
-
-        MeshRenderer cubeMeshRenderer(cubeMesh, &meshShader, Camera::mainCamera);
-
-        std::vector<float> teapotVertices = Mesh::getMeshVerticesFromObjFile("res/models/teapot.obj");
-        Mesh teapotMesh(teapotVertices);
-		MeshRenderer teapotMeshRenderer(&teapotMesh, &meshShader, Camera::mainCamera);
-       
 
         // setup post process components 
         float texVertices[] = {
@@ -283,20 +264,20 @@ int main(void)
 
 
         // setup card mesh, shader and camera
-        player.shooter.setCardRenderer(cubeMesh, &meshShader, &playerCamera);
+        player.shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
 
 		player.shooter.setPlayer(&player);
 
         audioManager->init();
-        game->setMeshRenderer(cubeMesh, &meshShader, &playerCamera);
+        game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
         ui.init(window);
 
-		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
+		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, &player);
 
-		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f), cubeMeshRenderer);
+		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
         game->add_entity<BossEnemy>(pillar);
 
 
@@ -329,13 +310,9 @@ int main(void)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
             
-            //pillar->update(deltaTime);
-            //pillar->draw();
 
             // geometry pass
             game->render();
-            //teapotMeshRenderer.draw(glm::vec3(0, 0.2f, 3), glm::quat(1, 0, 0, 0), glm::vec3(0.008f));
-			//cubeMeshRenderer.draw(glm::vec3(0.5f, 0, 3.5f), glm::quat(1, 0, 0, 0), glm::vec3(0.5f, testHeight, 0.5f));
 
             glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)

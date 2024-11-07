@@ -1,7 +1,7 @@
 #include "Card.h"
 
-Card::Card(glm::vec3 position, MeshRenderer meshRenderer)
-	: Entity(position, meshRenderer)
+Card::Card(glm::vec3 position)
+	: Entity(position)
 {
 	collision_channel = Collision_Channel::Projectile;
 }

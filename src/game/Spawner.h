@@ -12,10 +12,10 @@ class Spawner
 {
 public:
 	// constructor
-	Spawner(float spawnRate, MeshRenderer meshRenderer, Player* player) :
-		spawnRate(spawnRate), timer(spawnRate), enemyMeshRenderer(meshRenderer), player(player),
+	Spawner(float spawnRate, Player* player) :
+		spawnRate(spawnRate), timer(spawnRate), player(player),
 		// passing in a type for the spawn function
-		spawnFunction([=](glm::vec3 pos, MeshRenderer meshR) -> void* { return static_cast<void*>(game->spawn_entity<EntityType>(pos, meshR)); }) 
+		spawnFunction([=](glm::vec3 pos) -> void* { return static_cast<void*>(game->spawn_entity<EntityType>(pos)); }) 
 	{}
 
 	void update(float deltaTime) {
@@ -25,16 +25,15 @@ public:
 			// calculate random position around the player to spawn the enemy
 			glm::vec3 spawnPos = player->transform.position + player->transform.getRandomPointInRadius(10, 25);
 
-			spawnFunction(spawnPos, enemyMeshRenderer);
+			spawnFunction(spawnPos);
 			timer = spawnRate;
 		}
 	}	
 
 private:
-	std::function<void* (glm::vec3, MeshRenderer)> spawnFunction;
+	std::function<void* (glm::vec3)> spawnFunction;
 	float spawnRate;
 	float timer;
-	MeshRenderer enemyMeshRenderer;
 	Player* player;
 	// potential: how many to spawn per timer reaches zero
 	// potential: spawn distance bounds

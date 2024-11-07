@@ -6,8 +6,8 @@
 class PlaceHolderCard1 : public Card
 {
 public:
-	PlaceHolderCard1(glm::vec3 position, MeshRenderer meshRenderer)
-		: Card(position, meshRenderer), bCanSpawnChildren(true) {}
+	PlaceHolderCard1(glm::vec3 position)
+		: Card(position), bCanSpawnChildren(true) {}
 
 	void update(float deltaTime) override;
 	void launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) override;

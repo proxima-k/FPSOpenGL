@@ -64,41 +64,41 @@ void UICards::renderCardSelection(ImVec2 windowSize)
 
             if (selectedTextures[i] == sineCardTexture)
             {
-                shooter->cardQueue.push(new SineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+                shooter->cardQueue.push(new SineCard(glm::vec3(0)));
             }
             else if (selectedTextures[i] == cosineCardTexture)
             {
-                shooter->cardQueue.push(new CosineCard(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+                shooter->cardQueue.push(new CosineCard(glm::vec3(0)));
             }
             else if (selectedTextures[i] == placeholder1card)
             {
-                shooter->cardQueue.push(new PlaceHolderCard1(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+                shooter->cardQueue.push(new PlaceHolderCard1(glm::vec3(0)));
             }
             else if (selectedTextures[i] == placeholder2card)
             {
-                shooter->cardQueue.push(new PlaceHolderCard2(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+                shooter->cardQueue.push(new PlaceHolderCard2(glm::vec3(0)));
             }
             else if (selectedTextures[i] == placeholder3card)
             {
-                shooter->cardQueue.push(new PlaceHolderCard3(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera)));
+                shooter->cardQueue.push(new PlaceHolderCard3(glm::vec3(0)));
             }
             else if (selectedTextures[i] == passivedamagecard)
             {
-                auto damagePassive = new DamagePassive(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera));
+                auto damagePassive = new DamagePassive(glm::vec3(0));
 
 				shooter->cardPassivesQueue.push(damagePassive);
                 damagePassive->applyPassiveEffect();
 			}
             else if (selectedTextures[i] == passivespeedcard)
             {
-                auto passivespeedcard = new SpeedPassive(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera));
+                auto passivespeedcard = new SpeedPassive(glm::vec3(0));
 
                 shooter->cardPassivesQueue.push(passivespeedcard);
                 passivespeedcard->applyPassiveEffect();
             }
             else if (selectedTextures[i] == passivedashcard)
             {
-                auto dashbuffcard = new DashPassive(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera));
+                auto dashbuffcard = new DashPassive(glm::vec3(0));
 
                 shooter->cardPassivesQueue.push(dashbuffcard);
                 dashbuffcard->applyPassiveEffect();

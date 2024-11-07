@@ -8,7 +8,8 @@
 class ShootingEnemy : public Enemy 
 {
 public:
-	ShootingEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	ShootingEnemy(glm::vec3 position);
+	void initMeshRenderer() override;
 
 	void update(float deltaTime) override;
 

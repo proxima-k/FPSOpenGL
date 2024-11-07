@@ -3,10 +3,13 @@
 #include "ShootingEnemy.h"
 #include "../Game.h"
 
-ShootingEnemy::ShootingEnemy(glm::vec3 position, MeshRenderer meshRenderer)
-	: Enemy(position, meshRenderer), physicsBody(), trailRenderer()
+#include <MeshManager.h>
+#include <ShaderManager.h>
+
+ShootingEnemy::ShootingEnemy(glm::vec3 position)
+	: Enemy(position), physicsBody(), trailRenderer()
 {
-	Shader* trailShader = new Shader("res/shaders/mesh.shader");
+	Shader* trailShader = shaderManager->getShader("mesh");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 25;
@@ -22,6 +25,11 @@ ShootingEnemy::ShootingEnemy(glm::vec3 position, MeshRenderer meshRenderer)
 	maxHealth = 10.0f;
 
 	health = maxHealth;
+}
+
+
+void ShootingEnemy::initMeshRenderer()
+{
 }
 
 void ShootingEnemy::update(float deltaTime)

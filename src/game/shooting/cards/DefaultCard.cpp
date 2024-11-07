@@ -1,8 +1,8 @@
 #include "DefaultCard.h"
 #include "../../game.h"
 
-DefaultCard::DefaultCard(glm::vec3 position, MeshRenderer meshRenderer)
-	: Card(position, meshRenderer), currentPosition(position)
+DefaultCard::DefaultCard(glm::vec3 position)
+	: Card(position), currentPosition(position)
 {
 
 }

@@ -10,7 +10,7 @@
 class PillarEnemy : public Entity
 {
 public:
-	PillarEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	PillarEnemy(glm::vec3 position);
 
 	void update(float deltaTime) override { behaviorTree.update(deltaTime); }
 	//void updateHeight();

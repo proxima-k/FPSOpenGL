@@ -1,7 +1,7 @@
 #include "UICard.h"
 
-UICard::UICard(glm::vec3 position, MeshRenderer meshRenderer)
-	: Card(position, meshRenderer)
+UICard::UICard(glm::vec3 position)
+	: Card(position)
 {
 }
 

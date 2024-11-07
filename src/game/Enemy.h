@@ -9,7 +9,7 @@
 class Enemy : public Entity 
 {
 public:
-	Enemy(glm::vec3 position, MeshRenderer meshRenderer);
+	Enemy(glm::vec3 position);
 	
 	float health;
 	float maxHealth;

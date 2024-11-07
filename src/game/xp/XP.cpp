@@ -1,8 +1,10 @@
 #include "XP.h"
 #include "../Game.h"
 
-XP::XP(glm::vec3 position, MeshRenderer meshrenderer) 
-	: Entity(position, meshrenderer), trailRenderer()
+#include <ShaderManager.h>
+
+XP::XP(glm::vec3 position) 
+	: Entity(position), trailRenderer()
 {
 	collision_channel = Collision_Channel::XP;
 
@@ -10,12 +12,10 @@ XP::XP(glm::vec3 position, MeshRenderer meshrenderer)
 	transform.scale = glm::vec3(0.02f);
 	transform.rotation = glm::vec3(0.0f);
 
-	meshRenderer = meshrenderer;
-
 	glm::vec3 xpColor = glm::vec3(1.0f, 1.0f, 0.0f);
 	meshRenderer.setColor(xpColor);
 
-	Shader* trailShader = new Shader("res/shaders/mesh.shader");
+	Shader* trailShader = shaderManager->getShader("mesh");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 20;

@@ -6,7 +6,7 @@
 class BossEnemy : public Enemy
 {
 public:
-	BossEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	BossEnemy(glm::vec3 position);
 	~BossEnemy();
 
 	void update(float deltaTime) override { behaviorTree.update(deltaTime); }

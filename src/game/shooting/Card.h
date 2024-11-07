@@ -22,7 +22,7 @@ public:
 		PassiveSpeed
 	};
 
-	Card(glm::vec3 position, MeshRenderer meshRenderere);
+	Card(glm::vec3 position);
 
 	void virtual launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void initializeTimer(float time);

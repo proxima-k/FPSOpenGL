@@ -8,7 +8,7 @@
 class CubeEnemy : public Enemy 
 {
 public:
-	CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	CubeEnemy(glm::vec3 position);
 
 	void update(float deltaTime) override;
 

@@ -32,12 +32,12 @@ public:
     void render();
 
     template<typename EntityType>
-    EntityType* spawn_entity(glm::vec3 position, MeshRenderer meshRenderer) {
+    EntityType* spawn_entity(glm::vec3 position) {
         for (int i = 0; i < MAX_ENTITYS; i++)
         {
             if (entitys[i] == nullptr)
             {
-                EntityType* new_entity = new EntityType(position, meshRenderer);
+                EntityType* new_entity = new EntityType(position);
                 entitys[i] = new_entity;
 
                 return new_entity;

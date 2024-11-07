@@ -8,7 +8,7 @@
 class XP : public Entity
 {
 public:
-	XP(glm::vec3 position, MeshRenderer meshRenderer);
+	XP(glm::vec3 position);
 
 	void update(float deltaTime) override;
 

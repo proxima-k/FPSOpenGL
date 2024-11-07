@@ -6,7 +6,7 @@
 class DefaultCard : public Card
 {
 public:
-	DefaultCard(glm::vec3 position, MeshRenderer meshRenderer);
+	DefaultCard(glm::vec3 position);
 
 	void update(float deltaTime) override;
 	void launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) override;

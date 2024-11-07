@@ -5,8 +5,8 @@
 class DashPassive : public PassiveCard
 {
 public:
-	DashPassive(glm::vec3 position = glm::vec3(0), MeshRenderer meshRenderer = MeshRenderer())
-		: PassiveCard(position, meshRenderer)
+	DashPassive(glm::vec3 position = glm::vec3(0))
+		: PassiveCard(position)
 	{
 
 	}

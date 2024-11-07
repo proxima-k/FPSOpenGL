@@ -7,8 +7,8 @@
 #include "WarningTask.h"
 #include "AttackTask.h"
 
-PillarEnemy::PillarEnemy(glm::vec3 position, MeshRenderer meshRenderer)
-    : Entity(position, meshRenderer)
+PillarEnemy::PillarEnemy(glm::vec3 position)
+    : Entity(position)
 {
 	// setup nodes for behavior tree
 	BT::RootNode* root = new BT::RootNode();
