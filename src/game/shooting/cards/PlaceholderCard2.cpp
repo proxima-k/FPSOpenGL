@@ -33,9 +33,11 @@ void PlaceHolderCard2::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 	damage = 20;
 	speed = 10.0f;
 	aliveTime = 200.0f;
-	transform.scale = glm::vec3(1.f, 0.005f, 0.1f);
 
 	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
+
+	//Initial passives
+	transform.scale *= game->playerCardSizeMultiplier;
 }

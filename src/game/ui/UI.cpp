@@ -36,6 +36,7 @@ void UI::init(GLFWwindow* window)
     cards.passivedamagecard = game->textureManager->getTexture("damagebuffcard");
     cards.passivespeedcard = game->textureManager->getTexture("speedbuffcard");
     cards.passivedashcard = game->textureManager->getTexture("dashbuffcard");
+    cards.passivesizecard = game->textureManager->getTexture("");
     cards.emptydeck = game->textureManager->getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);

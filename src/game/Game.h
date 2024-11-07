@@ -75,6 +75,7 @@ public:
     float playerDamageMultiplier = 1.0f;
     float playerSpeedMultiplier = 1.0f;
     float playerDashMultiplier = 1.0f;
+    float playerCardSizeMultiplier = 1.0f;
 
     bool bGameOver = false;
 

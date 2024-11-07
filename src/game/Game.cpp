@@ -135,6 +135,7 @@ void Game::reset()
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
 	playerDashMultiplier = 1.0f;
+	playerCardSizeMultiplier = 1.0f;
 
 	bGameOver = false;
 

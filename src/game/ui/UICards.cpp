@@ -103,6 +103,13 @@ void UICards::renderCardSelection(ImVec2 windowSize)
                 shooter->cardPassivesQueue.push(dashbuffcard);
                 dashbuffcard->applyPassiveEffect();
             }
+            else if (selectedTextures[i] == passivesizecard)
+            {
+                auto passivesizecard = new SizePassive(glm::vec3(0), MeshRenderer(shooter->cardMesh, shooter->cardShader, shooter->camera));
+
+                shooter->cardPassivesQueue.push(passivesizecard);
+                passivesizecard->applyPassiveEffect();
+            }
 
             game->currentGameState = Game::GameStates::Playing;
 
@@ -196,6 +203,10 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
             ImGui::Image((void*)(intptr_t)passivedashcard, cardSize);
         break;
 
+        case Card::CardType::PassiveSize:
+            ImGui::Image((void*)(intptr_t)passivesizecard, cardSize);
+            break;
+
         default:
             ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
             break;
@@ -204,9 +215,8 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
 }
 void UICards::randomizeCards()
 {
-    std::vector<GLuint> cardTextures = { placeholder2card };
-
-    //sineCardTexture, cosineCardTexture, placeholder1card, placeholder2card, placeholder3card, passivedamagecard, passivespeedcard, passivedashcard
+    std::vector<GLuint> cardTextures = 
+    { sineCardTexture, cosineCardTexture, placeholder1card, placeholder2card, placeholder3card, passivedamagecard, passivespeedcard, passivedashcard, passivesizecard };
 
     if (!cardsRandomized) {
         std::random_device rd;

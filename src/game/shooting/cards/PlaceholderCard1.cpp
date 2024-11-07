@@ -66,4 +66,7 @@ void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 	transform.position = launchPosition;
+
+	//Initial passives
+	transform.scale *= game->playerCardSizeMultiplier;
 }

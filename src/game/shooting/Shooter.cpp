@@ -65,13 +65,17 @@ void Shooter::shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirec
 {
 	if (cardQueue.size() <= 0) return;
 
-	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
+	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f) * game->playerCardSizeMultiplier);
 	Card* cardToSpawn = cardQueue.front();
 
 	spawnCard(cardToSpawn, launchPosition, launchDirection, upDirection);
 
 	cardQueue.pop();
 	cardQueue.push(cardToSpawn);
+
+	cardToSpawn->transform.scale *= game->playerCardSizeMultiplier;
+
+	std::cout << game->playerCardSizeMultiplier << std::endl;
 }
 
 void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)

@@ -214,6 +214,7 @@
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard1.h" />
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard2.h" />
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard3.h" />
+    <ClInclude Include="src\game\shooting\cards\SizePassive.h" />
     <ClInclude Include="src\game\shooting\cards\SpeedPassive.h" />
     <ClInclude Include="src\game\Spawner.h" />
     <ClInclude Include="src\engine\Trail.h" />

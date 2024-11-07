@@ -19,7 +19,8 @@ public:
 		Placeholder3,
 		PassiveDamage,
 		PassiveDash,
-		PassiveSpeed
+		PassiveSpeed,
+		PassiveSize
 	};
 
 	Card(glm::vec3 position, MeshRenderer meshRenderere);

@@ -34,4 +34,7 @@ void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, gl
 	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
+
+	//Initial passives
+	transform.scale *= game->playerCardSizeMultiplier;
 }

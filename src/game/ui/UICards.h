@@ -10,6 +10,7 @@
 #include "../shooting/cards/DamagePassive.h"
 #include "../shooting/cards/SpeedPassive.h"
 #include "../shooting/cards/DashPassive.h"
+#include "../shooting/cards/SizePassive.h"
 #include "../../engine/xyzmath.h"
 
 #include <glew/glew.h>
@@ -35,6 +36,7 @@ public:
     GLuint passivedamagecard;
     GLuint passivespeedcard;
     GLuint passivedashcard;
+    GLuint passivesizecard;
     GLuint emptydeck;
 
     std::vector<GLuint> selectedTextures;
