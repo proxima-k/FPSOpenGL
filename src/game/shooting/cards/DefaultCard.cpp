@@ -1,9 +1,12 @@
 #include "DefaultCard.h"
 #include "../../game.h"
+#include <MeshManager.h>
+#include <ShaderManager.h>
 
 DefaultCard::DefaultCard(glm::vec3 position)
 	: Card(position), currentPosition(position)
 {
+	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
 
 }
 

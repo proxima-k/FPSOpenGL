@@ -1,12 +1,16 @@
 #include "ParticleController.h"
 
+#include <MeshManager.h>
+#include <ShaderManager.h>
 #include "../game/Game.h"
 
 ParticleController::ParticleController(glm::vec3 startPos, const int particleAmount, const float duration, const float speed)
 {
-	std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-	mesh = new Mesh(vertices);
-	shader = new Shader("res/shaders/mesh.shader");
+	//std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
+	//mesh = new Mesh(vertices);
+	//shader = new Shader("res/shaders/mesh.shader");
+	mesh = meshManager->getMesh("cube");
+	shader = shaderManager->getShader("mesh");
 
 	for (int i = 0; i <= particleAmount; i++) {
 		glm::vec3 scale = glm::vec3(0.01f);

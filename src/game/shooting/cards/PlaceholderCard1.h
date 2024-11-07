@@ -2,12 +2,16 @@
 
 #include "../Card.h"
 #include "../../../graphics/MeshRenderer.h"
+#include <MeshManager.h>
+#include <ShaderManager.h>
 
 class PlaceHolderCard1 : public Card
 {
 public:
 	PlaceHolderCard1(glm::vec3 position)
-		: Card(position), bCanSpawnChildren(true) {}
+		: Card(position), bCanSpawnChildren(true) {
+		meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
+	}
 
 	void update(float deltaTime) override;
 	void launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) override;

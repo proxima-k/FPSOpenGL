@@ -11,7 +11,7 @@ public:
 
 	}
 
-	~SpeedPassive() override = default;
+	~SpeedPassive() = default;
 
 	void applyPassiveEffect() override
 	{

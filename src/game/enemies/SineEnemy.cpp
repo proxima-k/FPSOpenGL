@@ -2,6 +2,7 @@
 
 #include "SineEnemy.h"
 #include "../Game.h"
+#include <MeshManager.h>
 #include <ShaderManager.h>
 
 SineEnemy::SineEnemy(glm::vec3 position) : Enemy(position), physicsBody(), trailRenderer()
@@ -14,7 +15,7 @@ SineEnemy::SineEnemy(glm::vec3 position) : Enemy(position), physicsBody(), trail
     trailRenderer.setMesh(trailMesh);
     trailRenderer.setShader(trailShader);
     trailRenderer.setTargetCamera(game->camera);
-    trailRenderer.setColor(meshRenderer.getColor());
+    //trailRenderer.setColor(meshRenderer->getColor());
 
     collision_channel = Collision_Channel::Enemy;
 
@@ -22,6 +23,8 @@ SineEnemy::SineEnemy(glm::vec3 position) : Enemy(position), physicsBody(), trail
     maxHealth = 10.0f;
 
     health = maxHealth;
+
+	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
 }
 
 void SineEnemy::update(float deltaTime)

@@ -3,6 +3,7 @@
 #include "CosineEnemy.h"
 #include "../Game.h"
 
+#include <MeshManager.h>
 #include <ShaderManager.h>
 
 CosineEnemy::CosineEnemy(glm::vec3 position) 
@@ -16,7 +17,7 @@ CosineEnemy::CosineEnemy(glm::vec3 position)
     trailRenderer.setMesh(trailMesh);
     trailRenderer.setShader(trailShader);
     trailRenderer.setTargetCamera(game->camera);
-    trailRenderer.setColor(meshRenderer.getColor());
+    //trailRenderer.setColor(meshRenderer->getColor());
 
     collision_channel = Collision_Channel::Enemy;
 
@@ -24,6 +25,8 @@ CosineEnemy::CosineEnemy(glm::vec3 position)
     maxHealth = 10.0f;
 
     health = maxHealth;
+
+	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
 }
 
 void CosineEnemy::update(float deltaTime)

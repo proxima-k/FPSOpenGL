@@ -7,8 +7,11 @@
 #include "WarningTask.h"
 #include "AttackTask.h"
 
+#include <MeshManager.h>
+#include <ShaderManager.h>
+
 PillarEnemy::PillarEnemy(glm::vec3 position)
-    : Entity(position)
+	: Entity(position)
 {
 	// setup nodes for behavior tree
 	BT::RootNode* root = new BT::RootNode();
@@ -25,12 +28,16 @@ PillarEnemy::PillarEnemy(glm::vec3 position)
 
     collision_channel = Collision_Channel::Enemy;
 
-	transform.scale = glm::vec3(0.5f, 0.01f, 0.5f);
+	transform.scale = glm::vec3(1.0f, 0.01f, 1.0f);
     transform.position = position;
-    //currentHeight = 0.01f;
-	//updateHeight();
 
-	this->meshRenderer.setColor(glm::vec3(1.f, 0.3f, 0.3f));
+	initMeshRenderer();
+}
+
+void PillarEnemy::initMeshRenderer()
+{
+	this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
+	this->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
 }
 /*
 void PillarEnemy::update(float deltaTime)

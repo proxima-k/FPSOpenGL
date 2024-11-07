@@ -13,6 +13,7 @@ public:
 	PillarEnemy(glm::vec3 position);
 
 	void update(float deltaTime) override { behaviorTree.update(deltaTime); }
+	void initMeshRenderer() override;
 	//void updateHeight();
 
 private:

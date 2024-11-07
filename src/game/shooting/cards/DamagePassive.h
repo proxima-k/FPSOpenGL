@@ -11,7 +11,7 @@ public:
 
 	}
 
-	~DamagePassive() override = default;
+	~DamagePassive() = default;
 
 	void applyPassiveEffect() override
 	{

@@ -13,7 +13,7 @@ XP::XP(glm::vec3 position)
 	transform.rotation = glm::vec3(0.0f);
 
 	glm::vec3 xpColor = glm::vec3(1.0f, 1.0f, 0.0f);
-	meshRenderer.setColor(xpColor);
+	//meshRenderer->setColor(xpColor);
 
 	Shader* trailShader = shaderManager->getShader("mesh");
 	TrailMesh* trailMesh = new TrailMesh({});
@@ -23,7 +23,7 @@ XP::XP(glm::vec3 position)
 	trailRenderer.setMesh(trailMesh);
 	trailRenderer.setShader(trailShader);
 	trailRenderer.setTargetCamera(game->camera);
-	trailRenderer.setColor(meshRenderer.getColor());
+	//trailRenderer.setColor(meshRenderer->getColor());
 }
 
 void XP::update(float delta_time)

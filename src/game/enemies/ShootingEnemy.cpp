@@ -17,7 +17,7 @@ ShootingEnemy::ShootingEnemy(glm::vec3 position)
 	trailRenderer.setMesh(trailMesh);
 	trailRenderer.setShader(trailShader);
 	trailRenderer.setTargetCamera(game->camera);
-	trailRenderer.setColor(meshRenderer.getColor());
+	//trailRenderer.setColor(meshRenderer->getColor());
 
 	collision_channel = Collision_Channel::Enemy;
 
@@ -25,11 +25,14 @@ ShootingEnemy::ShootingEnemy(glm::vec3 position)
 	maxHealth = 10.0f;
 
 	health = maxHealth;
+
+	initMeshRenderer();
 }
 
 
 void ShootingEnemy::initMeshRenderer()
 {
+	meshRenderer = new MeshRenderer(meshManager->getMesh("enemy"), shaderManager->getShader("mesh"), game->camera);
 }
 
 void ShootingEnemy::update(float deltaTime)

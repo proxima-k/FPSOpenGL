@@ -11,7 +11,7 @@ public:
 
 	}
 
-	~DashPassive() override = default;
+	~DashPassive() = default;
 
 	void applyPassiveEffect() override
 	{

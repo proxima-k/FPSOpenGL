@@ -9,6 +9,7 @@ class Particle
 {
 public:
 	Particle(glm::vec3 startPos, glm::vec3 scale, const float duration, const float speed, Mesh* mesh, Shader* shader, Camera* camera);
+	~Particle() { delete meshRenderer; }
 
 	void render();
 	void update(float dt);
