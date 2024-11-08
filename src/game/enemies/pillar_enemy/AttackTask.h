@@ -1,8 +1,5 @@
 #pragma once
 
-// set collision channel to enemy
-#pragma once
-
 #include <behavior_tree/nodes/BaseNode.h>
 
 class AttackTask : public BT::BaseNode {

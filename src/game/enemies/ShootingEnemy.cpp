@@ -32,7 +32,7 @@ ShootingEnemy::ShootingEnemy(glm::vec3 position)
 
 void ShootingEnemy::initMeshRenderer()
 {
-	meshRenderer = new MeshRenderer(meshManager->getMesh("enemy"), shaderManager->getShader("mesh"), game->camera);
+	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
 }
 
 void ShootingEnemy::update(float deltaTime)

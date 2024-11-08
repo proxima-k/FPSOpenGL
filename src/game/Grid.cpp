@@ -113,24 +113,12 @@ void Grid::draw()
 	shader->SetMat4("u_Model", model);
 	shader->SetMat4("u_View", view);
 	shader->SetMat4("u_Projection", projection);
-	/*unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	unsigned int viewLoc = glGetUniformLocation(shader->GetID(), "u_View");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));*/
 
 	glm::vec3 bgColor(0.1f);
-	/*unsigned int bgColorLoc = glGetUniformLocation(shader->GetID(), "u_bgColor");
-	GLCall(glUniform3fv(bgColorLoc, 1, glm::value_ptr(bgColor)));
-	unsigned int renderRadiusLoc = glGetUniformLocation(shader->GetID(), "u_renderRadius");
-	glUniform1f(renderRadiusLoc, cellWidth * (cellsPerSideOfAxis - 1));
-	unsigned int gridWorldPosLoc = glGetUniformLocation(shader->GetID(), "u_gridWorldPos");
-	GLCall(glUniform3fv(gridWorldPosLoc, 1, glm::value_ptr(transform.position)));*/
-	
 	shader->SetFloat3("u_bgColor", bgColor);
 	shader->SetFloat("u_renderRadius", cellWidth* (cellsPerSideOfAxis - 1));
 	shader->SetFloat3("u_gridWorldPos", transform.position);
+	shader->SetFloat3("u_playerWorldPos", player->transform.position);
 
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));
 }
