@@ -5,10 +5,10 @@
 #include "../Player.h"
 #include "../../graphics/TrailMesh.h"
 
-class CubeEnemy : public Enemy 
+class ShootingEnemy : public Enemy 
 {
 public:
-	CubeEnemy(glm::vec3 position, MeshRenderer meshRenderer);
+	ShootingEnemy(glm::vec3 position, MeshRenderer meshRenderer);
 
 	void update(float deltaTime) override;
 

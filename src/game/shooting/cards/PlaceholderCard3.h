@@ -20,6 +20,10 @@ private:
 	float height = 0.f;
 	float timeElapsed = 0.f;
 
+	float orbitRadius = 1.0f;
+	float angle = 0.0f; 
+	glm::vec3 playerPosition;  
+
 	glm::vec3 currentPosition;
 };
 

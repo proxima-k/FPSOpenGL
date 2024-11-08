@@ -7,8 +7,7 @@
 
 #include "../engine/Timer.h"
 #include "../engine/TextureManager.h"
-
-#include "../game/AudioManager.h"
+#include "../engine/ParticleController.h"
 
 class Player;
 class Shooter;
@@ -47,6 +46,17 @@ public:
         std::cerr << "Entity array is full, cannot spawn more entities." << std::endl;
         return nullptr;
     }
+
+    void spawn_particle_source(glm::vec3 startPos, const int particleAmount, const float duration, const float speed) {
+        for (int i = 0; i < 5; i++) {
+            if (particleCtrl[i] == nullptr)
+            {
+                particleCtrl[i] = new ParticleController(startPos, particleAmount, duration, speed);
+                break;
+            }
+        }
+    }
+
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
 
     void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
@@ -68,7 +78,6 @@ public:
     Player* player;
 
     TextureManager* textureManager;
-    AudioManager* audioManager;
 
     GameStates currentGameState = GameStates::Playing;
 
@@ -79,6 +88,8 @@ public:
 
     bool bGameOver = false;
 
+    int minutesUntilBossSpawns = 5;
+    float timeLeftUntilBoss = (minutesUntilBossSpawns * 60 + 1);
 private:
     float deltaTime = 0.f;
     float lastFrameTime = 0.f;
@@ -88,6 +99,7 @@ private:
     int playerLevel = 1;
 
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
+    ParticleController* particleCtrl[20] = { nullptr };
     Timer timer;
 };
 

@@ -51,4 +51,7 @@ private:
     // vector to track active source-buffer pairs for cleanup
     std::vector<SourceBuffer> activeSourceBuffers;
 };
+
+extern AudioManager* audioManager;
+
 #endif

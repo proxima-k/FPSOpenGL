@@ -28,6 +28,7 @@
 #include "game/Game.h"
 #include "game/Entity.h"
 #include "game/enemies/CubeEnemy.h"
+#include "game/enemies/ShootingEnemy.h"
 
 #include "game/shooting/Card.h"
 
@@ -64,6 +65,7 @@ Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), w
 Player player(&playerCamera);
 UI ui;
 Game* game = nullptr;
+AudioManager* audioManager = nullptr;
 
 SteamManager* steamManager = nullptr;
 
@@ -159,6 +161,7 @@ int main(void)
     bool show_log_window = true;
 
     game = new Game();
+    audioManager = new AudioManager();
     game->player = &player;
     steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
@@ -194,13 +197,14 @@ int main(void)
 
 		player.shooter.setPlayer(&player);
 
+        audioManager->init();
         game->setMeshRenderer(&cubeMesh, &meshShader, &playerCamera);
 
         glEnable(GL_DEPTH_TEST);
 
         ui.init(window);
 
-		Spawner<CubeEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
+		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, cubeMeshRenderer, &player);
 
         while (!glfwWindowShouldClose(window))
         {
@@ -232,6 +236,8 @@ int main(void)
             ui.begin();
             ui.render(window);
             ui.end();
+
+            audioManager->update();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

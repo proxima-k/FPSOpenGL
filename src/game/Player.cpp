@@ -42,8 +42,8 @@ void Player::checkCollision()
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
-        auto xpSoundEffect = game->audioManager->getAudioClip("GameOver");
-        game->audioManager->playSound(xpSoundEffect, transform.position, 0.4f);
+        auto gameOverSoundEffect = audioManager->getAudioClip("GameOver.mp3");
+        audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
 
         die();
     }
@@ -177,33 +177,33 @@ void Player::processAudioInput(GLFWwindow* window)
     bool isWPressed = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS);
     if (isWPressed && !prevWState)
     {
-        auto clip = game->audioManager->getAudioClip("MoveUp");
+        auto clip = audioManager->getAudioClip("MoveUp.mp3");
         if (clip)
-            game->audioManager->playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     bool isSPressed = (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS);
     if (isSPressed && !prevSState)
     {
-        auto clip = game->audioManager->getAudioClip("MoveBack");
+        auto clip = audioManager->getAudioClip("MoveBack.mp3");
         if (clip)
-            game->audioManager->playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     bool isAPressed = (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS);
     if (isAPressed && !prevAState)
     {
-        auto clip = game->audioManager->getAudioClip("MoveLeft");
+        auto clip = audioManager->getAudioClip("MoveLeft.mp3");
         if (clip)
-            game->audioManager->playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     bool isDPressed = (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS);
     if (isDPressed && !prevDState)
     {
-        auto clip = game->audioManager->getAudioClip("MoveRight");
+        auto clip = audioManager->getAudioClip("MoveRight.mp3");
         if (clip)
-            game->audioManager->playSound(clip, transform.position, volume);
+            audioManager->playSound(clip, transform.position, volume);
     }
 
     prevWState = isWPressed;

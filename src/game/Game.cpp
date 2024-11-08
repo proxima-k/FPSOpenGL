@@ -20,9 +20,6 @@ Game::Game()
 
 	textureManager = new TextureManager;
 	textureManager->init();
-
-	audioManager = new AudioManager;
-	audioManager->init();
 }
 
 Game::~Game()
@@ -34,7 +31,6 @@ Game::~Game()
 	}
 	
 	delete textureManager;
-	delete audioManager;
 }
 
 void Game::update()
@@ -61,7 +57,24 @@ void Game::update()
 		}
 	}
 
-	audioManager->update();
+	for (int i = 0; i < 20; i++)
+	{
+		auto* pCtrl = particleCtrl[i];
+
+		if (pCtrl == nullptr) continue;
+
+		if (pCtrl->isEmpty()) {
+			particleCtrl[i] = nullptr;
+			delete pCtrl;
+
+			std::cout << "Destroy Particle Controller" << std::endl;
+			return;
+		}
+
+		pCtrl->update(deltaTime);
+	}
+
+	timeLeftUntilBoss -= deltaTime;
 }
 
 // calls the draw function on all the entities
@@ -73,6 +86,14 @@ void Game::render()
 		{
 			entitys[i]->draw();
 		}
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		auto* pCtrl = particleCtrl[i];
+
+		if (pCtrl != nullptr)
+			pCtrl->render();
 	}
 }
 
@@ -131,6 +152,8 @@ void Game::reset()
 	crtPlayerXP = 0;
 	maxPlayerXP = 100;
 	playerLevel = 1;
+
+	timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
