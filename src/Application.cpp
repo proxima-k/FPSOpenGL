@@ -183,20 +183,23 @@ int main(void)
 		meshManager->init();
         shaderManager->init();
 
-        Grid wallGrid(1, 1, 16);
+        Grid wallGrid(1, 1, 5);
+		Shader* wallGridShader = shaderManager->getShader("wallGrid");
 
         floorGrid = new Grid(1, 1, 16);
 		Shader* gridShader = shaderManager->getShader("grid");
+
 
         floorGrid->setShader(gridShader);
         floorGrid->setCamera(&playerCamera);
         floorGrid->setPlayer(&player);
 
-        wallGrid.setShader(gridShader);
+        wallGrid.setShader(wallGridShader);
         wallGrid.setCamera(&playerCamera);
         wallGrid.setPlayer(&player);
 
         wallGrid.transform.rotation = glm::angleAxis(glm::radians(90.f), glm::vec3(0.f, 0.f, 1.f)) * wallGrid.transform.rotation;
+		wallGrid.transform.position = glm::vec3(0.f, 5.f, 0.f);
 
 
         // Entity (mesh path, shader, camera)
@@ -309,7 +312,7 @@ int main(void)
             game->update();
             game->render();
 
-			//cubeEnemySpawner.update(deltaTime);
+			cubeEnemySpawner.update(deltaTime);
             floorGrid->update();
 
             // GRAPHICS =======================================================
