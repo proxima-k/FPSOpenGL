@@ -15,12 +15,10 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 #include "graphics/Renderer.h"
+#include "graphics/VertexArray.h"
 #include "graphics/VertexBuffer.h"
 #include "graphics/VertexBufferLayout.h"
-#include "graphics/IndexBuffer.h"
-#include "graphics/VertexArray.h"
 #include "graphics/Shader.h"
-
 #include "graphics/Mesh.h"
 
 #include "game/Camera.h"
@@ -30,12 +28,8 @@
 #include "game/enemies/CubeEnemy.h"
 #include "game/enemies/ShootingEnemy.h"
 
-#include "game/shooting/Card.h"
-
-#include "engine/Debug.h"
-#include "engine/Logger.h"
-
 #include "game/Grid.h"
+#include "game/WallGrid.h"
 
 #include "game/ui/UI.h"
 
@@ -183,12 +177,11 @@ int main(void)
 		meshManager->init();
         shaderManager->init();
 
-        Grid wallGrid(1, 1, 5);
+        WallGrid wallGrid(1.f, 10, 20, 10);
 		Shader* wallGridShader = shaderManager->getShader("wallGrid");
 
         floorGrid = new Grid(1, 1, 16);
 		Shader* gridShader = shaderManager->getShader("grid");
-
 
         floorGrid->setShader(gridShader);
         floorGrid->setCamera(&playerCamera);
@@ -197,9 +190,6 @@ int main(void)
         wallGrid.setShader(wallGridShader);
         wallGrid.setCamera(&playerCamera);
         wallGrid.setPlayer(&player);
-
-        wallGrid.transform.rotation = glm::angleAxis(glm::radians(90.f), glm::vec3(0.f, 0.f, 1.f)) * wallGrid.transform.rotation;
-		wallGrid.transform.position = glm::vec3(0.f, 5.f, 0.f);
 
 
         // Entity (mesh path, shader, camera)
@@ -312,7 +302,7 @@ int main(void)
             game->update();
             game->render();
 
-			cubeEnemySpawner.update(deltaTime);
+			//cubeEnemySpawner.update(deltaTime);
             floorGrid->update();
 
             // GRAPHICS =======================================================

@@ -4,7 +4,7 @@
 
 void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 {
-	std::cout << "AttackTask started" << std::endl;
+	//std::cout << "AttackTask started" << std::endl;
 
 	currentHeight = 0.01f;
 	Entity* entity = blackboard.getValue<Entity*>("entity");

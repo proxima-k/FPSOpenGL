@@ -9,8 +9,8 @@
 class WallGrid {
 private:
 	unsigned int verticesCount;
-	float cellWidth, cellHeight;
-	int cellsPerSideOfAxis;
+	float cellLength;
+	int xCellCount, yCellCount, zCellCount;
 
 	VertexArray* VAO;
 	VertexBuffer* VBO;
@@ -21,19 +21,18 @@ private:
 	Player* player;
 
 public:
-	Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis);
-	~Grid();
+	WallGrid(float cellLength, int xCellCount, int zCellCount, int yCellCount);
+	~WallGrid();
 
-	void update();
+	void update() {}
 	void draw();
 
 	void setShader(Shader* shader);
 	void setCamera(Camera* camera);
-
 	void setPlayer(Player* player);
-	glm::vec2 getCellPosInt(glm::vec3 position);
-	void getCellCenter(int x, int y, glm::vec3& center);
-	void getCellCenter(glm::vec3 position, glm::vec3& center);
 
 	Transform transform;
+
+
+	//glm::vec2 getBounds()
 };

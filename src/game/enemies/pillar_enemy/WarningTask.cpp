@@ -4,7 +4,7 @@
 
 void WarningTask::onNodeStart(BT::Blackboard& blackboard)
 {
-	std::cout << "WarningTask started +++++++++++++++++++++++++++++" << std::endl;
+	//std::cout << "WarningTask started +++++++++++++++++++++++++++++" << std::endl;
 	timer = waitTime;
 
 	Entity* entity = blackboard.getValue<Entity*>("entity");
