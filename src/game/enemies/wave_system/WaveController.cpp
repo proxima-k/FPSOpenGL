@@ -46,6 +46,8 @@ WaveSequence WaveController::create_wave_sequence(std::vector<Wave*> waves) {
 }
 
 void WaveController::update(float dt) {
+	if (waveQueue.empty()) return;
+
 	waveQueue.front().update(dt);
 
 	auto sequence = waveQueue.front();
@@ -59,6 +61,7 @@ void WaveController::update(float dt) {
 }
 
 void WaveController::next_wave() {
+	if(waveQueue.size() > 1)
 	waveQueue.pop();
 }
 
