@@ -276,8 +276,6 @@ int main(void)
 
         ui.init(window);
 
-		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, &player);
-
 		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
         game->add_entity<BossEnemy>(pillar);
 
@@ -302,7 +300,6 @@ int main(void)
             game->update();
             game->render();
 
-			cubeEnemySpawner.update(deltaTime);
             floorGrid->update();
 
             // GRAPHICS =======================================================

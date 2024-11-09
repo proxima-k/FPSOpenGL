@@ -9,6 +9,8 @@
 #include "../engine/TextureManager.h"
 #include "../engine/ParticleController.h"
 
+#include "enemies/wave_system/WaveController.h"
+
 class Player;
 class Shooter;
 
@@ -84,7 +86,11 @@ public:
 
     void enterSelectCardState();
     void addPlayerXP(int xp) { crtPlayerXP += xp; enterSelectCardState(); }
-    void level_up_player() { maxPlayerXP += 100; } // implement scaling function here
+    void level_up_player() {
+        maxPlayerXP += 100; 
+        playerLevel++;
+        waveController->next_wave();
+    } // implement scaling function here
 
     void gameOver();
     void reset();
@@ -99,6 +105,8 @@ public:
     Player* player;
 
     TextureManager* textureManager;
+
+    WaveController* waveController;
 
     GameStates currentGameState = GameStates::Playing;
 

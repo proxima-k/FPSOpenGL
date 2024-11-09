@@ -21,6 +21,9 @@ Game::Game()
 
 	textureManager = new TextureManager;
 	textureManager->init();
+
+	waveController = new WaveController;
+	waveController->populate_queue();
 }
 
 Game::~Game()
@@ -32,6 +35,7 @@ Game::~Game()
 	}
 	
 	delete textureManager;
+	delete waveController;
 }
 
 void Game::update()
@@ -76,6 +80,8 @@ void Game::update()
 	}
 
 	timeLeftUntilBoss -= deltaTime;
+
+	waveController->update(deltaTime);
 }
 
 // calls the draw function on all the entities
@@ -146,7 +152,6 @@ void Game::enterSelectCardState()
 		}
 		crtPlayerXP = 0;
 		level_up_player();
-		playerLevel++;
 
 		currentGameState = GameStates::SelectCards;
 	}
@@ -180,6 +185,7 @@ void Game::reset()
 	bGameOver = false;
 
 	player->reset();
+	waveController->reset_waves();
 
 	GameStates currentGameState = GameStates::Playing;
 
