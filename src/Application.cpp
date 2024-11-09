@@ -302,7 +302,7 @@ int main(void)
             game->update();
             game->render();
 
-			cubeEnemySpawner.update(deltaTime);
+			//cubeEnemySpawner.update(deltaTime);
             floorGrid->update();
 
             // GRAPHICS =======================================================
@@ -316,7 +316,7 @@ int main(void)
             game->render();
 
             glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);   // Default framebuffer (screen)
 
             // Blit the depth buffer from the FBO to the default framebuffer
             glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
