@@ -302,7 +302,7 @@ int main(void)
             game->update();
             game->render();
 
-			//cubeEnemySpawner.update(deltaTime);
+			cubeEnemySpawner.update(deltaTime);
             floorGrid->update();
 
             // GRAPHICS =======================================================

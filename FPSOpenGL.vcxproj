@@ -160,7 +160,7 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
-    <ClCompile Include="src\engine\MeshManager.h" />
+    <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
     <ClCompile Include="dependencies\openAL\include\openAL\drmp3_impl.cpp" />
@@ -175,10 +175,8 @@
     <ClCompile Include="src\game\enemies\pillar_enemy\AttackTask.cpp" />
     <ClCompile Include="src\game\enemies\pillar_enemy\PillarEnemy.cpp" />
     <ClCompile Include="src\game\enemies\pillar_enemy\WarningTask.cpp" />
-    <ClCompile Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClCompile Include="src\game\enemies\ShootingEnemy.cpp" />
     <ClCompile Include="src\game\enemies\SineEnemy.cpp" />
-    <ClCompile Include="src\game\shooting\cards\DashPassive.h" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard1.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard2.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard3.cpp" />
@@ -229,6 +227,7 @@
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
+    <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />
     <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />
     <ClInclude Include="src\engine\Particle.h" />

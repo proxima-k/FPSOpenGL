@@ -6,6 +6,6 @@ Enemy::Enemy(glm::vec3 position)
 {
     collision_channel = Collision_Channel::Enemy;
 
-    transform.scale = glm::vec3(.1f);
+    transform.scale = glm::vec3(.2f);
     transform.position = position;
 }

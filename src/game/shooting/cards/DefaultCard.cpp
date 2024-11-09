@@ -18,7 +18,7 @@ void DefaultCard::update(float deltaTime)
 
 	transform.position = currentPosition + rightVector * height;
 
-	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
+	Entity* hit_actor = game->get_colliding_entity_OBB(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(hit_actor);

@@ -6,6 +6,7 @@
 #include "enemies/CubeEnemy.h"
 
 #include "AABB.h"
+#include "OBB.h"
 
 #include "../graphics/MeshRenderer.h"
 #include "../graphics/Mesh.h"
@@ -107,6 +108,23 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 		AABB b = AABB::from_position_size(entitys[i]->transform);
 
 		if (aabb_overlap(a, b)) {
+			return entitys[i];
+		}
+	}
+
+	return nullptr;
+}
+
+Entity* Game::get_colliding_entity_OBB(Entity* self, Collision_Channel channel)
+{
+	for (int i = 0; i < MAX_ENTITYS; i++) {
+		if (entitys[i] == self || entitys[i] == nullptr || entitys[i]->collision_channel != channel) 
+			continue;
+
+		OBB::OBB obb1(&(self->transform)	  , self->transform.scale);
+		OBB::OBB obb2(&(entitys[i]->transform), entitys[i]->transform.scale);
+
+		if (OBB::isOverlapping(obb1, obb2)) {
 			return entitys[i];
 		}
 	}

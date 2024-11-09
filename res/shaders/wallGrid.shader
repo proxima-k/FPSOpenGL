@@ -36,7 +36,7 @@ void main()
 {
     
     float t = clamp(fragPos.y / u_renderRadius, 0, 1);
-    float color = Lerp(u_bgColor.x, 1.0, 1 - t);
+    float color = Lerp(u_bgColor.x, 1.0, t);
     
     // the higher the y value, the less white it is
     targetColor = vec4(vec3(color), 1.0);

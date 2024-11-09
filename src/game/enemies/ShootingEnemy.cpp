@@ -26,6 +26,8 @@ ShootingEnemy::ShootingEnemy(glm::vec3 position)
 
 	health = maxHealth;
 
+    //transform.scale = glm::vec3(1);
+
 	initMeshRenderer();
 }
 

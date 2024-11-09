@@ -5,9 +5,7 @@
 class AttackTask : public BT::BaseNode {
 protected:
 	void onNodeStart(BT::Blackboard& blackboard) override;
-
 	BT::NodeState onNodeUpdate(float deltaTime, BT::Blackboard& blackboard) override;
-
 	void onNodeFinish(BT::Blackboard& blackboard) override;
 
 private:

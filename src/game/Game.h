@@ -78,6 +78,7 @@ public:
     }
 
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
+    Entity* get_colliding_entity_OBB(Entity* other, Collision_Channel channel);
 
     void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
 
