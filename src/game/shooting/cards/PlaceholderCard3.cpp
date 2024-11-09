@@ -42,7 +42,7 @@ void PlaceHolderCard3::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 	damage = 10;
 	aliveTime = 200.0f;
 
-	meshRenderer.setColor({ 0, 0, 0 });
+	meshRenderer->setColor({ 0, 0, 0 });
 	transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
 
 	playerPosition = launchPosition;
