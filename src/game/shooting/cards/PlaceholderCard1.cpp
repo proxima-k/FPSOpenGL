@@ -32,6 +32,7 @@ void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 {
 	bDestroyOnHit = false;
 	damage = 50;
+	aliveTime = 200.0f;
 
 	if (bCanSpawnChildren)
 	{
@@ -62,6 +63,7 @@ void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 		rightCard->damage = damage;
 	}
 
+	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
 	transform.position = launchPosition;

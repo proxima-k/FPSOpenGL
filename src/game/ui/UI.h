@@ -34,6 +34,7 @@ private:
 
     GLuint crosshair;
     ImFont* kanitFont;
+    ImFont* menuFont;
 
     bool initialized;
 };

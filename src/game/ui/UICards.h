@@ -54,4 +54,6 @@ public:
 
     bool cardsRandomized = false;
     bool highlightCard = false;
+
+    std::string descriptionTxt;
 };

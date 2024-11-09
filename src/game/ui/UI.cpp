@@ -39,6 +39,7 @@ void UI::init(GLFWwindow* window)
     cards.emptydeck = game->textureManager->getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
+    menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 120.0f);
 
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
@@ -121,12 +122,27 @@ void UI::render(GLFWwindow* window)
 
             ImGui::SetCursorPos({ (windowWidth / 7) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
             ImVec2 buttonSize = { buttonSizeX , buttonSizeY };
-            bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("popcat"), buttonSize);
+            //ImGui::PushStyleColor(ImGuiCol_Button, { 2, 2, 2, 2 });
+            bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("play"), buttonSize);
 
             if (clicked) {
                 game->reset();
                 game->currentGameState = Game::GameStates::Playing;
             }
+
+            if (menuFont)
+            {
+                ImGui::PopFont();
+                ImGui::PushFont(menuFont);
+            }
+
+            float titleSizeX = (windowWidth / 1.5f);
+            float titleSizeY = (windowHeight / 2);
+            ImVec2 titleSize = { titleSizeX , titleSizeY };
+
+            ImGui::SetCursorPos({ (windowWidth / 7) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
+            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
+
         break;
     }
 
@@ -154,13 +170,24 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     float windowWidth = ImGui::GetWindowWidth();
     
     ImVec2 levelPos((windowSize.x) / 2.0f - (40 / 2), 0);
+    ImVec2 clockPos((windowSize.x) / 2.0f - (40 / 2), windowSize.y - 40);
     ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
     ImVec2 barSize(windowWidth, 25);
     ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
     
-    displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
-    
+    int minutes = static_cast<int>(game->timeLeftUntilBoss) / 60;
+    int seconds = static_cast<int>(game->timeLeftUntilBoss) % 60;
+
     customProgressBar(displayedScoreFraction, barSize, barColor);
+
+    char timeText[16];
+    std::snprintf(timeText, sizeof(timeText), "%02d:%02d", minutes, seconds);
+
+    ImGui::SetCursorPos(clockPos);
+    ImGui::Text("%s", timeText);
+
+    displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
+   
     
     ImGui::SetCursorPos(levelPos);
     ImGui::Text("Lvl %d", game->get_player_level());

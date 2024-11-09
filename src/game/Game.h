@@ -108,6 +108,8 @@ public:
 
     bool bGameOver = false;
 
+    int minutesUntilBossSpawns = 5;
+    float timeLeftUntilBoss = (minutesUntilBossSpawns * 60 + 1);
 private:
     float deltaTime = 0.f;
     float lastFrameTime = 0.f;
