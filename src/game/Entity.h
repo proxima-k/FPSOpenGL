@@ -32,7 +32,7 @@ public:
 	void destroy() { destroyed = true; }
 
 	Transform transform;
-	MeshRenderer* meshRenderer;
+	MeshRenderer* meshRenderer = nullptr;
 
 	Collision_Channel collision_channel = Collision_Channel::None;
 

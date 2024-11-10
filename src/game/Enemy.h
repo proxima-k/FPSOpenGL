@@ -26,7 +26,7 @@ public:
 	}
 
 	// so all enemies simply can call die() to be removed from the game
-	void die(float xpSpawnAmount) 
+	virtual void die(float xpSpawnAmount)
 	{
 		game->addPlayerXP(xpAmount);
 		game->spawn_particle_source(transform.position, 40.0f, 0.3f, 2.0f);

@@ -159,7 +159,10 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\BaseNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
+    <ClCompile Include="src\engine\behavior_tree\nodes\WaitTask.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BodyRotateTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossBody.cpp" />
     <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
@@ -227,6 +230,10 @@
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\WaitTask.h" />
+    <ClInclude Include="src\game\enemies\boss\BodyRotateTask.h" />
+    <ClInclude Include="src\game\enemies\boss\BossBody.h" />
+    <ClInclude Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />
     <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />

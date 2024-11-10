@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 
 class Transform 
@@ -17,21 +19,22 @@ public:
 
 	virtual ~Transform() = default;
 
-	glm::vec3 getForward() const {
-		return glm::normalize(rotation * glm::vec3(0, 0, 1));
+	glm::vec3 getRight()   const { return glm::normalize(rotation * glm::vec3(1, 0, 0)); }
+	glm::vec3 getUp()      const { return glm::normalize(rotation * glm::vec3(0, 1, 0)); }
+	glm::vec3 getForward() const { return glm::normalize(rotation * glm::vec3(0, 0, 1)); }
 
-		//float yaw = glm::radians(rotation.y); // convert to radians
-		//float pitch = glm::radians(rotation.x); // convert to radians
-
-		//glm::vec3 forward;
-		//forward.x = cos(yaw) * cos(pitch);
-		//forward.y = sin(pitch);
-		//forward.z = sin(yaw) * cos(pitch);
-
-		//return glm::normalize(forward);
+	glm::mat4 getLocalTransformMatrix() const {
+		// local transform matrix is the same as model matrix
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, position);
+		model *= glm::toMat4(rotation);
+		model = glm::scale(model, scale);
+		return model;
 	}
-	glm::vec3 getRight() const { return glm::normalize(rotation * glm::vec3(1, 0, 0)); }
-	glm::vec3 getUp()    const { return glm::normalize(rotation * glm::vec3(0, 1, 0)); }
+
+	glm::mat4 computeWorldTransform(const Transform& parentWorldTransform, const Transform& childTransform) {
+		return parentWorldTransform.getLocalTransformMatrix() * childTransform.getLocalTransformMatrix();
+	}
 
 	glm::vec3 getRandomPointInRadius(int minDist, int maxDist) const
 	{
@@ -52,3 +55,20 @@ public:
 		return glm::sqrt(beforeSqrt);
 	}
 };
+
+// old code
+/*
+	glm::vec3 getForward() const {
+		return glm::normalize(rotation * glm::vec3(0, 0, 1));
+
+		//float yaw = glm::radians(rotation.y); // convert to radians
+		//float pitch = glm::radians(rotation.x); // convert to radians
+
+		//glm::vec3 forward;
+		//forward.x = cos(yaw) * cos(pitch);
+		//forward.y = sin(pitch);
+		//forward.z = sin(yaw) * cos(pitch);
+
+		//return glm::normalize(forward);
+	}
+*/

@@ -278,9 +278,8 @@ int main(void)
 
 		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, &player);
 
-		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
-        game->add_entity<BossEnemy>(pillar);
-
+		BossEnemy* bossEnemy = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
+        game->add_entity<BossEnemy>(bossEnemy);
 
 
         while (!glfwWindowShouldClose(window))
