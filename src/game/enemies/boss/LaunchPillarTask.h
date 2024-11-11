@@ -9,7 +9,7 @@ protected:
 	void onNodeFinish(BT::Blackboard& blackboard) override;
 private:
 	float timer = 0.f;
-	float attackCooldown = 0.5f;
+	float attackCooldown = 0.3f;
 
 	int maxAttackCount = 5;
 	int currentAttackCount = 0;

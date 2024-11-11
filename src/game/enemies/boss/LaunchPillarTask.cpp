@@ -27,7 +27,8 @@ BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& bl
         if (floorGrid == nullptr)
 			return BT::NodeState::FAILURE;
 
-        glm::vec2 gridCellCenter = floorGrid->getCellCenter(player->transform.position);
+        float constant = 3.5f;
+        glm::vec2 gridCellCenter = floorGrid->getCellCenter(player->transform.position + glm::normalize(player->physicsbody.velocity) * constant);
 		glm::vec3 spawnPosition = glm::vec3(gridCellCenter.x, 0, gridCellCenter.y);
 		spawnPosition.y = 0;
         game->spawn_entity<PillarEnemy>(spawnPosition);

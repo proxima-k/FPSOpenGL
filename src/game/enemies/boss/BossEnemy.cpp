@@ -67,7 +67,7 @@ void BossEnemy::initMeshRenderer()
 
 				BossBody* body = game->spawn_entity<BossBody>(spawnPosition);
 
-				std::cout << x << " " << y << " " << z << std::endl;
+				//std::cout << x << " " << y << " " << z << std::endl;
 
 				bossBodies.push_back(body);
 			}
