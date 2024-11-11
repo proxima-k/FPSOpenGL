@@ -6,7 +6,8 @@ enum EnemyType {
 	Basic,
 	Cosine,
 	Sinus,
-	Pillar
+	Pillar,
+	Caterpillar,
 };
 
 class Wave {

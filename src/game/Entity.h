@@ -31,6 +31,8 @@ public:
 
 	void destroy() { destroyed = true; }
 
+	std::string entityName = "Name";
+
 	Transform transform;
 	MeshRenderer* meshRenderer;
 
