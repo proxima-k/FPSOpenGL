@@ -9,8 +9,8 @@ void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 	currentHeight = 0.01f;
 	Entity* entity = blackboard.getValue<Entity*>("entity");
 	if (entity != nullptr) {
-		entity->transform.scale.y = currentHeight;
-		entity->transform.position.y = currentHeight;
+		entity->transform.scale.y = currentHeight / 2;
+		entity->transform.position.y = currentHeight / 2;
 		entity->collision_channel = Collision_Channel::Enemy;
 	}
 }
@@ -22,7 +22,7 @@ BT::NodeState AttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboa
 	currentHeight = glm::mix(currentHeight, MAX_HEIGHT, 0.1f);
 	if (entity != nullptr) {
 		entity->transform.scale.y = currentHeight;
-		entity->transform.position.y = currentHeight;
+		entity->transform.position.y = currentHeight / 2;
 	}
 
 	if (MAX_HEIGHT - currentHeight <= 0.0001) {

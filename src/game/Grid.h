@@ -34,9 +34,9 @@ public:
 	void setCamera(Camera* camera);
 
 	void setPlayer(Player* player);
-	glm::vec2 getCellPosInt(glm::vec3 position);
-	void getCellCenter(int x, int y, glm::vec3& center);
-	void getCellCenter(glm::vec3 position, glm::vec3& center);
+	glm::vec2 getCellCoords(glm::vec3 position);
+	glm::vec2 getCellCenter(int x, int y);
+	glm::vec2 getCellCenter(glm::vec3 position);
 
 	Transform transform;
 };

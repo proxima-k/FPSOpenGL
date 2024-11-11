@@ -37,9 +37,9 @@ public:
 
 	float playerHeight = transform.scale.y / 2;
 	float speed = 1600;
+	Physicsbody physicsbody;
 
 private:
-	Physicsbody physicsbody;
 	Camera* camera;
 
 	glm::vec3 lastVelocity = glm::vec3(0.0f);

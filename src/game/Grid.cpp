@@ -137,22 +137,32 @@ void Grid::setPlayer(Player* _player)
 	player = _player;
 }
 
-glm::vec2 Grid::getCellPosInt(glm::vec3 position) 
+glm::vec2 Grid::getCellCoords(glm::vec3 position) 
 {
 	int x = position.x / cellWidth;
 	int y = position.z / cellHeight;
 
+	if (position.x < 0) {
+		x--;
+	}
+
+	if (position.z < 0) {
+		y--;
+	}
+
 	return glm::vec2(x, y);
 }
 
-void Grid::getCellCenter(int x, int y, glm::vec3& center)
+glm::vec2 Grid::getCellCenter(int xCellIndex, int yCellIndex)
 {
-	center.x = x * cellWidth + cellWidth / 2;
-	center.y = 0;
-	center.z = y * cellHeight + cellHeight / 2;
-
+	glm::vec2 center;
+	center.x = xCellIndex * cellWidth + cellWidth / 2;
+	center.y = yCellIndex * cellHeight + cellHeight / 2;
+	return center;
 }
 
-void Grid::getCellCenter(glm::vec3 position, glm::vec3& center)
+glm::vec2 Grid::getCellCenter(glm::vec3 position)
 {
+	glm::vec2 cellCoords = getCellCoords(position);
+	return getCellCenter(cellCoords.x, cellCoords.y);
 }

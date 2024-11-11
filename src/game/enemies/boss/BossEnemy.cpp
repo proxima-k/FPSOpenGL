@@ -1,13 +1,19 @@
 #include "BossEnemy.h"
 
-#include <iostream>
-#include <behavior_tree/nodes/Root.h>
 #include <MeshManager.h>
 #include <ShaderManager.h>
 
+#include <iostream>
+
+#include <behavior_tree/nodes/Root.h>
 #include "LaunchPillarTask.h"
+#include <behavior_tree/nodes/WaitTask.h>
 
 #include "BossBody.h"
+#include "../../Game.h"
+#include "../../Player.h"
+
+
 
 
 BossEnemy::BossEnemy(glm::vec3 position)
@@ -21,6 +27,8 @@ BossEnemy::BossEnemy(glm::vec3 position)
 
 	behaviorTree.setRootNode(root);
 	root->setChild(pillarAttackTask);
+
+	behaviorTree.getBlackboard().setValue<Player*>("player", game->player);
 
 	maxHealth = 100;
 	health = maxHealth;
