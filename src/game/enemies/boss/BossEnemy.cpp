@@ -23,10 +23,10 @@ BossEnemy::BossEnemy(glm::vec3 position)
 
 	// setup nodes for behavior tree
 	BT::RootNode* root = new BT::RootNode();
-	LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
+	//LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
 
 	behaviorTree.setRootNode(root);
-	root->setChild(pillarAttackTask);
+	//root->setChild(pillarAttackTask);
 
 	behaviorTree.getBlackboard().setValue<Player*>("player", game->player);
 

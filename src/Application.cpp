@@ -30,6 +30,7 @@
 
 #include "game/Grid.h"
 #include "game/WallGrid.h"
+#include "game/enemies/boss/BossCage.h"
 
 #include "game/ui/UI.h"
 
@@ -180,7 +181,7 @@ int main(void)
         WallGrid wallGrid(1.f, 10, 20, 10);
 		Shader* wallGridShader = shaderManager->getShader("wallGrid");
 
-        floorGrid = new Grid(1, 1, 16);
+        floorGrid = new Grid(16, 16, 1);
 		Shader* gridShader = shaderManager->getShader("grid");
 
         floorGrid->setShader(gridShader);
@@ -190,6 +191,16 @@ int main(void)
         wallGrid.setShader(wallGridShader);
         wallGrid.setCamera(&playerCamera);
         wallGrid.setPlayer(&player);
+
+        BossCage bossCage(glm::vec3(0, 0, 0), 13, 10, 13, 1);
+        bossCage.floorGrid->setShader(gridShader);
+        bossCage.floorGrid->setCamera(&playerCamera);
+        bossCage.floorGrid->setPlayer(&player);
+        
+        bossCage.wallGrid->setShader(wallGridShader);
+        bossCage.wallGrid->setCamera(&playerCamera);
+        bossCage.wallGrid->setPlayer(&player);
+
 
 
         // Entity (mesh path, shader, camera)
@@ -347,8 +358,12 @@ int main(void)
 			glDepthFunc(GL_LESS);
             
             // floor grid pass
+            /*
             floorGrid->draw();
+            wallGrid.update(deltaTime);
             wallGrid.draw();
+            */
+            bossCage.draw();
 
             ui.begin();
             ui.render(window);

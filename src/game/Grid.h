@@ -13,7 +13,8 @@ class Grid
 private:
 	unsigned int verticesCount;
 	float cellWidth, cellHeight;
-	int cellsPerSideOfAxis;
+	//float cellSize;
+	int xCellCount, zCellCount;
 
 	VertexArray* VAO;
 	VertexBuffer* VBO;
@@ -24,7 +25,8 @@ private:
 	Player* player;
 
 public:
-	Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis);
+	//Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis);
+	Grid(int xCellCount, int zCellCount, float cellSize);
 	~Grid();
 
 	void update();

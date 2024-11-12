@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "../graphics/VertexBufferLayout.h"
-
+/*
 Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
 	: cellWidth(cellWidth), cellHeight(cellHeight), cellsPerSideOfAxis(cellsPerSideOfAxis)
 {
@@ -45,6 +45,49 @@ Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
 		//vertices.push_back(glm::vec3(-cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
 		//vertices.push_back(glm::vec3( cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
 	}
+	verticesCount = vertices.size();
+
+	VAO = new VertexArray();
+	VBO = new VertexBuffer(&vertices[0], vertices.size() * sizeof(float));
+
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+
+	VAO->AddBuffer(*VBO, layout);
+}
+*/
+
+Grid::Grid(int xCellCount, int zCellCount, float cellSize)
+	: cellWidth(cellSize), cellHeight(cellSize), xCellCount(xCellCount), zCellCount(zCellCount)
+{
+	std::vector<float> vertices;
+
+	for (int i = -xCellCount; i <= xCellCount; i++) {
+		vertices.push_back(i * cellSize);
+		vertices.push_back(0);
+		vertices.push_back(-zCellCount * cellSize);
+
+		vertices.push_back(i * cellSize);
+		vertices.push_back(0);
+		vertices.push_back(zCellCount * cellSize);
+
+		//vertices.push_back(glm::vec3(i * cellSize, 0, -cellsPerSideOfAxis * cellSize));
+		//vertices.push_back(glm::vec3(i * cellSize, 0,  cellsPerSideOfAxis * cellSize));
+	}
+
+	for (int j = -zCellCount; j <= zCellCount; j++) {
+		vertices.push_back(-xCellCount * cellSize);
+		vertices.push_back(0);
+		vertices.push_back(j * cellSize);
+
+		vertices.push_back(xCellCount * cellSize);
+		vertices.push_back(0);
+		vertices.push_back(j * cellSize);
+
+		//vertices.push_back(glm::vec3(-cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
+		//vertices.push_back(glm::vec3( cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
+	}
+
 	verticesCount = vertices.size();
 
 	VAO = new VertexArray();
@@ -115,7 +158,7 @@ void Grid::draw()
 
 	glm::vec3 bgColor(0.1f);
 	shader->SetFloat3("u_bgColor", bgColor);
-	shader->SetFloat("u_renderRadius", cellWidth* (cellsPerSideOfAxis - 1));
+	shader->SetFloat("u_renderRadius", cellWidth * (xCellCount - 1));
 	shader->SetFloat3("u_gridWorldPos", transform.position);
 	shader->SetFloat3("u_playerWorldPos", player->transform.position);
 
