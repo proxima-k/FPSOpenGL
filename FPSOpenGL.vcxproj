@@ -160,6 +160,11 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\Wave.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\Wave.h" />
+    <ClCompile Include="src\game\enemies\wave_system\WaveController.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\WaveSequence.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\WaveSequence.h" />
     <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
@@ -227,6 +232,8 @@
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
+    <ClInclude Include="src\game\enemies\wave_system\WaveController.h" />
+    <ClInclude Include="src\game\enemies\wave_system\WaveType.h" />
     <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />
     <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />
