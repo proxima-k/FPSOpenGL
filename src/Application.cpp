@@ -295,7 +295,6 @@ int main(void)
 
         HealingLine healingLine(glm::vec3(0), glm::vec3(0, 10, 10));
 
-
         while (!glfwWindowShouldClose(window))
         {
             // LOGICS =========================================================
@@ -367,6 +366,8 @@ int main(void)
             wallGrid.draw();
             */
             bossCage.draw();
+
+            healingLine.updateEndPosition(glm::vec3(0, glm::sin(currentFrame) * 10, 10));
             healingLine.draw();
 
             ui.begin();

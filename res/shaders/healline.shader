@@ -34,7 +34,9 @@ float Lerp(float a, float b, float t)
 void main()
 {
     float distance = distance(u_startPos, fragPos);
-    float color = sin(distance) / 4 + 0.75;
+    
+    float n = 4;
+    float color = sin(distance) / n + ((n - 1) / n);
 
     targetColor = vec4(vec3(color), 1.0);
 };
