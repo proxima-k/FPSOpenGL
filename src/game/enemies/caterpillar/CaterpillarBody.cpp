@@ -11,7 +11,6 @@ CaterPillarBody::CaterPillarBody(glm::vec3 position)
 {
     entityName = "Body";
 
-    owner = nullptr;
     collision_channel = Collision_Channel::Enemy;
 
     xpAmount = 1.0f;
@@ -21,25 +20,21 @@ CaterPillarBody::CaterPillarBody(glm::vec3 position)
 	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
 }
 
-void CaterPillarBody::update(float deltaTime)
+void CaterPillarBody::follow_piece(Enemy* enemy, float dt)
 {
-    if (owner != nullptr) {
-        std::cout << owner->entityName << std::endl;
-        glm::vec3 targetPos = owner->transform.position; // Get the position of the owner
-
-        std::cout << "Owner position: " << targetPos.x << ", " << targetPos.y << ", " << targetPos.z << std::endl;
-
-        float minDistance = 0.1f;
+    if (enemy != nullptr) {
+        glm::vec3 targetPos = enemy->transform.position;
+        float minDistance = 0.02f;
         float currentDistance = glm::distance(transform.position, targetPos);
 
         if (currentDistance > minDistance) {
-            float followSpeed = 5.0f;
-            transform.position = glm::mix(transform.position, targetPos, followSpeed * deltaTime);
-            transform.position.y = owner->transform.position.y; // Match the Y position
+            float followSpeed = 10.0f;
+            transform.position = glm::mix(transform.position, targetPos, followSpeed * dt);
+            transform.position.y = enemy->transform.position.y;
 
             glm::quat targetRotation = glm::quatLookAt(glm::normalize(targetPos - transform.position), glm::vec3(0, 1, 0));
             float rotationSpeed = 3.0f;
-            transform.rotation = glm::slerp(transform.rotation, targetRotation, rotationSpeed * deltaTime);
+            transform.rotation = glm::slerp(transform.rotation, targetRotation, rotationSpeed * dt);
         }
     }
     else {

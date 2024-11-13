@@ -5,6 +5,8 @@
 #include "../../Player.h"
 #include "../../../graphics/TrailMesh.h"
 
+#include "CaterpillarBody.h"
+
 class CaterPillar : public Enemy
 {
 public:
@@ -13,6 +15,9 @@ public:
 	void update(float deltaTime) override;
 
 	Physicsbody physicsBody;
+
+	int bodyLength = 5;
+	std::vector<CaterPillarBody*> bodyPieces;
 
 private:
 	Camera* camera;

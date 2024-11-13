@@ -11,15 +11,9 @@ class CaterPillarBody : public Enemy
 public:
 	CaterPillarBody(glm::vec3 position);
 
-	void update(float deltaTime) override;
-	void bind_owner(Entity* newOwner) { 
-		if (newOwner != nullptr && owner == nullptr) {
-			owner = newOwner;
-		}
-	}
+	void follow_piece(Enemy* enemy, float dt);
 
 	Physicsbody physicsBody;
-	Entity* owner;
 
 private:
 	Camera* camera;

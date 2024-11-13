@@ -28,7 +28,7 @@ MeshRenderer::MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera, glm::vec3
 
 void MeshRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 {
-	if (mesh == nullptr) {
+              	if (mesh == nullptr) {
 		std::cout << "[MeshRenderer] Error: Missing mesh in mesh renderer" << std::endl;
 		return;
 	}

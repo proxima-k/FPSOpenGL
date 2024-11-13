@@ -31,29 +31,21 @@ CaterPillar::CaterPillar(glm::vec3 position)
     health = maxHealth;
 
 	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
+    meshRenderer->setColor({ 1.f, 0.3f, 0.3f });
+    transform.scale *= 1.5f;
 
-    int bodyLength = 2;
-    std::vector<Enemy*> bodyPieces;
-    bodyPieces.push_back(this);
-
-    for (int bodyPieceIndex = 0; bodyPieceIndex < bodyLength; bodyPieceIndex++) {
-        CaterPillarBody* newBodyPiece = game->spawn_entity<CaterPillarBody>(transform.position);
-        if (bodyPieceIndex == 0) {
-            std::cout << "Binding first body part to head" << std::endl;
-            newBodyPiece->bind_owner(this);
-        }
-        else {
-            std::cout << "Binding body part " << bodyPieceIndex << " to previous body part" << std::endl;
-            newBodyPiece->bind_owner(bodyPieces.back());
-        }
-
-        bodyPieces.push_back(newBodyPiece);
-    }
-
+    for (int bodyPieceIndex = 0; bodyPieceIndex < bodyLength; bodyPieceIndex++)
+        bodyPieces.push_back(game->spawn_entity<CaterPillarBody>(transform.position));
 }
 
 void CaterPillar::update(float deltaTime)
 {
+    Enemy* lastPiece = this;
+    for (CaterPillarBody* bodyPiece : bodyPieces) {
+        bodyPiece->follow_piece(lastPiece, deltaTime);
+        lastPiece = bodyPiece;
+    }
+
     glm::vec3 camPos = Camera::mainCamera->transform.position;
     glm::vec3 dirToCamera = glm::normalize(camPos - transform.position);
 

@@ -72,7 +72,6 @@ void Game::update()
 			particleCtrl[i] = nullptr;
 			delete pCtrl;
 
-			std::cout << "Destroy Particle Controller" << std::endl;
 			return;
 		}
 
