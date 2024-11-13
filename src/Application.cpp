@@ -367,7 +367,8 @@ int main(void)
             */
             bossCage.draw();
 
-            healingLine.updateEndPosition(glm::vec3(0, glm::sin(currentFrame) * 10, 10));
+            healingLine.updateEndPosition(glm::vec3(0, glm::sin(currentFrame) * 2, 10));
+            healingLine.update(deltaTime);
             healingLine.draw();
 
             ui.begin();

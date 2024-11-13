@@ -15,9 +15,6 @@ public:
 	// update ray end position
 	// shader for ray
 	// 
-	void draw() override;
-
-	void drawHealingLine();
 
 private:
 	BT::BehaviorTree behaviorTree;

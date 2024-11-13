@@ -11,6 +11,7 @@ class HealingLine {
 public:
 	HealingLine(glm::vec3 startPosition, glm::vec3 endPosition);
 
+	void update(float deltaTime);
 	void draw();
 
 	void updateStartPosition(glm::vec3 newStartPosition);
@@ -22,6 +23,8 @@ public:
 	Transform transform;
 
 private:
+	float timeElapsed = 0.f;
+
 	glm::vec3 startPosition;
 	glm::vec3 endPosition;
 

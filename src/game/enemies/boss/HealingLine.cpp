@@ -37,6 +37,11 @@ HealingLine::HealingLine(glm::vec3 startPosition, glm::vec3 endPosition)
 	VAO->AddBuffer(*VBO, layout);
 }
 
+void HealingLine::update(float deltaTime)
+{
+	timeElapsed += deltaTime;
+}
+
 void HealingLine::draw()
 {
 	VAO->Bind();
@@ -60,6 +65,7 @@ void HealingLine::draw()
 	shader->SetMat4("u_View", view);
 	shader->SetMat4("u_Projection", projection);
 
+	shader->SetFloat("u_timeElapsed", timeElapsed);
 	shader->SetFloat3("u_startPos", startPosition);
 	shader->SetFloat3("u_endPos", endPosition);
 

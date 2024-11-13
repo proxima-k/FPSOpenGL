@@ -11,6 +11,7 @@ BossHealingCube::~BossHealingCube()
 
 }
 
+/*
 void BossHealingCube::draw()
 {
 	if (meshRenderer == nullptr)
@@ -23,10 +24,4 @@ void BossHealingCube::draw()
 	// also draw the line
 	drawHealingLine();
 }
-
-void BossHealingCube::drawHealingLine()
-{
-	// draw shaders and stuff
-	
-}
-
+*/
