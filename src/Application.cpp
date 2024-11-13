@@ -42,6 +42,7 @@
 #include "engine/ShaderManager.h"
 
 #include "game/enemies/boss/BossEnemy.h"
+#include "game/enemies/boss/HealingLine.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_movement_callback(GLFWwindow* window, double xPos, double yPos);
@@ -292,6 +293,8 @@ int main(void)
 		BossEnemy* bossEnemy = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
         game->add_entity<BossEnemy>(bossEnemy);
 
+        HealingLine healingLine(glm::vec3(0), glm::vec3(0, 10, 10));
+
 
         while (!glfwWindowShouldClose(window))
         {
@@ -364,6 +367,7 @@ int main(void)
             wallGrid.draw();
             */
             bossCage.draw();
+            healingLine.draw();
 
             ui.begin();
             ui.render(window);

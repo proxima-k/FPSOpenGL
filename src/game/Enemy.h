@@ -16,7 +16,7 @@ public:
 	float xpAmount;
 
 	// deal damage to enemy
-	void take_damage(int damage)
+	virtual void take_damage(int damage)
 	{
 		health -= damage;
 		if (health <= 0)

@@ -164,6 +164,8 @@
     <ClCompile Include="src\game\enemies\boss\BodyRotateTask.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossBody.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossCage.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossHealingCube.cpp" />
+    <ClCompile Include="src\game\enemies\boss\HealingLine.cpp" />
     <ClCompile Include="src\game\enemies\boss\HealTask.cpp" />
     <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
@@ -237,6 +239,8 @@
     <ClInclude Include="src\game\enemies\boss\BodyRotateTask.h" />
     <ClInclude Include="src\game\enemies\boss\BossBody.h" />
     <ClInclude Include="src\game\enemies\boss\BossCage.h" />
+    <ClInclude Include="src\game\enemies\boss\BossHealingCube.h" />
+    <ClInclude Include="src\game\enemies\boss\HealingLine.h" />
     <ClInclude Include="src\game\enemies\boss\HealTask.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClInclude Include="src\game\OBB.h" />
@@ -312,6 +316,7 @@
     <ClInclude Include="src\engine\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\healline.shader" />
     <None Include="res\shaders\mesh.shader" />
     <None Include="res\shaders\grid.shader" />
     <None Include="res\shaders\transition.frag" />
