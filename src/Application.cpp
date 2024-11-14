@@ -36,7 +36,6 @@
 #include "game/Spawner.h"
 
 #include "game/AudioManager.h"
-#include "engine/SteamManager.h"
 #include "engine/MeshManager.h"
 #include "engine/ShaderManager.h"
 
@@ -65,8 +64,6 @@ UI ui;
 Game* game = nullptr;
 Grid* floorGrid = nullptr;
 AudioManager* audioManager = nullptr;
-
-SteamManager* steamManager = nullptr;
 
 GLuint LoadTextureFromFile(const char* filename)
 {
@@ -159,16 +156,7 @@ int main(void)
     game = new Game();
     audioManager = new AudioManager();
     game->player = &player;
-    steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
-	
-    //SteamAPI_Init();
-    //if (SteamAPI_RestartAppIfNecessary(steamManager->getAppId()))
-    //{
-    //    return -1;
-    //}
-
-    std::cout << "Connecting to steam APP ID:" << steamManager->getAppId() << " is currently disabled in Application.cpp\n";
 
     {
         meshManager = new MeshManager();
