@@ -277,7 +277,7 @@ int main(void)
         ui.init(window);
 
 		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
-        game->add_entity<BossEnemy>(pillar);
+        //game->add_entity<BossEnemy>(pillar);
 
 
 
@@ -346,7 +346,7 @@ int main(void)
             
             // floor grid pass
             floorGrid->draw();
-            wallGrid.draw();
+            /*wallGrid.draw();*/
 
             ui.begin();
             ui.render(window);
