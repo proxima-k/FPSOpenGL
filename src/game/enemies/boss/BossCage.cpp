@@ -1,5 +1,8 @@
 #include "BossCage.h"
 
+#include <cmath>
+#include <glm/glm.hpp>
+
 BossCage::BossCage(glm::vec3 centerWorldPosition, int xCellCount, int yCellCount, int zCellCount, float cellSize)
 	: centerWorldPosition(centerWorldPosition), xCellCount(xCellCount), yCellCount(yCellCount), zCellCount(zCellCount), cellSize(cellSize)
 {
@@ -27,4 +30,21 @@ void BossCage::draw()
 {
 	wallGrid->draw();
 	floorGrid->draw();
+}
+
+void BossCage::getCellCoords(float angle)
+{
+	float radians = glm::radians(angle);
+	float width = xCellCount * cellSize * 2;
+	float height = zCellCount * cellSize * 2;
+
+	width = 10;
+	height = 10;
+
+	float scale = width / glm::max(glm::abs(glm::cos(radians)), glm::abs(glm::sin(radians)));
+	float x = glm::cos(radians) * scale;
+	float y = glm::sin(radians) * scale;
+
+	//std::cout << "x: " << width << " y: " << height << std::endl;
+	std::cout << "x: " << x << " y: " << y << std::endl;
 }

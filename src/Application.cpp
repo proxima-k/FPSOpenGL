@@ -366,6 +366,7 @@ int main(void)
             wallGrid.draw();
             */
             bossCage.draw();
+            bossCage.getCellCoords(currentFrame * 10);
 
             healingLine.updateEndPosition(glm::vec3(0, glm::sin(currentFrame) * 2, 10));
             healingLine.update(deltaTime);
