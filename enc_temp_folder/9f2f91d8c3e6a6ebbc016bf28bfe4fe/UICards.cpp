@@ -2,7 +2,8 @@
 
 #include <map>
 
-void UICards::renderCardSelection(ImVec2 windowSize) {
+void UICards::renderCardSelection(ImVec2 windowSize)
+{
     ImVec2 descriptionBoxSize = { windowSize.x / 1.5f, 120 };
 
     ImGui::SetCursorPos({ (windowSize.x / 2 - descriptionBoxSize.x / 2), (windowSize.y * 0.7f - descriptionBoxSize.y / 2) });
@@ -37,7 +38,8 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
 
     randomizeCards();
 
-    for (int i = 0; i < selectionAmount; i++) {
+    for (int i = 0; i < selectionAmount; i++)
+    {
         int row = i / cardsPerRow;
         int indexInRow = i % cardsPerRow;
 
@@ -49,12 +51,15 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
 
         bool isHovered = ImGui::IsMouseHoveringRect(cardPos, ImVec2(cardPos.x + cardSize.x, cardPos.y + cardSize.y));
 
-        float scaleFactor = isHovered ? 1.1f : 1.0f;
+        // Define the scale factor for hover (slight increase when hovered)
+        float scaleFactor = isHovered ? 1.1f : 1.0f; // Slightly scale the card when hovered
 
+        // Apply scaling and adjust the position
         ImVec2 scaledCardSize = ImVec2(cardSize.x * scaleFactor, cardSize.y * scaleFactor);
         ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
         ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
 
+        // Set the new position and render the scaled card
         ImGui::SetCursorPos(adjustedPos);
         bool clicked = ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], scaledCardSize);
 
@@ -62,32 +67,41 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
         {
             std::cout << "Pressed button " << i << std::endl;
 
-            if (selectedTextures[i] == sineCardTexture) {
+            // Card actions here (unchanged from original code)
+            if (selectedTextures[i] == sineCardTexture)
+            {
                 shooter->cardQueue.push(new SineCard(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == cosineCardTexture) {
+            else if (selectedTextures[i] == cosineCardTexture)
+            {
                 shooter->cardQueue.push(new CosineCard(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == placeholder1card) {
+            else if (selectedTextures[i] == placeholder1card)
+            {
                 shooter->cardQueue.push(new PlaceHolderCard1(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == placeholder2card) {
+            else if (selectedTextures[i] == placeholder2card)
+            {
                 shooter->cardQueue.push(new PlaceHolderCard2(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == placeholder3card) {
+            else if (selectedTextures[i] == placeholder3card)
+            {
                 shooter->cardQueue.push(new PlaceHolderCard3(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == passivedamagecard) {
+            else if (selectedTextures[i] == passivedamagecard)
+            {
                 auto damagePassive = new DamagePassive(glm::vec3(0));
                 shooter->cardPassivesQueue.push(damagePassive);
                 damagePassive->applyPassiveEffect();
             }
-            else if (selectedTextures[i] == passivespeedcard) {
+            else if (selectedTextures[i] == passivespeedcard)
+            {
                 auto passivespeedcard = new SpeedPassive(glm::vec3(0));
                 shooter->cardPassivesQueue.push(passivespeedcard);
                 passivespeedcard->applyPassiveEffect();
             }
-            else if (selectedTextures[i] == passivedashcard) {
+            else if (selectedTextures[i] == passivedashcard)
+            {
                 auto dashbuffcard = new DashPassive(glm::vec3(0));
                 shooter->cardPassivesQueue.push(dashbuffcard);
                 dashbuffcard->applyPassiveEffect();
@@ -95,10 +109,12 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
 
             game->currentGameState = Game::GameStates::Playing;
 
-            if (shooter->cardQueue.size() > maxCardHandSize) {
+            if (shooter->cardQueue.size() > maxCardHandSize)
+            {
                 shooter->cardQueue.pop();
             }
         }
+
         ImGui::PopID();
     }
 }
