@@ -16,7 +16,7 @@ public:
 	void applyPassiveEffect() override
 	{
 		float currentMultiplier = game->playerSpeedMultiplier;
-		game->playerSpeedMultiplier = currentMultiplier * 2.0f;
+		game->playerSpeedMultiplier = currentMultiplier * 1.2f;
 	}
 
 	CardType getCardType() const override { return PassiveSpeed; }

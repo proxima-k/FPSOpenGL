@@ -87,8 +87,8 @@ public:
     void enterSelectCardState();
     void addPlayerXP(int xp) { crtPlayerXP += xp; enterSelectCardState(); }
     void level_up_player() {
-        maxPlayerXP += 100; 
         playerLevel++;
+        maxPlayerXP += 100; 
         waveController->next_wave();
     } // implement scaling function here
 

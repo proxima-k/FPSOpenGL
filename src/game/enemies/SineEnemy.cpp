@@ -19,7 +19,7 @@ SineEnemy::SineEnemy(glm::vec3 position) : Enemy(position), physicsBody(), trail
 
     collision_channel = Collision_Channel::Enemy;
 
-    xpAmount = 10.0f;
+    xpAmount = 75.0f;
     maxHealth = 10.0f;
 
     health = maxHealth;
@@ -39,7 +39,7 @@ void SineEnemy::update(float deltaTime)
 
     if (transform.getVectorMagnitude(transform.position - camPos) > 2) {
         float sineFrequency = 3;
-        float sineAmplitude = 0.03f;
+        float sineAmplitude = 0.005f;
         transform.position.y += sineAmplitude * sin(sineFrequency * glfwGetTime());
     }
 
