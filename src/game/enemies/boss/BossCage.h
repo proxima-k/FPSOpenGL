@@ -15,7 +15,8 @@ public:
 
 	void update(float deltaTime) { behaviorTree.update(deltaTime); }
 	void draw(); // handles drawing grid?
-	void getCellCoords(float angle);
+	glm::vec3 getCellCenterCoords(float angle, float yCoord, glm::vec3& cellNormal);
+	glm::vec3 getCellCoords(float angle, float yCoord);
 
 	float cellSize;
 	float xCellCount, yCellCount, zCellCount;   // these are all half of the total cells per axis

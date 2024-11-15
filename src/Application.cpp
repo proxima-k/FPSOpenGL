@@ -193,7 +193,7 @@ int main(void)
         wallGrid.setCamera(&playerCamera);
         wallGrid.setPlayer(&player);
 
-        BossCage bossCage(glm::vec3(0, 0, 0), 13, 10, 13, 1);
+        BossCage bossCage(glm::vec3(0, 0, 0), 10, 10, 13, 1);
         bossCage.floorGrid->setShader(gridShader);
         bossCage.floorGrid->setCamera(&playerCamera);
         bossCage.floorGrid->setPlayer(&player);
@@ -294,6 +294,9 @@ int main(void)
         game->add_entity<BossEnemy>(bossEnemy);
 
         HealingLine healingLine(glm::vec3(0), glm::vec3(0, 10, 10));
+        HealingLine healingLine2(glm::vec3(0), glm::vec3(0, 10, 10));
+        float testValue = 0;
+
 
         while (!glfwWindowShouldClose(window))
         {
@@ -366,11 +369,20 @@ int main(void)
             wallGrid.draw();
             */
             bossCage.draw();
-            bossCage.getCellCoords(currentFrame * 10);
+            
+            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+                testValue += deltaTime;
+            else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+                testValue -= deltaTime;
 
-            healingLine.updateEndPosition(glm::vec3(0, glm::sin(currentFrame) * 2, 10));
+            healingLine.updateEndPosition(bossCage.getCellCoords(testValue * 10, 3));
             healingLine.update(deltaTime);
             healingLine.draw();
+
+            glm::vec3 something;
+            healingLine2.updateEndPosition(bossCage.getCellCenterCoords(testValue * 10, 3, something));
+            healingLine2.update(deltaTime);
+            healingLine2.draw();
 
             ui.begin();
             ui.render(window);

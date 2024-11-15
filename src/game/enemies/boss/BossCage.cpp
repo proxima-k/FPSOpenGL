@@ -32,19 +32,90 @@ void BossCage::draw()
 	floorGrid->draw();
 }
 
-void BossCage::getCellCoords(float angle)
+glm::vec3 BossCage::getCellCenterCoords(float angle, float yCoord, glm::vec3& cellNormal) // also add y coordinates
 {
 	float radians = glm::radians(angle);
-	float width = xCellCount * cellSize * 2;
-	float height = zCellCount * cellSize * 2;
+	
+	float width = xCellCount * cellSize;
+	float height = zCellCount * cellSize;
 
-	width = 10;
-	height = 10;
+	// to scale the values cosine and sine values for comparison
+	float alpha = glm::atan(height / width);
+	float cosineScale = glm::cos(glm::radians(45.f)) / glm::cos(alpha);
+	float sineScale = glm::sin(glm::radians(45.f)) / glm::sin(alpha);
 
-	float scale = width / glm::max(glm::abs(glm::cos(radians)), glm::abs(glm::sin(radians)));
-	float x = glm::cos(radians) * scale;
-	float y = glm::sin(radians) * scale;
+	float cosine = glm::cos(radians);
+	float sine = glm::sin(radians);
 
-	//std::cout << "x: " << width << " y: " << height << std::endl;
-	std::cout << "x: " << x << " y: " << y << std::endl;
+	float x, z;
+	int xCellCoord, zCellCoord;
+	float sign; // for determining if the constant (x or y) is at positive or negative side
+
+	if (glm::abs(cosine * cosineScale) >= glm::abs(sine * sineScale)) {
+		sign = std::round(cosine / std::abs(cosine));
+
+		x = width;
+		z = width / glm::abs(cosine) * sine;
+
+		xCellCoord = width * sign;
+		zCellCoord = z / cellSize;
+
+		if (z < 0) zCellCoord--;
+		z = zCellCoord * cellSize + cellSize / 2.f;
+		x = xCellCoord;
+
+		cellNormal = glm::vec3(-sign, 0, 0);
+	}
+	else {
+		sign = std::round(sine / std::abs(sine));
+
+		x = height / glm::abs(sine) * cosine;
+		z = height;
+
+		zCellCoord = height * sign;
+		xCellCoord = x / cellSize;
+
+		if (x < 0) xCellCoord--;
+		x = xCellCoord * cellSize + cellSize / 2.f;
+		z = zCellCoord;
+
+		cellNormal = glm::vec3(0, 0, -sign);
+	}
+
+	float y = (int)(yCoord / cellSize);
+	if (yCoord < 0) y--;
+	y = y * cellSize + cellSize / 2.f;
+
+	return glm::vec3(x, y, z);
+}
+
+
+glm::vec3 BossCage::getCellCoords(float angle, float yCoord) // also add y coordinates
+{
+	float radians = glm::radians(angle);
+
+	float width = xCellCount * cellSize;
+	float height = zCellCount * cellSize;
+
+	// to scale the values cosine and sine values for comparison
+	float alpha = glm::atan(height / width);
+	float cosineScale = glm::cos(glm::radians(45.f)) / glm::cos(alpha);
+	float sineScale = glm::sin(glm::radians(45.f)) / glm::sin(alpha);
+
+	float cosine = glm::cos(radians);
+	float sine = glm::sin(radians);
+
+	float scale = height / glm::abs(sine);
+	int shouldXOffset = 1;
+	int shouldZOffset = 0;
+	if (glm::abs(cosine * cosineScale) >= glm::abs(sine * sineScale)) {
+		scale = width / glm::abs(cosine);
+		shouldXOffset = 0;
+		shouldZOffset = 1;
+	}
+
+	float x = scale * cosine;
+	float z = scale * sine;
+
+	return glm::vec3(x, yCoord, z);
 }
