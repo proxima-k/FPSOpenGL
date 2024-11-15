@@ -165,8 +165,10 @@
     <ClCompile Include="src\game\enemies\boss\BossBody.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossCage.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossHealingCube.cpp" />
+    <ClCompile Include="src\game\enemies\boss\FloorGridRevealTask.cpp" />
     <ClCompile Include="src\game\enemies\boss\HealingLine.cpp" />
     <ClCompile Include="src\game\enemies\boss\HealTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\WallGridRevealTask.cpp" />
     <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
@@ -240,8 +242,10 @@
     <ClInclude Include="src\game\enemies\boss\BossBody.h" />
     <ClInclude Include="src\game\enemies\boss\BossCage.h" />
     <ClInclude Include="src\game\enemies\boss\BossHealingCube.h" />
+    <ClInclude Include="src\game\enemies\boss\FloorGridRevealTask.h" />
     <ClInclude Include="src\game\enemies\boss\HealingLine.h" />
     <ClInclude Include="src\game\enemies\boss\HealTask.h" />
+    <ClInclude Include="src\game\enemies\boss\WallGridRevealTask.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />

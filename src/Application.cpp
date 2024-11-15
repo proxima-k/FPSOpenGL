@@ -368,6 +368,7 @@ int main(void)
             wallGrid.update(deltaTime);
             wallGrid.draw();
             */
+            bossCage.update(deltaTime);
             bossCage.draw();
             
             if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)

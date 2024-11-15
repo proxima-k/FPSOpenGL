@@ -19,10 +19,11 @@ public:
 	void setPlayer(Player* player);
 
 	Transform transform;
+	float revealIntensity;
+	float revealHeight;
 
 private:
 	float timer = 0;
-
 
 	unsigned int verticesCount;
 	float cellLength;

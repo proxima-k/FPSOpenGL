@@ -2,6 +2,11 @@
 
 #include <cmath>
 #include <glm/glm.hpp>
+#include <behavior_tree/nodes/Root.h>
+#include <behavior_tree/nodes/SequenceNode.h>
+#include <behavior_tree/nodes/WaitTask.h>
+#include "WallGridRevealTask.h"
+#include "FloorGridRevealTask.h"
 
 BossCage::BossCage(glm::vec3 centerWorldPosition, int xCellCount, int yCellCount, int zCellCount, float cellSize)
 	: centerWorldPosition(centerWorldPosition), xCellCount(xCellCount), yCellCount(yCellCount), zCellCount(zCellCount), cellSize(cellSize)
@@ -20,10 +25,21 @@ BossCage::BossCage(glm::vec3 centerWorldPosition, int xCellCount, int yCellCount
 	wallGrid->transform.position = centerWorldPosition;
 	floorGrid->transform.position = centerWorldPosition;
 
+	BT::RootNode* rootNode = new BT::RootNode();
+	BT::SequenceNode* sequenceNode = new BT::SequenceNode();
+	BT::WaitTask* waitTask = new BT::WaitTask();
+	FloorGridRevealTask* floorGridRevealTask = new FloorGridRevealTask();
+	WallGridRevealTask* wallGridRevealTask = new WallGridRevealTask();
+
+	behaviorTree.setRootNode(rootNode);
+	rootNode->setChild(sequenceNode);
+	sequenceNode->addChild(waitTask);
+	sequenceNode->addChild(wallGridRevealTask);
+	wallGridRevealTask->canRepeat = false;
+
 	// assign key to blackboard for tree nodes to access and manipulate shader uniforms
 	behaviorTree.getBlackboard().setValue<WallGrid*>("wallGrid", wallGrid);
-	behaviorTree.getBlackboard().setValue<Grid*>("wallGrid", floorGrid);
-
+	behaviorTree.getBlackboard().setValue<Grid*>("floorGrid", floorGrid);
 }
 
 void BossCage::draw()

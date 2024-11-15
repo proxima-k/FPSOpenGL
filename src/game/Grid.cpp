@@ -12,50 +12,7 @@
 #include <iostream>
 
 #include "../graphics/VertexBufferLayout.h"
-/*
-Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
-	: cellWidth(cellWidth), cellHeight(cellHeight), cellsPerSideOfAxis(cellsPerSideOfAxis)
-{
-	std::vector<float> vertices;
 
-	// creating vertical lines
-	for (int i = -cellsPerSideOfAxis; i <= cellsPerSideOfAxis; i++) {
-		vertices.push_back(i * cellWidth);
-		vertices.push_back(0);
-		vertices.push_back(-cellsPerSideOfAxis * cellHeight);
-
-		vertices.push_back(i * cellWidth);
-		vertices.push_back(0);
-		vertices.push_back(cellsPerSideOfAxis * cellHeight);
-
-		//vertices.push_back(glm::vec3(i * cellWidth, 0, -cellsPerSideOfAxis * cellHeight));
-		//vertices.push_back(glm::vec3(i * cellWidth, 0,  cellsPerSideOfAxis * cellHeight));
-	}
-
-	// creating horizontal lines
-	for (int j = -cellsPerSideOfAxis; j <= cellsPerSideOfAxis; j++) {
-		vertices.push_back(-cellsPerSideOfAxis * cellWidth);
-		vertices.push_back(0);
-		vertices.push_back(j * cellHeight);
-
-		vertices.push_back( cellsPerSideOfAxis * cellWidth);
-		vertices.push_back(0);
-		vertices.push_back(j * cellHeight);
-
-		//vertices.push_back(glm::vec3(-cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
-		//vertices.push_back(glm::vec3( cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
-	}
-	verticesCount = vertices.size();
-
-	VAO = new VertexArray();
-	VBO = new VertexBuffer(&vertices[0], vertices.size() * sizeof(float));
-
-	VertexBufferLayout layout;
-	layout.Push<float>(3);
-
-	VAO->AddBuffer(*VBO, layout);
-}
-*/
 
 Grid::Grid(int xCellCount, int zCellCount, float cellSize)
 	: cellWidth(cellSize), cellHeight(cellSize), xCellCount(xCellCount), zCellCount(zCellCount)
@@ -209,3 +166,48 @@ glm::vec2 Grid::getCellCenter(glm::vec3 position)
 	glm::vec2 cellCoords = getCellCoords(position);
 	return getCellCenter(cellCoords.x, cellCoords.y);
 }
+
+/*
+Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
+	: cellWidth(cellWidth), cellHeight(cellHeight), cellsPerSideOfAxis(cellsPerSideOfAxis)
+{
+	std::vector<float> vertices;
+
+	// creating vertical lines
+	for (int i = -cellsPerSideOfAxis; i <= cellsPerSideOfAxis; i++) {
+		vertices.push_back(i * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(-cellsPerSideOfAxis * cellHeight);
+
+		vertices.push_back(i * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(cellsPerSideOfAxis * cellHeight);
+
+		//vertices.push_back(glm::vec3(i * cellWidth, 0, -cellsPerSideOfAxis * cellHeight));
+		//vertices.push_back(glm::vec3(i * cellWidth, 0,  cellsPerSideOfAxis * cellHeight));
+	}
+
+	// creating horizontal lines
+	for (int j = -cellsPerSideOfAxis; j <= cellsPerSideOfAxis; j++) {
+		vertices.push_back(-cellsPerSideOfAxis * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(j * cellHeight);
+
+		vertices.push_back( cellsPerSideOfAxis * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(j * cellHeight);
+
+		//vertices.push_back(glm::vec3(-cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
+		//vertices.push_back(glm::vec3( cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
+	}
+	verticesCount = vertices.size();
+
+	VAO = new VertexArray();
+	VBO = new VertexBuffer(&vertices[0], vertices.size() * sizeof(float));
+
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+
+	VAO->AddBuffer(*VBO, layout);
+}
+*/
