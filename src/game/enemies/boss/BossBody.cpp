@@ -37,6 +37,15 @@ BossBody::~BossBody()
 {
 }
 
+void BossBody::take_damage(int damage)
+{
+	health -= damage;
+	if (health <= 0)
+	{
+		die(1.f);
+	}
+}
+
 void BossBody::die(float xpAmount)
 {
 	//bossController->body died

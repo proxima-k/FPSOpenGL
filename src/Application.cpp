@@ -20,6 +20,8 @@
 #include "graphics/VertexBufferLayout.h"
 #include "graphics/Shader.h"
 #include "graphics/Mesh.h"
+#include "graphics/FrameBuffer.h"
+#include "graphics/OutlinePostProcess.h"
 
 #include "game/Camera.h"
 #include "game/Player.h"
@@ -163,14 +165,6 @@ int main(void)
     game->player = &player;
     steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
-	
-    //SteamAPI_Init();
-    //if (SteamAPI_RestartAppIfNecessary(steamManager->getAppId()))
-    //{
-    //    return -1;
-    //}
-
-    std::cout << "Connecting to steam APP ID:" << steamManager->getAppId() << " is currently disabled in Application.cpp\n";
 
     {
         meshManager = new MeshManager();
@@ -202,94 +196,27 @@ int main(void)
         bossCage.wallGrid->setCamera(&playerCamera);
         bossCage.wallGrid->setPlayer(&player);
 
-
-
-        // Entity (mesh path, shader, camera)
-        //std::vector<float> vertices = Mesh::getMeshVerticesFromObjFile("res/models/cube.obj");
-        //Mesh cubeMesh(vertices);
-        Shader* meshShader = shaderManager->getShader("mesh");
-		Mesh* cubeMesh = meshManager->getMesh("cube");
-
-
-        // setup post process components 
-        float texVertices[] = {
-            // positions   // texCoords
-            -1.0f,  1.0f,  0.0f, 1.0f,
-            -1.0f, -1.0f,  0.0f, 0.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
-
-            -1.0f,  1.0f,  0.0f, 1.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
-             1.0f,  1.0f,  1.0f, 1.0f
-        };
-        Shader outlineShader("res/shaders/postprocess.shader");
-        VertexArray quadVAO;
-        VertexBuffer quadVBO(texVertices, sizeof(texVertices));
-        VertexBufferLayout layout;
-        layout.Push<float>(2);
-        layout.Push<float>(2);
-        quadVAO.AddBuffer(quadVBO, layout);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0, 0, windowWidth, windowHeight);
-
-        unsigned int FBO;
-        glGenFramebuffers(1, &FBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-		glViewport(0, 0, windowWidth, windowHeight);
-
-        unsigned int colorBufferTexture;
-        glGenTextures(1, &colorBufferTexture);
-        glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferTexture, 0);
-
-        unsigned int depthBufferTexture;
-        glGenTextures(1, &depthBufferTexture);
-        glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, windowWidth, windowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBufferTexture, 0);
-
-        GLuint normalTexture;
-        glGenTextures(1, &normalTexture);
-        glBindTexture(GL_TEXTURE_2D, normalTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, windowWidth, windowHeight, 0, GL_RGB, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normalTexture, 0);
-
-        GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-        glDrawBuffers(2, attachments);
-
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            std::cerr << "ERROR: FRAMEBUFFER NOT COMPLETE" << std::endl;
-        }
+        // setup post processing components
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
+        glViewport(0, 0, windowWidth, windowHeight);
+        FrameBuffer FBO(windowWidth, windowHeight);
+        OutlinePostProcess outlinePP;
+        outlinePP.setColorTextureID(FBO.GetColorID());
+        outlinePP.setDepthTextureID(FBO.GetDepthID());
+        outlinePP.setNormalTextureID(FBO.GetNormalID());
 
         // setup card mesh, shader and camera
+        Shader* meshShader = shaderManager->getShader("mesh");
+		Mesh* cubeMesh = meshManager->getMesh("cube");
         player.shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
-
 		player.shooter.setPlayer(&player);
 
         audioManager->init();
         game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
 
-        glEnable(GL_DEPTH_TEST);
-
         ui.init(window);
 
-		Spawner<ShootingEnemy> cubeEnemySpawner(1.f, &player);
-
+        // testing area
 		BossEnemy* bossEnemy = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
         game->add_entity<BossEnemy>(bossEnemy);
 
@@ -321,46 +248,23 @@ int main(void)
             floorGrid->update();
 
             // GRAPHICS =======================================================
-            glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+            FBO.Bind();
             GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
             
-
             // geometry pass
             game->render();
 
-            glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);   // Default framebuffer (screen)
-
-            // Blit the depth buffer from the FBO to the default framebuffer
-            glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            // This makes sure after post processing, the depth data is still there for the following meshes to use it 
+            FrameBuffer::CopyDepthBuffer(FBO.GetID(), 0, windowWidth, windowHeight);
 
             // post processing pass
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-
-            outlineShader.Bind();
-            glDisable(GL_DEPTH_TEST);
-            
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, colorBufferTexture);
-            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_colorTexture"), 0);
-
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
-            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_depthTexture"), 1);
-
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, normalTexture);
-            glUniform1i(glGetUniformLocation(outlineShader.GetID(), "u_normalTexture"), 2);
-
-            quadVAO.Bind();
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-
             glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LESS);
+            outlinePP.render();
             
             // floor grid pass
             /*
@@ -370,8 +274,10 @@ int main(void)
             */
             bossCage.update(deltaTime);
             bossCage.draw();
+
+            game->renderHealingLines();
             
-            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            /*if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
                 testValue += deltaTime;
             else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
                 testValue -= deltaTime;
@@ -383,8 +289,9 @@ int main(void)
             glm::vec3 something;
             healingLine2.updateEndPosition(bossCage.getCellCenterCoords(testValue * 10, 3, something));
             healingLine2.update(deltaTime);
-            healingLine2.draw();
+            healingLine2.draw();*/
 
+            // UI pass
             ui.begin();
             ui.render(window);
             ui.end();

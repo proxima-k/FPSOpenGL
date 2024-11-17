@@ -8,6 +8,7 @@
 #include "../engine/Timer.h"
 #include "../engine/TextureManager.h"
 #include "../engine/ParticleController.h"
+#include "../game/enemies/boss/HealingLine.h"
 
 class Player;
 class Shooter;
@@ -77,6 +78,17 @@ public:
         }
     }
 
+    void renderHealingLines();
+    HealingLine* spawn_healing_line(glm::vec3 startPos, glm::vec3 endPos) {
+        for (int i = 0; i < 20; i++) {
+            if (healingLines[i] == nullptr)
+            {
+                healingLines[i] = new HealingLine(startPos, endPos);
+                return healingLines[i];
+            }
+        }
+    }
+
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
     Entity* get_colliding_entity_OBB(Entity* other, Collision_Channel channel);
 
@@ -120,6 +132,7 @@ private:
 
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
     ParticleController* particleCtrl[20] = { nullptr };
+    HealingLine* healingLines[20] = { nullptr };
     Timer timer;
 };
 

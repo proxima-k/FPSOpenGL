@@ -198,6 +198,7 @@
     <ClCompile Include="src\game\ui\UICards.cpp" />
     <ClCompile Include="src\game\WallGrid.cpp" />
     <ClCompile Include="src\game\xp\XP.cpp" />
+    <ClCompile Include="src\graphics\FrameBuffer.cpp" />
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
     <ClCompile Include="src\game\shooting\Shooter.cpp" />
@@ -223,6 +224,7 @@
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\graphics\IndexBuffer.cpp" />
+    <ClCompile Include="src\graphics\OutlinePostProcess.cpp" />
     <ClCompile Include="src\graphics\Renderer.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\TrailMesh.cpp" />
@@ -281,6 +283,7 @@
     <ClInclude Include="src\game\ui\UICards.h" />
     <ClInclude Include="src\game\WallGrid.h" />
     <ClInclude Include="src\game\xp\XP.h" />
+    <ClInclude Include="src\graphics\FrameBuffer.h" />
     <ClInclude Include="src\graphics\MeshRenderer.h" />
     <ClInclude Include="src\game\shooting\Card.h" />
     <ClInclude Include="src\game\shooting\Shooter.h" />
@@ -308,6 +311,7 @@
     <ClInclude Include="src\game\Transform.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\graphics\IndexBuffer.h" />
+    <ClInclude Include="src\graphics\OutlinePostProcess.h" />
     <ClInclude Include="src\graphics\Renderer.h" />
     <ClInclude Include="src\graphics\TrailSegment.h" />
     <ClInclude Include="src\graphics\Shader.h" />
@@ -325,7 +329,7 @@
     <None Include="res\shaders\grid.shader" />
     <None Include="res\shaders\transition.frag" />
     <None Include="res\shaders\transition.vert" />
-    <None Include="res\shaders\postprocess.shader" />
+    <None Include="res\shaders\outlinePP.shader" />
     <None Include="res\shaders\wallGrid.shader" />
   </ItemGroup>
   <ItemGroup>

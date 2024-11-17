@@ -43,18 +43,28 @@ void Game::update()
 	// updates all the entitys
 	for (int i = 0; i < MAX_ENTITYS; i++) 
 	{
-		if (entitys[i] != nullptr)
-		{
-			if (entitys[i]->destroyed)
-			{
-				delete entitys[i];
-				entitys[i] = nullptr;
-			}
-			else 
-			{
-				entitys[i]->update(deltaTime);
-			}
+		if (entitys[i] == nullptr) continue;
 
+		if (entitys[i]->destroyed) {
+			delete entitys[i];
+			entitys[i] = nullptr;
+		}
+		else {
+			entitys[i]->update(deltaTime);
+		}
+	}
+
+	// handles healing line updates and destruction
+	for (int i = 0; i < 20; i++) {
+		HealingLine* healingLine = healingLines[i];
+		if (healingLine == nullptr) continue;
+
+		if (healingLine->destroyed) {
+			delete healingLine;
+			healingLines[i] = nullptr;
+		}
+		else {
+			healingLine->update(deltaTime);
 		}
 	}
 
@@ -65,8 +75,8 @@ void Game::update()
 		if (pCtrl == nullptr) continue;
 
 		if (pCtrl->isEmpty()) {
-			particleCtrl[i] = nullptr;
 			delete pCtrl;
+			particleCtrl[i] = nullptr;
 
 			std::cout << "Destroy Particle Controller" << std::endl;
 			return;
@@ -95,6 +105,13 @@ void Game::render()
 
 		if (pCtrl != nullptr)
 			pCtrl->render();
+	}
+}
+
+void Game::renderHealingLines() {
+	for (int i = 0; i < 20; i++) {
+		if (healingLines[i] == nullptr) continue;
+		healingLines[i]->draw();
 	}
 }
 

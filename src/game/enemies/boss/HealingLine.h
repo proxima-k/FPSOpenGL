@@ -10,6 +10,7 @@
 class HealingLine {
 public:
 	HealingLine(glm::vec3 startPosition, glm::vec3 endPosition);
+	~HealingLine() { delete VAO; delete VBO; }
 
 	void update(float deltaTime);
 	void draw();
@@ -20,7 +21,10 @@ public:
 	void setShader(Shader* _shader) { shader = _shader; }
 	void setCamera(Camera* _camera) { camera = _camera; }
 
+	void destroy() { destroyed = true; }
+
 	Transform transform;
+	bool destroyed = false;
 
 private:
 	float timeElapsed = 0.f;

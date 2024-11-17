@@ -3,6 +3,8 @@
 #include "../../Enemy.h"
 #include "behavior_tree/BehaviorTree.h"
 
+#include "HealingLine.h"
+
 class BossHealingCube : public Enemy
 {
 public:
@@ -17,5 +19,7 @@ public:
 	// 
 
 private:
+	HealingLine* healingLine = nullptr;
+	
 	BT::BehaviorTree behaviorTree;
 };
