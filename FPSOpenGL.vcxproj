@@ -320,14 +320,17 @@
     <Image Include="res\sprites\basiccard.png" />
     <Image Include="res\sprites\cosinecard.png" />
     <Image Include="res\sprites\crosshair177.png" />
+    <Image Include="res\sprites\damage.png" />
     <Image Include="res\sprites\damagebuffcard.png" />
     <Image Include="res\sprites\dashbuffcard.png" />
     <Image Include="res\sprites\detectioncircle.png" />
     <Image Include="res\sprites\emptydeck.png" />
+    <Image Include="res\sprites\menusprite.png" />
     <Image Include="res\sprites\placeholder.jpg" />
     <Image Include="res\sprites\placeholder1card.png" />
     <Image Include="res\sprites\placeholder2card.png" />
     <Image Include="res\sprites\placeholder3card.png" />
+    <Image Include="res\sprites\play.png" />
     <Image Include="res\sprites\sinecard.png" />
     <Image Include="res\sprites\speedbuffcard.png" />
   </ItemGroup>

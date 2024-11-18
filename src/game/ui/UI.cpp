@@ -5,6 +5,8 @@
 #include <string>
 #include <random>
 
+#include "../Player.h"
+
 #include "../shooting/cards/CosineCard.h"
 #include "../shooting/cards/SineCard.h"
 
@@ -25,18 +27,23 @@ void UI::init(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    crosshair = game->textureManager->getTexture("crosshair177");
+    GLuint(*getTexture)(std::string) = [](std::string fileName) -> GLuint {
+        return game->textureManager->getTexture(fileName);
+        };
 
-    cards.basicCardTexture = game->textureManager->getTexture("basiccard");
-    cards.sineCardTexture = game->textureManager->getTexture("sinecard");
-    cards.cosineCardTexture = game->textureManager->getTexture("cosinecard");
-    cards.placeholder1card = game->textureManager->getTexture("placeholder1card");
-    cards.placeholder2card = game->textureManager->getTexture("placeholder2card");
-    cards.placeholder3card = game->textureManager->getTexture("placeholder3card");
-    cards.passivedamagecard = game->textureManager->getTexture("damagebuffcard");
-    cards.passivespeedcard = game->textureManager->getTexture("speedbuffcard");
-    cards.passivedashcard = game->textureManager->getTexture("dashbuffcard");
-    cards.emptydeck = game->textureManager->getTexture("emptydeck");
+    damageScreenEffect = getTexture("damage");
+    crosshair = getTexture("crosshair177");
+
+    cards.basicCardTexture = getTexture("basiccard");
+    cards.sineCardTexture = getTexture("sinecard");
+    cards.cosineCardTexture = getTexture("cosinecard");
+    cards.placeholder1card = getTexture("placeholder1card");
+    cards.placeholder2card = getTexture("placeholder2card");
+    cards.placeholder3card = getTexture("placeholder3card");
+    cards.passivedamagecard = getTexture("damagebuffcard");
+    cards.passivespeedcard = getTexture("speedbuffcard");
+    cards.passivedashcard = getTexture("dashbuffcard");
+    cards.emptydeck = getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
     menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 120.0f);
@@ -144,6 +151,23 @@ void UI::render(GLFWwindow* window)
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
 
         break;
+    }
+
+    auto player = game->player;
+    if (!player->bIsShieldAlive) {
+        ImVec2 screenSize = { windowWidth, windowHeight };
+
+        float sCooldown = player->shieldCooldown;
+        float sCooldownTimer = player->shieldCooldownTimer;
+        sCooldown /= sCooldown;
+        sCooldownTimer /= sCooldown;
+
+        float tint = sCooldownTimer - sCooldown;
+
+        ImVec4 tintColor = ImVec4(1.0f, 1.0f, 1.0f, tint);
+
+        ImGui::SetCursorPos({ 0, 0 });
+        ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("damage"), screenSize, ImVec2(0, 0), ImVec2(1, 1), tintColor);
     }
 
     if (kanitFont)
