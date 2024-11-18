@@ -13,12 +13,11 @@
 #include "../../Game.h"
 #include "../../Player.h"
 
-
-
-
 BossEnemy::BossEnemy(glm::vec3 position)
 	: Enemy(position)
 {
+	defaultPosition = position;
+
 	collision_channel = Collision_Channel::None;
 
 	// setup nodes for behavior tree
@@ -48,41 +47,62 @@ BossEnemy::~BossEnemy()
 
 void BossEnemy::initMeshRenderer()
 {
-	//BossBody* body = game->spawn_entity<BossBody>(glm::vec3(0, 1, 4));
-	//return;
-
-	for (int z = 1; z >= -1; z -= 2) {
+	int index = 0;
+	for (int y = -1; y <= 1; y += 2) {
 		float offset = 0.1f;
-		float yAngle = 90.f;
 		float xAngle = 0.f;
+		float zAngle = 90.f;
 		for (int i = 0; i < 2; i++) {
-			yAngle += i * 180.0f;
+			zAngle += i * 180.0f;
 			for (int j = 0; j < 2; j++) {
 				xAngle += j * 180.0f;
 
-				float y = glm::sin(glm::radians(yAngle));
 				float x = glm::cos(glm::radians(xAngle));
-
-				glm::vec3 spawnPosition(x / 2.0f + x * offset, y / 2.0f + y * offset, z / 2.0f + z * offset);
-
-				BossBody* body = game->spawn_entity<BossBody>(spawnPosition);
+				float z = glm::sin(glm::radians(zAngle));
 
 				//std::cout << x << " " << y << " " << z << std::endl;
 
-				bossBodies.push_back(body);
+				glm::vec3 spawnPosition(x / 2.0f + x * offset, y / 2.0f + y * offset, z / 2.0f + z * offset);
+
+				glm::vec3 offsetDirection = glm::normalize(spawnPosition);
+				float offsetMagnitude = glm::sqrt(3 * offset * offset);
+
+				std::cout << offsetDirection.x << " " << offsetDirection.y << " " << offsetDirection.z << std::endl;
+
+				BossBody* body = new BossBody(spawnPosition, index, offsetDirection, offsetMagnitude);
+				body->setBossController(this);
+				game->add_entity(body);
+
+				bossBodies[index] = body;
+				index++;
 			}
 		}
 	}
-	
 
+	currentBodyCount = 8;
+	
 	transform.scale = glm::vec3(1);
-	//meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	//meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
 }
 
 void BossEnemy::update(float deltaTime)
 {
 	behaviorTree.update(deltaTime);
 
-	//for (int i=4)
+	timeElapsed += deltaTime;
+
+	float heightOffset = glm::sin(timeElapsed * 2) / 5;
+	transform.position = defaultPosition + glm::vec3(0.f, heightOffset, 0.f);
+
+	std::cout << "boss is alive" << std::endl;
+}
+
+void BossEnemy::NotifyBossBodyDeath(int index)
+{
+	bossBodies[index] = nullptr;
+	currentBodyCount--;
+
+	if (currentBodyCount <= 0) {
+		// add extra stuff to show boss died
+		destroy();
+	}
 }

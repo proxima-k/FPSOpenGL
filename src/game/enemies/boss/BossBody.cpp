@@ -24,13 +24,25 @@ BossBody::BossBody(glm::vec3 spawnPosition)
 
 	behaviorTree.getBlackboard().setValue<Entity*>("body", this);
 
-	maxHealth = 500;
+	maxHealth = 20;
 	health = maxHealth;
 
 	transform.scale = glm::vec3(1);
 
 	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
 	meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
+}
+
+BossBody::BossBody(glm::vec3 spawnPosition, int _index, glm::vec3 _offsetDirection, float _offset)
+	: BossBody(spawnPosition)
+{
+	index = _index;
+	offsetDirection = _offsetDirection;
+	offset = _offset;
+	// get Y cord
+	// find range
+	// check that index within the range to find which quarter it belongs to
+
 }
 
 BossBody::~BossBody()
@@ -44,14 +56,40 @@ void BossBody::take_damage(int damage)
 	{
 		die(1.f);
 	}
+	updateTransform();
+}
+
+void BossBody::heal(int amount) {
+	health += amount;
+	if (health > maxHealth)
+		health = maxHealth;
+
+	updateTransform();
 }
 
 void BossBody::die(float xpAmount)
 {
 	//bossController->body died
+	// notify boss brain that this body died
 	destroy();
+	bossController->NotifyBossBodyDeath(index);
 }
 
-void BossBody::setBossController(BossEnemy* bossController)
+void BossBody::setBossController(BossEnemy* _bossController)
 {
+	bossController = _bossController;
+}
+
+void BossBody::updateTransform()
+{
+	float healthPercentage = health / (float)maxHealth;
+	
+	float scale = 1.f * (1.f / sizeSteps);
+	int step = glm::ceil(healthPercentage * sizeSteps);
+	float size = step * scale;
+	transform.scale = glm::vec3(size);
+	// have to get distance from center of cube the a corner
+	glm::vec3 bossPosition = bossController->transform.position;
+
+	transform.position = bossPosition + offsetDirection * (glm::sqrt(3 * size * size / 4) + offset);
 }

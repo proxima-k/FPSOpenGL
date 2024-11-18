@@ -217,7 +217,7 @@ int main(void)
         ui.init(window);
 
         // testing area
-		BossEnemy* bossEnemy = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
+		BossEnemy* bossEnemy = new BossEnemy(glm::vec3(0.f, 3.f, 0.f));
         game->add_entity<BossEnemy>(bossEnemy);
 
         HealingLine healingLine(glm::vec3(0), glm::vec3(0, 10, 10));
@@ -277,7 +277,7 @@ int main(void)
 
             game->renderHealingLines();
             
-            /*if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
                 testValue += deltaTime;
             else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
                 testValue -= deltaTime;
@@ -289,7 +289,7 @@ int main(void)
             glm::vec3 something;
             healingLine2.updateEndPosition(bossCage.getCellCenterCoords(testValue * 10, 3, something));
             healingLine2.update(deltaTime);
-            healingLine2.draw();*/
+            healingLine2.draw();
 
             // UI pass
             ui.begin();
