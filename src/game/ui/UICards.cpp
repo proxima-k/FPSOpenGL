@@ -17,14 +17,14 @@ void UICards::renderCardSelection(ImVec2 windowSize)
     ImGui::Text(descriptionTxt.c_str());
 
     std::map<GLuint, std::string> cardDescriptions = {
-    {sineCardTexture, "sin(x) — Applies a sine wave effect with amplitude modulation."},
-    {cosineCardTexture, "cos(x) — Applies a cosine wave effect with frequency adjustment."},
-    {placeholder1card, "f(x) = x^2 — Placeholder effect representing a quadratic increase."},
-    {placeholder2card, "f(x) = log(x) — Placeholder effect representing logarithmic scaling."},
-    {placeholder3card, "f(x) = e^x — Placeholder effect representing exponential growth."},
-    {passivedamagecard, "dmg(x) = base_damage * (1 + 0.1x) — Increases damage by 10% per level."},
-    {passivespeedcard, "spd(x) = base_speed * (1 + 0.05x) — Increases speed by 5% per level."},
-    {passivedashcard, "dash(x) = base_dash_distance * (1 + 0.2x) — Increases dash distance by 20% per level."}
+    {sineCardTexture, "sin(x) — The card moves left to right, deals more damage"},
+    {cosineCardTexture, "cos(x) — The card moves up and down, deals more damage"},
+    {placeholder1card, "3x - Launches three cards"},
+    {placeholder2card, "x^2 - Has a boomerang effect, deals more damage"},
+    {placeholder3card, "d * pi - A card that circles around you"},
+    {passivedamagecard, "dmg(x) - Boosts your damage"},
+    {passivespeedcard, "spd(x) - Makes you move faster"},
+    {passivedashcard, "dash(x) Increeses dash lenght"}
     };
 
 
