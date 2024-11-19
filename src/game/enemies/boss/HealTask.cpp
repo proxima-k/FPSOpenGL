@@ -6,11 +6,18 @@
 
 void HealTask::onNodeStart(BT::Blackboard& blackboard)
 {
+    // loop through boss bodies and disable collision
+    
+    std::cout << "Start healing" << std::endl;
+
     // get random cell on the wall grid, spawn a cube
     // assign cube's target location
     // form a line towards the target location
     // cube will move towards the target location
     BossCage* bossCage = blackboard.getValue<BossCage*>("bossCage");
+
+    if (bossCage == nullptr) return;
+
     currentHealingCubeCount = MAX_HEALING_CUBE_COUNT;
 
     for (int i = 0; i < MAX_HEALING_CUBE_COUNT; i++) {
@@ -25,6 +32,8 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
 
 BT::NodeState HealTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
 {
+    std::cout << "Testin" << std::endl;
+
     if (currentHealingCubeCount <= 0) return BT::NodeState::FAILURE;
     if (timer <= 0) return BT::NodeState::SUCCESS; 
 

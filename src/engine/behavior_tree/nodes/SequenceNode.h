@@ -6,27 +6,33 @@ namespace BT {
 	class SequenceNode : public CompositeNode {
 	protected:
 		void onNodeStart(Blackboard& blackboard) override {
-			currentChild = 0;
+			currentChildIndex = 0;
 		}
 
 		void onNodeFinish(Blackboard& blackboard) override {
-			currentChild = -1;
+			currentChildIndex = -1;
 		}
 
 		NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) override {
-			while (currentChild < children.size()) {
-				NodeState childState = children[currentChild]->update(deltaTime, blackboard);
+			while (currentChildIndex < children.size()) {
+				NodeState childState = children[currentChildIndex]->update(deltaTime, blackboard);
 
 				if (childState == NodeState::RUNNING || childState == NodeState::FAILURE)
 					return childState;
 
-				currentChild++;
+				currentChildIndex++;
 			}
 
 			return NodeState::SUCCESS;
 		}
+
+		void onNodeAbort(Blackboard& blackboard) override {
+			children[currentChildIndex]->abort(blackboard);
+			currentChildIndex = -1;
+			BaseNode::onNodeAbort(blackboard);
+		}
 	
 	private:
-		int currentChild = -1;
+		int currentChildIndex = -1;
 	};
 }

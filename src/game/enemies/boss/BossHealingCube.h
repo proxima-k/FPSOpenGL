@@ -20,7 +20,7 @@ public:
 	void die(float xpSpawnAmount) override
 	{
 		if (healTaskNode != nullptr) {
-			healTaskNode->NotifyHealingCubeDeath();
+			healTaskNode->notifyHealingCubeDeath();
 		}
 
 		game->spawn_particle_source(transform.position, 40.0f, 0.3f, 2.0f);

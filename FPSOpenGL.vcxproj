@@ -158,7 +158,6 @@
   <ItemGroup>
     <ClCompile Include="src\engine\behavior_tree\nodes\BaseNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
-    <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\WaitTask.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BodyRotateTask.cpp" />
@@ -235,18 +234,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\behavior_tree\nodes\CompositeNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\DecoratorNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\RandomSelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\ServiceNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\WaitTask.h" />
     <ClInclude Include="src\engine\MeshManager.h" />
     <ClInclude Include="src\game\enemies\boss\BodyRotateTask.h" />
     <ClInclude Include="src\game\enemies\boss\BossBody.h" />
     <ClInclude Include="src\game\enemies\boss\BossCage.h" />
     <ClInclude Include="src\game\enemies\boss\BossHealingCube.h" />
+    <ClInclude Include="src\game\enemies\boss\EnoughHealthDecorator.h" />
     <ClInclude Include="src\game\enemies\boss\FloorGridRevealTask.h" />
     <ClInclude Include="src\game\enemies\boss\HealingLine.h" />
     <ClInclude Include="src\game\enemies\boss\HealTask.h" />
+    <ClInclude Include="src\game\enemies\boss\LerpBodyColorService.h" />
     <ClInclude Include="src\game\enemies\boss\WallGridRevealTask.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClInclude Include="src\game\OBB.h" />

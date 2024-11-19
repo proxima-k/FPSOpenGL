@@ -6,8 +6,13 @@
 #include <iostream>
 
 #include <behavior_tree/nodes/Root.h>
-#include "LaunchPillarTask.h"
+#include <behavior_tree/nodes/SelectorNode.h>
+#include <behavior_tree/nodes/SequenceNode.h>
+#include <behavior_tree/nodes/RandomSelectorNode.h>
 #include <behavior_tree/nodes/WaitTask.h>
+#include "EnoughHealthDecorator.h"
+#include "LaunchPillarTask.h"
+#include "HealTask.h"
 
 #include "BossBody.h"
 #include "../../Game.h"
@@ -22,21 +27,33 @@ BossEnemy::BossEnemy(glm::vec3 position)
 
 	// setup nodes for behavior tree
 	BT::RootNode* root = new BT::RootNode();
-	//LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
+	BT::SelectorNode* selector = new BT::SelectorNode();
+	BT::SequenceNode* sequence = new BT::SequenceNode();
+	BT::WaitTask* waitTask = new BT::WaitTask(2.6f, 0.6f);
+	BT::RandomSelectorNode* randomSelector = new BT::RandomSelectorNode();
+	EnoughHealthDecorator* enoughHealthDecorator = new EnoughHealthDecorator();
+	HealTask* healTask = new HealTask();
+	LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
+
 
 	behaviorTree.setRootNode(root);
-	//root->setChild(pillarAttackTask);
+	root->setChild(selector);
+	selector->addChild(enoughHealthDecorator);
+	selector->addChild(healTask);
+	enoughHealthDecorator->setChild(sequence);
+	sequence->addChild(waitTask);
+	sequence->addChild(randomSelector);
+	// randomSelector->addChild(projectileTask);
+	randomSelector->addChild(pillarAttackTask);
+	// randomSelector->addChild(spawnEnemiesTask);
+
 
 	behaviorTree.getBlackboard().setValue<Player*>("player", game->player);
+	behaviorTree.getBlackboard().setValue<BossEnemy*>("boss", this);
 
 	maxHealth = 100;
 	health = maxHealth;
 
-	//meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	//meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
-
-	// todo: change this so that pillar doesn't require a mesh renderer stored within the blackboard
-	//behaviorTree.getBlackboard().setValue<MeshRenderer*>("pillarMeshRenderer", &meshRenderer);
 	initMeshRenderer();
 }
 
@@ -93,10 +110,10 @@ void BossEnemy::update(float deltaTime)
 	float heightOffset = glm::sin(timeElapsed * 2) / 5;
 	transform.position = defaultPosition + glm::vec3(0.f, heightOffset, 0.f);
 
-	std::cout << "boss is alive" << std::endl;
+	//std::cout << "boss is alive" << std::endl;
 }
 
-void BossEnemy::NotifyBossBodyDeath(int index)
+void BossEnemy::notifyBossBodyDeath(int index)
 {
 	bossBodies[index] = nullptr;
 	currentBodyCount--;

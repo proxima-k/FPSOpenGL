@@ -43,3 +43,13 @@ BT::NodeState BT::BaseNode::finishExecuteNode(bool success)
 	state = success ? BT::NodeState::SUCCESS : BT::NodeState::FAILURE;
 	return state;
 }
+
+void BT::BaseNode::abort(Blackboard& blackboard)
+{
+	if (state == NodeState::RUNNING) onNodeAbort(blackboard);
+	if (canRepeat)
+		state = NodeState::READY;
+	else {
+		state = NodeState::FAILURE;
+	}
+}

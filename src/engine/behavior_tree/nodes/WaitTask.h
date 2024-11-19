@@ -11,6 +11,7 @@ namespace BT {
 		void onNodeStart(Blackboard& blackboard) override;
 		NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard);
 		void onNodeFinish(Blackboard& blackboard) override;
+
 	private:
 		float timer, waitTime, variation;
 	};

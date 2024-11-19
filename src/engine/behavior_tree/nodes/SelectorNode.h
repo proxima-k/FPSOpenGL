@@ -26,6 +26,12 @@ namespace BT {
 			return NodeState::FAILURE;
 		}
 
+		void onNodeAbort(Blackboard& blackboard) override {
+			children[currentChildIndex]->abort(blackboard);
+			currentChildIndex = -1;
+			BaseNode::onNodeAbort(blackboard);
+		}
+
 	private:
 		int currentChildIndex;
 	};

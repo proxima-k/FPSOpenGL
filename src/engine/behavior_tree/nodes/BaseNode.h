@@ -20,6 +20,8 @@ namespace BT {
 
 		NodeState update(float deltaTime, Blackboard& blackboard);
 		NodeState finishExecuteNode(bool success);
+		void abort(Blackboard& blackboard);
+		virtual NodeState getState() { return state; }
 
 		bool canRepeat = true;
 
@@ -28,7 +30,7 @@ namespace BT {
 		virtual void onNodeStart(Blackboard& blackboard) = 0;
 		virtual NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) = 0;
 		virtual void onNodeFinish(Blackboard& blackboard) = 0;
-		//virtual void onNodeAborted() {}
+		virtual void onNodeAbort(Blackboard& blackboard) {}
 
 		NodeState state = NodeState::READY;
 		bool hasRunOnce = false;

@@ -72,7 +72,7 @@ void BossBody::die(float xpAmount)
 	//bossController->body died
 	// notify boss brain that this body died
 	destroy();
-	bossController->NotifyBossBodyDeath(index);
+	bossController->notifyBossBodyDeath(index);
 }
 
 void BossBody::setBossController(BossEnemy* _bossController)

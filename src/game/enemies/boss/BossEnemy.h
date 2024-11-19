@@ -17,9 +17,10 @@ public:
 	void initMeshRenderer() override;
 	void update(float deltaTime) override;
 
-	void NotifyBossBodyDeath(int index);
+	void notifyBossBodyDeath(int index);
 
 	glm::vec3 defaultPosition;
+	int getBodyCount() { return currentBodyCount; }
 
 private:
 	std::vector<BossBody*> bossBodies = std::vector<BossBody*>(8, nullptr);

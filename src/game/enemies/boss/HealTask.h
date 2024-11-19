@@ -4,7 +4,7 @@
 
 class HealTask : public BT::BaseNode {
 public:
-	void NotifyHealingCubeDeath() { currentHealingCubeCount--; };
+	void notifyHealingCubeDeath() { currentHealingCubeCount--; };
 
 protected:
 	void onNodeStart(BT::Blackboard& blackboard) override;
