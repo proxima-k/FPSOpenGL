@@ -9,7 +9,7 @@
 class BossHealingCube : public Enemy
 {
 public:
-	BossHealingCube(glm::vec3 spawnPosition, glm::vec3 targetPosition, HealTask* healTaskNode);
+	BossHealingCube(glm::vec3 spawnPosition, glm::vec3 targetPosition, HealTask* healTaskNode, int index);
 	~BossHealingCube();
 	// target position
 
@@ -20,8 +20,9 @@ public:
 	void die(float xpSpawnAmount) override
 	{
 		if (healTaskNode != nullptr) {
-			healTaskNode->notifyHealingCubeDeath();
+			healTaskNode->notifyHealingCubeDeath(index);
 		}
+
 
 		game->spawn_particle_source(transform.position, 40.0f, 0.3f, 2.0f);
 		destroy();
@@ -32,4 +33,6 @@ private:
 	HealingLine* healingLine = nullptr;
 	
 	BT::BehaviorTree behaviorTree;
+
+	int index;
 };

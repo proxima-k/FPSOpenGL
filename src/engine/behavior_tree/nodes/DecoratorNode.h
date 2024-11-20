@@ -24,13 +24,13 @@ namespace BT {
 		void onNodeStart(Blackboard& blackboard) override {}
 		void onNodeFinish(Blackboard& blackboard) override {}
 		NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) override {
+			if (child == nullptr) return NodeState::SUCCESS;
 
 			if (condition(blackboard)) {
 				return child->update(deltaTime, blackboard);
 			}
 			else {
 				child->abort(blackboard);
-
 				return NodeState::FAILURE;
 			}
 		}

@@ -44,12 +44,13 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	sequence->addChild(waitTask);
 	sequence->addChild(randomSelector);
 	// randomSelector->addChild(projectileTask);
-	randomSelector->addChild(pillarAttackTask);
+	//randomSelector->addChild(pillarAttackTask);
 	// randomSelector->addChild(spawnEnemiesTask);
 
 
 	behaviorTree.getBlackboard().setValue<Player*>("player", game->player);
 	behaviorTree.getBlackboard().setValue<BossEnemy*>("boss", this);
+	behaviorTree.getBlackboard().setValue<int>("healAttempts", 3);
 
 	maxHealth = 100;
 	health = maxHealth;
@@ -121,5 +122,17 @@ void BossEnemy::notifyBossBodyDeath(int index)
 	if (currentBodyCount <= 0) {
 		// add extra stuff to show boss died
 		destroy();
+	}
+}
+
+void BossEnemy::setCanCollide(bool canCollide)
+{
+	for (int i = 0; i < bossBodies.size(); i++) {
+		if (bossBodies[i] == nullptr) continue;
+
+		if (canCollide)
+			bossBodies[i]->collision_channel = Collision_Channel::Enemy;
+		else
+			bossBodies[i]->collision_channel = Collision_Channel::None;
 	}
 }

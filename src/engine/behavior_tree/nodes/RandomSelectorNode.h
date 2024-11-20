@@ -7,6 +7,12 @@ namespace BT {
 	class RandomSelectorNode : public CompositeNode {
 	protected:
 		void onNodeStart(Blackboard& blackboard) override {
+			if (children.size() <= 0) {
+				state = NodeState::SUCCESS;
+				std::cout << "Test" << std::endl;
+				return;
+			}
+
 			if (children.size() == 1) {
 				currentChildIndex = 0;
 				return;
@@ -36,7 +42,7 @@ namespace BT {
 		}
 
 	private:
-		int currentChildIndex;
+		int currentChildIndex = -1;
 		int lastChildIndex = -1;
 	};
 }

@@ -6,6 +6,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <vector>
 
+#include "BossCage.h"
+
 class BossBody;
 
 class BossEnemy : public Enemy
@@ -21,6 +23,10 @@ public:
 
 	glm::vec3 defaultPosition;
 	int getBodyCount() { return currentBodyCount; }
+
+	BossCage* bossCage = nullptr;
+
+	void setCanCollide(bool canCollide);
 
 private:
 	std::vector<BossBody*> bossBodies = std::vector<BossBody*>(8, nullptr);

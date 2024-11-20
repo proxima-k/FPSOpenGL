@@ -7,21 +7,24 @@
 
 class EnoughHealthDecorator : public BT::DecoratorNode {
 protected:
-	bool condition(BT::Blackboard& blackboard) override { 
+	bool condition(BT::Blackboard& blackboard) override {
 		BossEnemy* bossController = blackboard.getValue<BossEnemy*>("boss");
+		int healAttempts = blackboard.getValue<int>("healAttempts");
 
-		if (currentPower <= 0) // ignore (boss is dead)
+		if (healAttempts <= 0) // ignore (boss is dead)
 			return true;
 
 		// if health dropped below threshold
 		// if boss body count is less than pow(2, currentPower)
-		if (bossController->getBodyCount() < std::pow(2, currentPower)) {
-			currentPower--;
+		if (bossController->getBodyCount() < std::pow(2, healAttempts)) {
+			//healAttempts--;
 			return false;
 		}
 
-		return true; 
+		//std::cout << currentPower << std::endl;
+
+		return true;
 	}
 
-	int currentPower = 3;
+	//int currentPower = 3;
 };

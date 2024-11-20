@@ -60,6 +60,7 @@ void Game::update()
 		if (healingLine == nullptr) continue;
 
 		if (healingLine->destroyed) {
+			std::cout << "deleting healing line" << std::endl;
 			delete healingLine;
 			healingLines[i] = nullptr;
 		}
