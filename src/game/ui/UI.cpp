@@ -232,13 +232,13 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     }
     void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
     {
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    ImVec2 pos = ImGui::GetCursorScreenPos();
+        ImDrawList* drawList = ImGui::GetWindowDrawList();
+        ImVec2 pos = ImGui::GetCursorScreenPos();
 
-    drawList->AddRectFilled(
-        pos,
-        ImVec2(pos.x + size.x * fraction, pos.y + size.y),
-        ImGui::GetColorU32(barColor)
+        drawList->AddRectFilled(
+            pos,
+            ImVec2(pos.x + size.x * fraction, pos.y + size.y),
+            ImGui::GetColorU32(barColor)
     );
 }
 
