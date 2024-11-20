@@ -33,6 +33,7 @@ private:
     UICards cards;
 
     GLuint crosshair;
+    GLuint damageScreenEffect;
     ImFont* kanitFont;
     ImFont* menuFont;
 

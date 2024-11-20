@@ -36,7 +36,6 @@
 #include "game/Spawner.h"
 
 #include "game/AudioManager.h"
-#include "engine/SteamManager.h"
 #include "engine/MeshManager.h"
 #include "engine/ShaderManager.h"
 
@@ -65,8 +64,6 @@ UI ui;
 Game* game = nullptr;
 Grid* floorGrid = nullptr;
 AudioManager* audioManager = nullptr;
-
-SteamManager* steamManager = nullptr;
 
 GLuint LoadTextureFromFile(const char* filename)
 {
@@ -159,16 +156,7 @@ int main(void)
     game = new Game();
     audioManager = new AudioManager();
     game->player = &player;
-    steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
-	
-    //SteamAPI_Init();
-    //if (SteamAPI_RestartAppIfNecessary(steamManager->getAppId()))
-    //{
-    //    return -1;
-    //}
-
-    std::cout << "Connecting to steam APP ID:" << steamManager->getAppId() << " is currently disabled in Application.cpp\n";
 
     {
         meshManager = new MeshManager();
@@ -277,7 +265,7 @@ int main(void)
         ui.init(window);
 
 		BossEnemy* pillar = new BossEnemy(glm::vec3(0.5f, 0, 1.5f));
-        game->add_entity<BossEnemy>(pillar);
+        //game->add_entity<BossEnemy>(pillar);
 
 
 
@@ -313,7 +301,7 @@ int main(void)
             game->render();
 
             glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO); // FBO with depth data
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Default framebuffer (screen)
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);   // Default framebuffer (screen)
 
             // Blit the depth buffer from the FBO to the default framebuffer
             glBlitFramebuffer(0, 0, windowWidth, windowHeight, 0, 0, windowWidth, windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
@@ -346,7 +334,7 @@ int main(void)
             
             // floor grid pass
             floorGrid->draw();
-            wallGrid.draw();
+            /*wallGrid.draw();*/
 
             ui.begin();
             ui.render(window);

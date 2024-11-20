@@ -78,9 +78,10 @@ void Game::update()
 		pCtrl->update(deltaTime);
 	}
 
-	timeLeftUntilBoss -= deltaTime;
-
-	waveController->update(deltaTime);
+	if (currentGameState != GameStates::SelectCards && currentGameState != GameStates::Menu) {
+		timeLeftUntilBoss -= deltaTime;
+		waveController->update(deltaTime);
+	}
 }
 
 // calls the draw function on all the entities

@@ -26,26 +26,27 @@ void Player::update(GLFWwindow* window, float deltaTime)
     updateCameraPosition();
     checkCollision();
 
-    if (!canDash)
-    {
-        dashCooldownTimer -= deltaTime;
-        if (dashCooldownTimer <= 0.0f)
-        {
-            canDash = true;
-            dashCooldownTimer = 0.0f;
-        }
-    }
+    update_shield(deltaTime);
+    update_dash(deltaTime);
+    update_iframe(deltaTime);
 }
 
 void Player::checkCollision() 
 {
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
-    if (hit_actor != nullptr)
+    if (hit_actor != nullptr && !bIsInvincible)
     {
         auto gameOverSoundEffect = audioManager->getAudioClip("GameOver.mp3");
         audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
 
-        die();
+        if (bIsShieldAlive) {
+            bIsShieldAlive = false;
+            bIsInvincible = true;
+            invincibilityCooldownTimer = invincibilityCooldown;
+        }
+        else {
+            die();
+        }
     }
 }
 
@@ -62,6 +63,39 @@ void Player::reset()
     shooter.emptyAllQueues();
 
     transform.position = glm::vec3(0.0f);
+
+    bIsShieldAlive = true;
+    bIsInvincible = false;
+}
+
+void Player::update_shield(float dt)
+{
+    if (bIsShieldAlive) return;
+        shieldCooldownTimer -= dt;
+        if (shieldCooldownTimer <= 0.0f) {
+            shieldCooldownTimer = shieldCooldown;
+            bIsShieldAlive = true;
+        }
+}
+
+void Player::update_dash(float dt)
+{
+    if (bCanDash) return;
+        dashCooldownTimer -= dt;
+        if (dashCooldownTimer <= 0.0f) {
+            bCanDash = true;
+            dashCooldownTimer = 0.0f;
+        }
+}
+
+void Player::update_iframe(float dt)
+{
+    if (!bIsInvincible) return;
+        invincibilityCooldownTimer -= dt;
+        if (invincibilityCooldownTimer <= 0.0f) {
+            bIsInvincible = false;
+            invincibilityCooldownTimer = invincibilityCooldown;
+        }
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -101,7 +135,7 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     // dashing
     float vMagnitude = glm::length(physicsbody.velocity);
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && canDash && vMagnitude > 4)
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && bCanDash && vMagnitude > 4)
     {
         glm::vec3 dashDirection = glm::normalize(physicsbody.velocity);
         if (glm::length(dashDirection) > 0.0f)
@@ -110,7 +144,7 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
             physicsbody.add_force(dashDirection * dashSpeed * deltaTime);
 
             dashCooldownTimer = dashCooldown;
-            canDash = false;
+            bCanDash = false;
         }
     }
 

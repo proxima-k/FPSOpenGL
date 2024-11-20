@@ -21,7 +21,7 @@ CubeEnemy::CubeEnemy(glm::vec3 position)
 
 	collision_channel = Collision_Channel::Enemy;
 
-	xpAmount = 10.0f;
+	xpAmount = 50.0f;
 	maxHealth = 10.0f;
 
 	health = maxHealth;

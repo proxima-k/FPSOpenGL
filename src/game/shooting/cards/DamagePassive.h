@@ -16,7 +16,7 @@ public:
 	void applyPassiveEffect() override
 	{
 		float currentMultiplier = game->playerDamageMultiplier;
-		game->playerDamageMultiplier = currentMultiplier * 2.0f;
+		game->playerDamageMultiplier = currentMultiplier * 1.5f;
 	}
 
 	CardType getCardType() const override { return PassiveDamage; }

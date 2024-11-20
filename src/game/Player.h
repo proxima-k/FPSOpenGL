@@ -26,6 +26,10 @@ public:
 	void die();
 	void reset();
 
+	void update_shield(float dt);
+	void update_dash(float dt);
+	void update_iframe(float dt);
+
 	Camera* getCamera() const { return camera; }
 
 	Shooter shooter;
@@ -38,6 +42,11 @@ public:
 	float playerHeight = transform.scale.y / 2;
 	float speed = 1600;
 
+	bool bIsShieldAlive;
+
+	float shieldCooldown = 5.0f;
+	float shieldCooldownTimer = 0.0f;
+
 private:
 	Physicsbody physicsbody;
 	Camera* camera;
@@ -47,5 +56,9 @@ private:
 	float dashCooldown = 2.0f;
 	float dashCooldownTimer = 0.0f;
 
-	bool canDash = true;
+	float invincibilityCooldown = 0.5f;
+	float invincibilityCooldownTimer = 0.0f;
+
+	bool bCanDash = true;
+	bool bIsInvincible;
 };

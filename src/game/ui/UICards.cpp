@@ -2,8 +2,7 @@
 
 #include <map>
 
-void UICards::renderCardSelection(ImVec2 windowSize)
-{
+void UICards::renderCardSelection(ImVec2 windowSize) {
     ImVec2 descriptionBoxSize = { windowSize.x / 1.5f, 120 };
 
     ImGui::SetCursorPos({ (windowSize.x / 2 - descriptionBoxSize.x / 2), (windowSize.y * 0.7f - descriptionBoxSize.y / 2) });
@@ -17,16 +16,15 @@ void UICards::renderCardSelection(ImVec2 windowSize)
     ImGui::Text(descriptionTxt.c_str());
 
     std::map<GLuint, std::string> cardDescriptions = {
-    {sineCardTexture, "sin(x) — Applies a sine wave effect with amplitude modulation."},
-    {cosineCardTexture, "cos(x) — Applies a cosine wave effect with frequency adjustment."},
-    {placeholder1card, "f(x) = x^2 — Placeholder effect representing a quadratic increase."},
-    {placeholder2card, "f(x) = log(x) — Placeholder effect representing logarithmic scaling."},
-    {placeholder3card, "f(x) = e^x — Placeholder effect representing exponential growth."},
-    {passivedamagecard, "dmg(x) = base_damage * (1 + 0.1x) — Increases damage by 10% per level."},
-    {passivespeedcard, "spd(x) = base_speed * (1 + 0.05x) — Increases speed by 5% per level."},
-    {passivedashcard, "dash(x) = base_dash_distance * (1 + 0.2x) — Increases dash distance by 20% per level."}
+        {sineCardTexture, "sin(x) — Applies a sine wave effect with amplitude modulation."},
+        {cosineCardTexture, "cos(x) — Applies a cosine wave effect with frequency adjustment."},
+        {placeholder1card, "f(x) = x^2 — Placeholder effect representing a quadratic increase."},
+        {placeholder2card, "f(x) = log(x) — Placeholder effect representing logarithmic scaling."},
+        {placeholder3card, "f(x) = e^x — Placeholder effect representing exponential growth."},
+        {passivedamagecard, "dmg(x) = base_damage * (1 + 0.1x) — Increases damage by 10% per level."},
+        {passivespeedcard, "spd(x) = base_speed * (1 + 0.05x) — Increases speed by 5% per level."},
+        {passivedashcard, "dash(x) = base_dash_distance * (1 + 0.2x) — Increases dash distance by 20% per level."}
     };
-
 
     int cardsPerRow = (selectionAmount > 2) ? (selectionAmount + 1) / 2 : selectionAmount;
     int rows = (selectionAmount + cardsPerRow - 1) / cardsPerRow;
@@ -39,13 +37,7 @@ void UICards::renderCardSelection(ImVec2 windowSize)
 
     randomizeCards();
 
-    // card states
-    std::vector<float> cardScales(selectionAmount, 1.0f);
-    std::vector<float> cardTimes(selectionAmount, 0.0f);
-    std::vector<bool> cardIsAnimating(selectionAmount, false);
-
-    for (int i = 0; i < selectionAmount; i++)
-    {
+    for (int i = 0; i < selectionAmount; i++) {
         int row = i / cardsPerRow;
         int indexInRow = i % cardsPerRow;
 
@@ -56,29 +48,10 @@ void UICards::renderCardSelection(ImVec2 windowSize)
         ImGui::PushID(i);
 
         bool isHovered = ImGui::IsMouseHoveringRect(cardPos, ImVec2(cardPos.x + cardSize.x, cardPos.y + cardSize.y));
-        float targetScale = isHovered ? scaleMultiplier : 1.0f;
 
-        if (isHovered) {
-            descriptionTxt = cardDescriptions[selectedTextures[i]];
+        float scaleFactor = isHovered ? 1.1f : 1.0f;
 
-            if (!cardIsAnimating[i])
-                cardIsAnimating[i] = true;
-        }
-
-        if (cardIsAnimating[i]) {
-
-            cardTimes[i] += ImGui::GetIO().DeltaTime * scaleSpeed;
-            if (cardTimes[i] > 1.0f) cardTimes[i] = 1.0f;
-
-            cardScales[i] = 1.0f + (targetScale - 1.0f) * xyzmath::EaseOutElastic(cardTimes[i]);
-
-            if (!isHovered && cardTimes[i] >= 1.0f) {
-                cardIsAnimating[i] = false;
-                cardTimes[i] = 0.0f;
-            }
-        }
-
-        ImVec2 scaledCardSize = ImVec2(cardSize.x * cardScales[i], cardSize.y * cardScales[i]);
+        ImVec2 scaledCardSize = ImVec2(cardSize.x * scaleFactor, cardSize.y * scaleFactor);
         ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
         ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
 
@@ -89,59 +62,48 @@ void UICards::renderCardSelection(ImVec2 windowSize)
         {
             std::cout << "Pressed button " << i << std::endl;
 
-            if (selectedTextures[i] == sineCardTexture)
-            {
+            if (selectedTextures[i] == sineCardTexture) {
                 shooter->cardQueue.push(new SineCard(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == cosineCardTexture)
-            {
+            else if (selectedTextures[i] == cosineCardTexture) {
                 shooter->cardQueue.push(new CosineCard(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == placeholder1card)
-            {
+            else if (selectedTextures[i] == placeholder1card) {
                 shooter->cardQueue.push(new PlaceHolderCard1(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == placeholder2card)
-            {
+            else if (selectedTextures[i] == placeholder2card) {
                 shooter->cardQueue.push(new PlaceHolderCard2(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == placeholder3card)
-            {
+            else if (selectedTextures[i] == placeholder3card) {
                 shooter->cardQueue.push(new PlaceHolderCard3(glm::vec3(0)));
             }
-            else if (selectedTextures[i] == passivedamagecard)
-            {
+            else if (selectedTextures[i] == passivedamagecard) {
                 auto damagePassive = new DamagePassive(glm::vec3(0));
-
-				shooter->cardPassivesQueue.push(damagePassive);
+                shooter->cardPassivesQueue.push(damagePassive);
                 damagePassive->applyPassiveEffect();
-			}
-            else if (selectedTextures[i] == passivespeedcard)
-            {
+            }
+            else if (selectedTextures[i] == passivespeedcard) {
                 auto passivespeedcard = new SpeedPassive(glm::vec3(0));
-
                 shooter->cardPassivesQueue.push(passivespeedcard);
                 passivespeedcard->applyPassiveEffect();
             }
-            else if (selectedTextures[i] == passivedashcard)
-            {
+            else if (selectedTextures[i] == passivedashcard) {
                 auto dashbuffcard = new DashPassive(glm::vec3(0));
-
                 shooter->cardPassivesQueue.push(dashbuffcard);
                 dashbuffcard->applyPassiveEffect();
             }
 
             game->currentGameState = Game::GameStates::Playing;
 
-            if (shooter->cardQueue.size() > maxCardHandSize)
-            {
+            if (shooter->cardQueue.size() > maxCardHandSize) {
                 shooter->cardQueue.pop();
             }
         }
-
         ImGui::PopID();
     }
 }
+
+
 
 void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool highlightCard)
 {
@@ -231,7 +193,11 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
 }
 void UICards::randomizeCards()
 {
-    std::vector<GLuint> cardTextures = { sineCardTexture, cosineCardTexture, placeholder1card, placeholder2card, placeholder3card, passivedamagecard, passivespeedcard, passivedashcard };
+    std::vector<GLuint> cardTextures;
+    cardTextures.insert(cardTextures.end(), { passivespeedcard, passivedashcard });
+
+    if(shooter->cardQueue.size() < 3)
+    cardTextures.insert(cardTextures.end(), { sineCardTexture, cosineCardTexture, placeholder1card, placeholder2card, placeholder3card });
 
     if (!cardsRandomized) {
         std::random_device rd;
