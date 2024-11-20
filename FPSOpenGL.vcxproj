@@ -162,6 +162,7 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
+    <ClCompile Include="src\game\enemies\bomber\BomberEnemy.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\Caterpillar.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\CaterpillarBody.cpp" />
     <ClCompile Include="src\game\enemies\wave_system\Wave.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
+    <ClInclude Include="src\game\enemies\bomber\BomberEnemy.h" />
     <ClInclude Include="src\game\enemies\caterpillar\Caterpillar.h" />
     <ClInclude Include="src\game\enemies\caterpillar\CaterpillarBody.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveController.h" />
