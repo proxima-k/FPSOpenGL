@@ -165,6 +165,7 @@
     <ClCompile Include="src\game\enemies\bomber\BomberEnemy.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\Caterpillar.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\CaterpillarBody.cpp" />
+    <ClCompile Include="src\game\enemies\EnemyProjectile.cpp" />
     <ClCompile Include="src\game\enemies\wave_system\Wave.cpp" />
     <ClCompile Include="src\game\enemies\wave_system\Wave.h" />
     <ClCompile Include="src\game\enemies\wave_system\WaveController.cpp" />
@@ -185,7 +186,7 @@
     <ClCompile Include="src\game\enemies\pillar_enemy\AttackTask.cpp" />
     <ClCompile Include="src\game\enemies\pillar_enemy\PillarEnemy.cpp" />
     <ClCompile Include="src\game\enemies\pillar_enemy\WarningTask.cpp" />
-    <ClCompile Include="src\game\enemies\ShootingEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\shooting\ShootingEnemy.cpp" />
     <ClCompile Include="src\game\enemies\SineEnemy.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard1.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard2.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="src\game\enemies\bomber\BomberEnemy.h" />
     <ClInclude Include="src\game\enemies\caterpillar\Caterpillar.h" />
     <ClInclude Include="src\game\enemies\caterpillar\CaterpillarBody.h" />
+    <ClInclude Include="src\game\enemies\EnemyProjectile.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveController.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveType.h" />
     <ClInclude Include="src\game\OBB.h" />
@@ -258,7 +260,7 @@
     <ClInclude Include="src\game\enemies\CosineEnemy.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\AttackTask.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\PillarEnemy.h" />
-    <ClInclude Include="src\game\enemies\ShootingEnemy.h" />
+    <ClInclude Include="src\game\enemies\shooting\ShootingEnemy.h" />
     <ClInclude Include="src\game\enemies\SineEnemy.h" />
     <ClInclude Include="src\game\shooting\cards\DamagePassive.h" />
     <ClInclude Include="src\game\shooting\cards\PassiveCard.h" />

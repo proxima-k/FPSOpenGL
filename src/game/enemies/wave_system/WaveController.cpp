@@ -7,6 +7,7 @@
 #include "../CubeEnemy.h"
 #include "../caterpillar/Caterpillar.h"
 #include "../bomber/BomberEnemy.h"
+#include "../shooting/ShootingEnemy.h"
 
 WaveController::WaveController() {
 	populate_queue();
@@ -14,8 +15,8 @@ WaveController::WaveController() {
 
 void WaveController::populate_queue() {
 	std::vector<Wave*> waveOne = {
-	//new Wave(EnemyType::Basic, 2.0f),
-	new Wave(EnemyType::Bomber, 10.0f)
+		//new Wave(EnemyType::Basic, 2.0f),
+		new Wave(EnemyType::Propeller, 5.0f)
 	};
 	waveQueue.push(create_wave_sequence(waveOne));
 
@@ -142,6 +143,9 @@ void WaveController::spawn_enemy_by_type(EnemyType enemyType) {
 		break;
 	case EnemyType::Bomber:
 		game->spawn_entity<BomberEnemy>(spawnPos);
+		break;
+	case EnemyType::Propeller:
+		game->spawn_entity<ShootingEnemy>(spawnPos);
 		break;
 	default:
 		std::cerr << "Unknown enemy type!" << std::endl;

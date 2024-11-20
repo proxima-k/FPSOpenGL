@@ -26,7 +26,7 @@
 #include "game/Game.h"
 #include "game/Entity.h"
 #include "game/enemies/CubeEnemy.h"
-#include "game/enemies/ShootingEnemy.h"
+#include "game/enemies/shooting/ShootingEnemy.h"
 
 #include "game/Grid.h"
 #include "game/WallGrid.h"

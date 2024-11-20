@@ -9,6 +9,7 @@ enum EnemyType {
 	Pillar,
 	Caterpillar,
 	Bomber,
+	Propeller,
 };
 
 class Wave {
