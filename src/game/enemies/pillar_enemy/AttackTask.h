@@ -10,5 +10,5 @@ protected:
 
 private:
 	float currentHeight = 0.01f;
-	const float MAX_HEIGHT = 5.f;
+	const float MAX_HEIGHT = 10.f;
 };
