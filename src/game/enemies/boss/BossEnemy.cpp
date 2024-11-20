@@ -18,6 +18,8 @@
 #include "../../Game.h"
 #include "../../Player.h"
 
+#include <random>
+
 BossEnemy::BossEnemy(glm::vec3 position)
 	: Enemy(position)
 {
@@ -67,7 +69,6 @@ void BossEnemy::initMeshRenderer()
 {
 	int index = 0;
 	for (int y = -1; y <= 1; y += 2) {
-		float offset = 0.1f;
 		float xAngle = 0.f;
 		float zAngle = 90.f;
 		for (int i = 0; i < 2; i++) {
@@ -78,16 +79,14 @@ void BossEnemy::initMeshRenderer()
 				float x = glm::cos(glm::radians(xAngle));
 				float z = glm::sin(glm::radians(zAngle));
 
-				//std::cout << x << " " << y << " " << z << std::endl;
-
-				glm::vec3 spawnPosition(x / 2.0f + x * offset, y / 2.0f + y * offset, z / 2.0f + z * offset);
+				glm::vec3 spawnPosition(x / 2.0f + x * bodyOffset, y / 2.0f + y * bodyOffset, z / 2.0f + z * bodyOffset);
 
 				glm::vec3 offsetDirection = glm::normalize(spawnPosition);
-				float offsetMagnitude = glm::sqrt(3 * offset * offset);
+				
 
 				std::cout << offsetDirection.x << " " << offsetDirection.y << " " << offsetDirection.z << std::endl;
 
-				BossBody* body = new BossBody(spawnPosition, index, offsetDirection, offsetMagnitude);
+				BossBody* body = new BossBody(spawnPosition, index, offsetDirection, getOffsetMagnitude());
 				body->setBossController(this);
 				game->add_entity(body);
 
@@ -111,7 +110,7 @@ void BossEnemy::update(float deltaTime)
 	float heightOffset = glm::sin(timeElapsed * 2) / 5;
 	transform.position = defaultPosition + glm::vec3(0.f, heightOffset, 0.f);
 
-	//std::cout << "boss is alive" << std::endl;
+	setBodyColor(glm::vec3(glm::sin(timeElapsed * 2) / 2 + 0.7f, 0.2f, 0.2f));
 }
 
 void BossEnemy::notifyBossBodyDeath(int index)
@@ -125,6 +124,69 @@ void BossEnemy::notifyBossBodyDeath(int index)
 	}
 }
 
+void BossEnemy::notifyBossBodyRegenerate(BossBody* body, int index)
+{
+	bossBodies[index] = body;
+	currentBodyCount++;
+}
+
+int BossEnemy::getRandomEmptyIndex()
+{
+
+	int emptySlots = 8 - currentBodyCount;
+	if (emptySlots < 1) return -1;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> randomSteps(1, emptySlots);
+	int steps = randomSteps(gen);
+	
+	for (int i = 0; i < bossBodies.size(); i++) {
+		if (bossBodies[i] == nullptr)
+			steps--;
+
+		if (steps <= 0) 
+			return i;
+	}
+
+	return -1;
+}
+
+float BossEnemy::getOffsetMagnitude()
+{
+	return glm::sqrt(3 * bodyOffset * bodyOffset);
+}
+
+glm::vec3 BossEnemy::getOffsetDirectionFromIndex(int index)
+{
+	int currentIndex = 0;
+	for (int y = -1; y <= 1; y += 2) {
+		float xAngle = 0.f;
+		float zAngle = 90.f;
+		for (int i = 0; i < 2; i++) {
+			zAngle += i * 180.0f;
+			for (int j = 0; j < 2; j++) {
+				xAngle += j * 180.0f;
+
+				float x = glm::cos(glm::radians(xAngle));
+				float z = glm::sin(glm::radians(zAngle));
+
+				glm::vec3 spawnPosition(x / 2.0f + x * bodyOffset, y / 2.0f + y * bodyOffset, z / 2.0f + z * bodyOffset);
+
+				glm::vec3 offsetDirection = glm::normalize(spawnPosition);
+
+				if (currentIndex == index)
+					return offsetDirection;
+
+				currentIndex++;
+			}
+		}
+	}
+
+	std::cout << "Error: get offset direction from index" << std::endl;
+	return glm::vec3(0.f);
+}
+
 void BossEnemy::setCanCollide(bool canCollide)
 {
 	for (int i = 0; i < bossBodies.size(); i++) {
@@ -134,5 +196,14 @@ void BossEnemy::setCanCollide(bool canCollide)
 			bossBodies[i]->collision_channel = Collision_Channel::Enemy;
 		else
 			bossBodies[i]->collision_channel = Collision_Channel::None;
+	}
+}
+
+void BossEnemy::setBodyColor(glm::vec3 color)
+{
+	for (int i = 0; i < bossBodies.size(); i++) {
+		if (bossBodies[i] == nullptr) continue;
+
+		bossBodies[i]->meshRenderer->setColor(color);
 	}
 }

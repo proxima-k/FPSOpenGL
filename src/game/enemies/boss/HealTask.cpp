@@ -4,40 +4,52 @@
 #include "BossCage.h"
 #include "BossEnemy.h"
 #include "BossHealingCube.h"
+#include "BossBody.h"
 
-void HealTask::notifyHealingCubeDeath(int index)
-{
-    currentHealingCubeCount--;
-    healingCubes[index]->destroy();
-    healingCubes[index] = nullptr;
-}
+
 
 void HealTask::onNodeStart(BT::Blackboard& blackboard)
 {
     BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
-    if (boss != nullptr)     
-        boss->setCanCollide(false);
+    if (boss == nullptr) {
+        state = BT::NodeState::FAILURE;
+        return;
+    }
+    boss->setCanCollide(false);
     
-    std::cout << "Start healing" << std::endl;
+    BossCage* bossCage = boss->bossCage;
+    if (bossCage == nullptr) return;
 
+    // find empty slot, get it's offset 
     // get random cell on the wall grid, spawn a cube
     // assign cube's target location
     // form a line towards the target location
-    // cube will move towards the target location
-    BossCage* bossCage = boss->bossCage;
 
-    if (bossCage == nullptr) return;
+    // spawn position, index, offset direction, offsetMagnitude
+    bodyIndex = boss->getRandomEmptyIndex();
+    if (bodyIndex== -1) {
+        state = BT::NodeState::FAILURE;
+        return;
+    }
+
+    // spawning new boss body
+    glm::vec3 offsetDirection = boss->getOffsetDirectionFromIndex(bodyIndex);
+    newBossBody = new BossBody(offsetDirection, bodyIndex, offsetDirection, boss->getOffsetMagnitude());
+    newBossBody->setBossController(boss);
+    newBossBody->collision_channel = Collision_Channel::None;
+    newBossBody->smoothSizing = true;
+    game->add_entity(newBossBody);
+    boss->notifyBossBodyRegenerate(newBossBody, bodyIndex);
 
     currentHealingCubeCount = MAX_HEALING_CUBE_COUNT;
     timer = MAX_HEALING_TIME;
     healingCubes.clear();
 
     for (int i = 0; i < MAX_HEALING_CUBE_COUNT; i++) {
-        std::cout << i << std::endl;
         glm::vec3 spawnPosition, cellNormal;
         spawnPosition = bossCage->getCellCenterCoords(i * (360.f / MAX_HEALING_CUBE_COUNT), 4, cellNormal);
     
-        BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, glm::vec3(0), this, i);
+        BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, newBossBody, this, i);
         game->add_entity(newHealingCube);
         healingCubes.push_back(newHealingCube);
     }
@@ -46,9 +58,11 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
 
 BT::NodeState HealTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
 {
-
     if (currentHealingCubeCount <= 0) return BT::NodeState::FAILURE;
     if (timer <= 0) return BT::NodeState::SUCCESS; 
+
+
+    newBossBody->health = newBossBody->maxHealth * (1 - timer/MAX_HEALING_TIME);
 
     timer -= deltaTime;
 
@@ -57,22 +71,40 @@ BT::NodeState HealTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard
 
 void HealTask::onNodeFinish(BT::Blackboard& blackboard)
 {
-
-    BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
-    if (boss != nullptr);
-        boss->setCanCollide(true);
-
-    std::cout << "Finished " << std::endl;
+    // consume a heal attempt
     int healAttempts = blackboard.getValue<int>("healAttempts") - 1;
     blackboard.setValue<int>("healAttempts", healAttempts);
 
-    // if state is success, call add body in boss brain
-    // if state is failure, then destroy the body
 
+    BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
+    if (boss == nullptr) return;
+    
+    // cleaning up
     for (int i = 0; i < healingCubes.size(); i++) {
         if (healingCubes[i] == nullptr) continue;
         
         healingCubes[i]->destroy();
         healingCubes[i] = nullptr;
     }
+
+
+    // if state is success, call add body in boss brain
+    if (state == BT::NodeState::SUCCESS) {
+        newBossBody->smoothSizing = false;
+    }
+    // if state is failure, then destroy the body
+    else if (state == BT::NodeState::FAILURE) {
+        boss->notifyBossBodyDeath(bodyIndex);
+        newBossBody->destroy();
+    }
+    
+    boss->setCanCollide(true);
+
+}
+
+void HealTask::notifyHealingCubeDeath(int index)
+{
+    currentHealingCubeCount--;
+    healingCubes[index]->destroy();
+    healingCubes[index] = nullptr;
 }

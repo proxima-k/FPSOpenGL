@@ -6,16 +6,20 @@
 
 #include "HealingLine.h"
 
+class BossBody;
+
 class BossHealingCube : public Enemy
 {
 public:
-	BossHealingCube(glm::vec3 spawnPosition, glm::vec3 targetPosition, HealTask* healTaskNode, int index);
+	BossHealingCube(glm::vec3 spawnPosition, BossBody* bossBodyToHeal, HealTask* healTaskNode, int index);
 	~BossHealingCube();
-	// target position
 
 	// update ray start position
 	// update ray end position
 	// shader for ray
+
+	//void draw() override;
+	void update(float deltaTime) override;
 
 	void die(float xpSpawnAmount) override
 	{
@@ -31,6 +35,7 @@ public:
 private:
 	HealTask* healTaskNode = nullptr;
 	HealingLine* healingLine = nullptr;
+	BossBody* bossBodyToHeal = nullptr;
 	
 	BT::BehaviorTree behaviorTree;
 

@@ -36,8 +36,9 @@ void main()
 {
     float distance = distance(u_startPos, fragPos);
     
-    float n = 10.5;
-    float color = sin(3 * distance + u_timeElapsed * 15) / n + ((n - n/3) / n);
+    //float n = 10.5;
+    float n = 5;
+    float color = sin(3 * distance - u_timeElapsed * 15) / n + ((n - n/3) / n);
 
     targetColor = vec4(vec3(color), 1.0);
 };

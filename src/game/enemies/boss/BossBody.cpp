@@ -33,12 +33,12 @@ BossBody::BossBody(glm::vec3 spawnPosition)
 	meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
 }
 
-BossBody::BossBody(glm::vec3 spawnPosition, int _index, glm::vec3 _offsetDirection, float _offset)
+BossBody::BossBody(glm::vec3 spawnPosition, int _index, glm::vec3 _offsetDirection, float _offsetMagnitude)
 	: BossBody(spawnPosition)
 {
 	index = _index;
 	offsetDirection = _offsetDirection;
-	offset = _offset;
+	offsetMagnitude = _offsetMagnitude;
 	// get Y cord
 	// find range
 	// check that index within the range to find which quarter it belongs to
@@ -84,12 +84,20 @@ void BossBody::updateTransform()
 {
 	float healthPercentage = health / (float)maxHealth;
 	
-	float scale = 1.f * (1.f / sizeSteps);
-	int step = glm::ceil(healthPercentage * sizeSteps);
-	float size = step * scale;
+	
+	float size;
+	if (smoothSizing) {
+		size = healthPercentage;
+	}
+	else {
+		float scale = 1.f * (1.f / sizeSteps);
+		int step = glm::ceil(healthPercentage * sizeSteps);
+		size = step * scale;
+	}
+
 	transform.scale = glm::vec3(size);
 	// have to get distance from center of cube the a corner
 	glm::vec3 bossPosition = bossController->transform.position;
 
-	transform.position = bossPosition + offsetDirection * (glm::sqrt(3 * size * size / 4) + offset);
+	transform.position = bossPosition + offsetDirection * (glm::sqrt(3 * size * size / 4) + offsetMagnitude);
 }

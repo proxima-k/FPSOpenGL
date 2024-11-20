@@ -10,7 +10,7 @@ class BossEnemy; // forward declaration to prevent circular dependencies
 class BossBody : public Enemy {
 public:
 	BossBody(glm::vec3 spawnPosition);
-	BossBody(glm::vec3 spawnPosition, int index, glm::vec3 offsetDirection, float offset);
+	BossBody(glm::vec3 spawnPosition, int index, glm::vec3 offsetDirection, float offsetMagnitude);
 	~BossBody();
 
 	void update(float deltaTime) override { behaviorTree.update(deltaTime); updateTransform(); }
@@ -28,11 +28,12 @@ public:
 	int index = -1;							 
 	// reference to the main controller
 	BossEnemy* bossController = nullptr;
+	bool smoothSizing = false;
 
 private:
 	int sizeSteps = 8;
 	glm::vec3 offsetDirection;
-	float offset;
+	float offsetMagnitude;
 
 	BT::BehaviorTree behaviorTree;
 };
