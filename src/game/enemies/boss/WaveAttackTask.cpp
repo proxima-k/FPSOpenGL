@@ -48,18 +48,19 @@ BT::NodeState WaveAttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blac
 		
 		//std::cout << currentXCellCount << std::endl;
 		//std::cout << currentZCellCount << std::endl;
+		glm::vec3 offset = cage->centerWorldPosition;
 		for (int x = -currentXCellCount; x <= currentXCellCount - 1; x += currentXCellCount * 2 - 1) {
 			for (int z = -currentZCellCount; z <= currentZCellCount - 1; z++) {
 				// offset x and z cell index
 				glm::vec2 cellCenter = cage->floorGrid->getCellCenter(x, z);
-				game->spawn_entity<WaveEnemy>(glm::vec3(cellCenter.x, 0, cellCenter.y));
+				game->spawn_entity<WaveEnemy>(glm::vec3(cellCenter.x + offset.x, 0, cellCenter.y + offset.z));
 			}
 		}
 
 		for (int z = -currentZCellCount; z <= currentZCellCount - 1; z += currentZCellCount * 2 - 1) {
 			for (int x = -currentXCellCount+1; x <= currentXCellCount-2; x++) {
 				glm::vec2 cellCenter = cage->floorGrid->getCellCenter(x, z);
-				game->spawn_entity<WaveEnemy>(glm::vec3(cellCenter.x, 0, cellCenter.y));
+				game->spawn_entity<WaveEnemy>(glm::vec3(cellCenter.x + offset.x, 0, cellCenter.y + offset.z));
 			}
 		}
 
