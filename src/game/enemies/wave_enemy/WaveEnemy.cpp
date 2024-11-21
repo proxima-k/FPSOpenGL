@@ -1,4 +1,4 @@
-#include "PillarEnemy.h"
+#include "WaveEnemy.h"
 
 #include <MeshManager.h>
 #include <ShaderManager.h>
@@ -8,18 +8,15 @@
 
 #include <behavior_tree/nodes/Root.h>
 #include <behavior_tree/nodes/SequenceNode.h>
-#include "WarningTask.h"
-#include "AttackTask.h"
+#include "../pillar_enemy/WarningTask.h"
+#include "WaveRiseAndFallTask.h"
 
-
-PillarEnemy::PillarEnemy(glm::vec3 position)
-	: Entity(position)
+WaveEnemy::WaveEnemy(glm::vec3 position)
 {
-	// setup nodes for behavior tree
 	BT::RootNode* root = new BT::RootNode();
 	BT::SequenceNode* sequence = new BT::SequenceNode();
 	WarningTask* warningTask = new WarningTask();
-	AttackTask* attackTask = new AttackTask();
+	WaveRiseAndFallTask* attackTask = new WaveRiseAndFallTask(1.2f, 5.f);
 
 	behaviorTree.setRootNode(root);
 	root->setChild(sequence);
@@ -28,16 +25,11 @@ PillarEnemy::PillarEnemy(glm::vec3 position)
 
 	behaviorTree.getBlackboard().setValue<Entity*>("entity", this);
 
-    collision_channel = Collision_Channel::Enemy;
+	collision_channel = Collision_Channel::Enemy;
 
 	transform.scale = glm::vec3(0.9f, 0.01f, 0.9f);
-    transform.position = position;
+	transform.position = position;
 
-	initMeshRenderer();
-}
-
-void PillarEnemy::initMeshRenderer()
-{
 	this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	this->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
+	this->meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
 }

@@ -27,9 +27,9 @@ namespace BT {
 		}
 
 		void onNodeAbort(Blackboard& blackboard) override {
+			BaseNode::onNodeAbort(blackboard);
 			children[currentChildIndex]->abort(blackboard);
 			currentChildIndex = -1;
-			BaseNode::onNodeAbort(blackboard);
 		}
 
 	private:

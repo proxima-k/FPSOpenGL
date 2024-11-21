@@ -36,6 +36,7 @@ namespace BT {
 		}
 
 		void onNodeAbort(Blackboard& blackboard) override {
+			BaseNode::onNodeAbort(blackboard);
 			if (child == nullptr) return;
 			child->abort(blackboard);
 		}

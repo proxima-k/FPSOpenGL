@@ -12,6 +12,7 @@
 #include <behavior_tree/nodes/WaitTask.h>
 #include "EnoughHealthDecorator.h"
 #include "LaunchPillarTask.h"
+#include "WaveAttackTask.h"
 #include "HealTask.h"
 
 #include "BossBody.h"
@@ -36,7 +37,7 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	EnoughHealthDecorator* enoughHealthDecorator = new EnoughHealthDecorator();
 	HealTask* healTask = new HealTask();
 	LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
-
+	WaveAttackTask* waveAttackTask = new WaveAttackTask();
 
 	behaviorTree.setRootNode(root);
 	root->setChild(selector);
@@ -45,8 +46,9 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	enoughHealthDecorator->setChild(sequence);
 	sequence->addChild(waitTask);
 	sequence->addChild(randomSelector);
+	randomSelector->addChild(waveAttackTask);
+	randomSelector->addChild(pillarAttackTask);
 	// randomSelector->addChild(projectileTask);
-	//randomSelector->addChild(pillarAttackTask);
 	// randomSelector->addChild(spawnEnemiesTask);
 
 

@@ -41,6 +41,12 @@ namespace BT {
 			lastChildIndex = currentChildIndex;
 		}
 
+		void onNodeAbort(Blackboard& blackboard) override {
+			BaseNode::onNodeAbort(blackboard);
+			lastChildIndex = currentChildIndex;
+			children[currentChildIndex]->abort(blackboard);
+		}
+
 	private:
 		int currentChildIndex = -1;
 		int lastChildIndex = -1;
