@@ -22,6 +22,8 @@ public:
 
     void updateScreenSize(unsigned int width, unsigned int height) { screenWidth = width; screenHeight = height; }
 
+    void reset_pitch() { currentPitch = 0;  }
+
     Transform transform;
 
 private:

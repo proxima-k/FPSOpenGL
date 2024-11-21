@@ -11,6 +11,8 @@ EnemyProjectile::EnemyProjectile(glm::vec3 position)
 	meshRenderer->setColor( { 1, 0, 0 } );
 	transform.scale *= 0.1f;
 	projectileSpeed = 8.0f;
+
+	collision_channel == Collision_Channel::Enemy;
 }
 
 void EnemyProjectile::update(float dt) {

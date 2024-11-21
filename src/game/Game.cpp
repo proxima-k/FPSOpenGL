@@ -186,6 +186,7 @@ void Game::reset()
 
 	player->reset();
 	waveController->reset_waves();
+	camera->reset_pitch();
 
 	GameStates currentGameState = GameStates::Playing;
 
