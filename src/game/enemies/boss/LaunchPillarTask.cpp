@@ -3,10 +3,14 @@
 #include "../pillar_enemy/PillarEnemy.h"
 #include "../../Player.h"
 #include "../../Grid.h"
+#include "BossEnemy.h"
 
 void LaunchPillarTask::onNodeStart(BT::Blackboard& blackboard)
 {
     currentAttackCount = 0;
+    
+    BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
+    boss->setTargetColor(glm::vec3(0.3f, 1.f, 0.3f));
 }
 
 BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
@@ -42,4 +46,6 @@ BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& bl
 
 void LaunchPillarTask::onNodeFinish(BT::Blackboard& blackboard)
 {
+    BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
+    boss->setTargetColor(glm::vec3(1.f));
 }

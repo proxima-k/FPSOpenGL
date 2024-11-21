@@ -8,6 +8,7 @@
 void WaveAttackTask::onNodeStart(BT::Blackboard& blackboard)
 {
 	BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
+	boss->setTargetColor(glm::vec3(0.3f, 0.3f, 1.f));
 
 	std::cout << "starting wave attack" << std::endl;
 	cage = boss->bossCage;
@@ -74,6 +75,8 @@ BT::NodeState WaveAttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blac
 
 void WaveAttackTask::onNodeFinish(BT::Blackboard& blackboard)
 {
+	BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
+	boss->setTargetColor(glm::vec3(1.f));
 }
 
 void WaveAttackTask::resetValues()

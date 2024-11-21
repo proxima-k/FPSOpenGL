@@ -27,7 +27,7 @@ public:
 
 	int getBodyCount() { return currentBodyCount; }
 	void setCanCollide(bool canCollide);
-	void setBodyColor(glm::vec3 color);
+	void setTargetColor(glm::vec3 color);
 
 	glm::vec3 defaultPosition;
 	BossCage* bossCage = nullptr;
@@ -40,5 +40,11 @@ private:
 	int currentBodyCount = 0;
 	float timeElapsed = 0;
 	float bodyOffset = 0.1f;
-	glm::vec3 color = glm::vec3(0.8f, 0.2f, 0.2f);
+
+	float colorTValue = 0;
+	glm::vec3 targetColor = glm::vec3(1);
+	glm::vec3 currentColor = glm::vec3(0);
+	glm::vec3 startColor = glm::vec3(0);
+
+	void setBodyColor(glm::vec3 color);
 };

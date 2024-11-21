@@ -1,6 +1,7 @@
 #pragma once
 
 #include <behavior_tree/nodes/BaseNode.h>
+#include <glm/vec3.hpp>
 
 class BossHealingCube;
 class BossBody;
@@ -25,4 +26,10 @@ private:
 
 	BossBody* newBossBody = nullptr;
 	int bodyIndex;
+
+	float timeToSwapColor = 1.2f;
+	float colorTimer = 0.f;
+	int colorIndex = 0;
+
+	glm::vec3 getColorFromIndex(int index);
 };

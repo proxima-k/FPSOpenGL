@@ -112,7 +112,19 @@ void BossEnemy::update(float deltaTime)
 	float heightOffset = glm::sin(timeElapsed * 2) / 5;
 	transform.position = defaultPosition + glm::vec3(0.f, heightOffset, 0.f);
 
-	setBodyColor(glm::vec3(glm::sin(timeElapsed * 2) / 2 + 0.7f, 0.2f, 0.2f));
+
+	// color update
+	if (colorTValue >= 0.9999) {
+		setBodyColor(targetColor);
+		return;
+	}
+
+	colorTValue = glm::mix(colorTValue, 1.f, 0.08f);
+
+	currentColor = glm::mix(startColor, targetColor, colorTValue);
+	setBodyColor(currentColor);
+
+	//colorTValue += deltaTime;
 }
 
 void BossEnemy::notifyBossBodyDeath(int index)
@@ -199,6 +211,13 @@ void BossEnemy::setCanCollide(bool canCollide)
 		else
 			bossBodies[i]->collision_channel = Collision_Channel::None;
 	}
+}
+
+void BossEnemy::setTargetColor(glm::vec3 color)
+{
+	targetColor = color;
+	colorTValue = 0;
+	startColor = currentColor;
 }
 
 void BossEnemy::setBodyColor(glm::vec3 color)
