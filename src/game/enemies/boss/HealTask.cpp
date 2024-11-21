@@ -47,7 +47,7 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
 
     for (int i = 0; i < MAX_HEALING_CUBE_COUNT; i++) {
         glm::vec3 spawnPosition, cellNormal;
-        spawnPosition = bossCage->getCellCenterCoords(i * (360.f / MAX_HEALING_CUBE_COUNT), 4, cellNormal);
+        spawnPosition = bossCage->getCellCenterCoords(i * (360.f / MAX_HEALING_CUBE_COUNT), 4, cellNormal) + bossCage->centerWorldPosition;
     
         BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, newBossBody, this, i);
         game->add_entity(newHealingCube);
@@ -72,7 +72,7 @@ BT::NodeState HealTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard
         boss->setTargetColor(getColorFromIndex(colorIndex));
 
         colorIndex++;
-        if (colorIndex > 2) colorIndex = 0;
+        if (colorIndex > 5) colorIndex = 0;
     }
     colorTimer -= deltaTime;
 
@@ -128,9 +128,15 @@ glm::vec3 HealTask::getColorFromIndex(int index)
     case 0:
         return glm::vec3(1.0f, 0.3f, 0.3f);
     case 1:
-        return glm::vec3(0.3f, 1.0f, 0.3f);
+        return glm::vec3(1.0f, 1.0f, 0.3f);
     case 2:
+        return glm::vec3(0.3f, 1.0f, 0.3f);
+    case 3:
+        return glm::vec3(0.3f, 1.0f, 1.0f);
+    case 4:
         return glm::vec3(0.3f, 0.3f, 1.0f);
+    case 5:
+        return glm::vec3(1.0f, 0.3f, 1.0f);
     default:
         return glm::vec3(1);
     }

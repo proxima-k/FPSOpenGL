@@ -31,5 +31,5 @@ WaveEnemy::WaveEnemy(glm::vec3 position)
 	transform.position = position;
 
 	this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	this->meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
+	this->meshRenderer->setColor(glm::vec3(0.5f, 0.5f, 1.f));
 }

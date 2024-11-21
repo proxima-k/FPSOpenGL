@@ -39,5 +39,5 @@ PillarEnemy::PillarEnemy(glm::vec3 position)
 void PillarEnemy::initMeshRenderer()
 {
 	this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	this->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
+	this->meshRenderer->setColor(glm::vec3(1.f, 0.5f, 0.5f));
 }

@@ -27,7 +27,7 @@ private:
 	BossBody* newBossBody = nullptr;
 	int bodyIndex;
 
-	float timeToSwapColor = 1.2f;
+	float timeToSwapColor = 0.8f;
 	float colorTimer = 0.f;
 	int colorIndex = 0;
 

@@ -4,13 +4,14 @@
 #include "../../Player.h"
 #include "../../Grid.h"
 #include "BossEnemy.h"
+#include "BossCage.h"
 
 void LaunchPillarTask::onNodeStart(BT::Blackboard& blackboard)
 {
     currentAttackCount = 0;
     
     BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
-    boss->setTargetColor(glm::vec3(0.3f, 1.f, 0.3f));
+    boss->setTargetColor(glm::vec3(1.f, 0.3f, 0.3f));
 }
 
 BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
@@ -21,10 +22,8 @@ BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& bl
     timer -= deltaTime;
     if (timer <= 0)
     {
-        //game->spawn_entity<PillarEnemy>(glm::vec3(currentAttackCount + 2.5f, 0, currentAttackCount + 2.5f));
+        BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
 
-        // todo: make a simple algorithm to spawn the pillar in front of where the player is moving
-        // maybe based on where the velocity is would be good.
 		Player* player = blackboard.getValue<Player*>("player");
 		if (player == nullptr)
 			return BT::NodeState::FAILURE;
@@ -32,8 +31,8 @@ BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& bl
 			return BT::NodeState::FAILURE;
 
         float constant = 3.5f;
-        glm::vec2 gridCellCenter = floorGrid->getCellCenter(player->transform.position + glm::normalize(player->physicsbody.velocity) * constant);
-		glm::vec3 spawnPosition = glm::vec3(gridCellCenter.x, 0, gridCellCenter.y);
+        glm::vec2 gridCellCenter = boss->bossCage->floorGrid->getCellCenter(player->transform.position + glm::normalize(player->physicsbody.velocity) * constant);
+        glm::vec3 spawnPosition = glm::vec3(gridCellCenter.x, 0, gridCellCenter.y);
 		spawnPosition.y = 0;
         game->spawn_entity<PillarEnemy>(spawnPosition);
 

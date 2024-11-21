@@ -11,6 +11,7 @@ void WaveRiseAndFallTask::onNodeStart(BT::Blackboard& blackboard)
 		entity->transform.scale.y = shortestHeight / 2;
 		entity->transform.position.y = shortestHeight / 2;
 		entity->collision_channel = Collision_Channel::Enemy;
+		entity->meshRenderer->setColor(glm::vec3(0.3f, 0.3f, 1.f));
 	}
 }
 

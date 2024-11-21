@@ -10,6 +10,7 @@ void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 		entity->transform.scale.y = currentHeight / 2;
 		entity->transform.position.y = currentHeight / 2;
 		entity->collision_channel = Collision_Channel::Enemy;
+		entity->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
 	}
 }
 

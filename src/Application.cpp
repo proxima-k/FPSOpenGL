@@ -33,6 +33,7 @@
 #include "game/Grid.h"
 #include "game/WallGrid.h"
 #include "game/enemies/boss/BossCage.h"
+#include "game/BossFightController.h"
 
 #include "game/ui/UI.h"
 
@@ -169,32 +170,9 @@ int main(void)
     {
         meshManager = new MeshManager();
         shaderManager = new ShaderManager();
-
 		meshManager->init();
         shaderManager->init();
 
-        WallGrid wallGrid(1.f, 10, 20, 10);
-		Shader* wallGridShader = shaderManager->getShader("wallGrid");
-
-        floorGrid = new Grid(16, 16, 1);
-		Shader* gridShader = shaderManager->getShader("grid");
-
-        floorGrid->setShader(gridShader);
-        floorGrid->setCamera(&playerCamera);
-        floorGrid->setPlayer(&player);
-
-        wallGrid.setShader(wallGridShader);
-        wallGrid.setCamera(&playerCamera);
-        wallGrid.setPlayer(&player);
-
-        BossCage bossCage(glm::vec3(0, 0, 0), 10, 10, 13, 1);
-        bossCage.floorGrid->setShader(gridShader);
-        bossCage.floorGrid->setCamera(&playerCamera);
-        bossCage.floorGrid->setPlayer(&player);
-        
-        bossCage.wallGrid->setShader(wallGridShader);
-        bossCage.wallGrid->setCamera(&playerCamera);
-        bossCage.wallGrid->setPlayer(&player);
 
         // setup post processing components
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -211,19 +189,17 @@ int main(void)
         player.shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
 		player.shooter.setPlayer(&player);
 
-        audioManager->init();
         game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
-
+        audioManager->init();
         ui.init(window);
 
-        // testing area
-		BossEnemy* bossEnemy = new BossEnemy(glm::vec3(0.f, 3.f, 0.f));
-        game->add_entity<BossEnemy>(bossEnemy);
-        bossEnemy->bossCage = &bossCage;
 
-        HealingLine healingLine(glm::vec3(0), glm::vec3(0, 10, 10));
-        HealingLine healingLine2(glm::vec3(0), glm::vec3(0, 10, 10));
-        float testValue = 0;
+        floorGrid = new Grid(16, 16, 1);
+        floorGrid->setShader(shaderManager->getShader("grid"));
+        floorGrid->setCamera(&playerCamera);
+        floorGrid->setPlayer(&player);
+
+        BossFightController bossFightController;
 
 
         while (!glfwWindowShouldClose(window))
@@ -245,7 +221,7 @@ int main(void)
             game->update();
             game->render();
 
-			//cubeEnemySpawner.update(deltaTime);
+            bossFightController.update(deltaTime);
             floorGrid->update();
 
             // GRAPHICS =======================================================
@@ -268,30 +244,20 @@ int main(void)
             outlinePP.render();
             
             // floor grid pass
-            /*
-            floorGrid->draw();
-            wallGrid.update(deltaTime);
-            wallGrid.draw();
-            */
-            bossCage.update(deltaTime);
-            bossCage.draw();
+            //bossCage.update(deltaTime);
+            //bossCage.draw();
+            bossFightController.drawBossCage();
 
+            if (!bossFightController.bossFightIsActive())
+                floorGrid->draw();
+
+            if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+                bossFightController.initializeBossFight();
+            
+
+            // healing lines pass
             game->renderHealingLines();
             
-            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-                testValue += deltaTime;
-            else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-                testValue -= deltaTime;
-
-            /*healingLine.updateEndPosition(bossCage.getCellCoords(testValue * 10, 3));
-            healingLine.update(deltaTime);
-            healingLine.draw();*/
-
-            /*glm::vec3 something;
-            healingLine2.updateEndPosition(bossCage.getCellCenterCoords(testValue * 10, 3, something));
-            healingLine2.update(deltaTime);
-            healingLine2.draw();*/
-
             // UI pass
             ui.begin();
             ui.render(window);

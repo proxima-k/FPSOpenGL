@@ -84,9 +84,7 @@ void BossEnemy::initMeshRenderer()
 				glm::vec3 spawnPosition(x / 2.0f + x * bodyOffset, y / 2.0f + y * bodyOffset, z / 2.0f + z * bodyOffset);
 
 				glm::vec3 offsetDirection = glm::normalize(spawnPosition);
-				
-
-				std::cout << offsetDirection.x << " " << offsetDirection.y << " " << offsetDirection.z << std::endl;
+				//std::cout << offsetDirection.x << " " << offsetDirection.y << " " << offsetDirection.z << std::endl;
 
 				BossBody* body = new BossBody(spawnPosition, index, offsetDirection, getOffsetMagnitude());
 				body->setBossController(this);

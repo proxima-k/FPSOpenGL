@@ -160,6 +160,7 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\WaitTask.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
+    <ClCompile Include="src\game\BossFightController.cpp" />
     <ClCompile Include="src\game\enemies\boss\BodyRotateTask.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossBody.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossCage.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="src\engine\behavior_tree\nodes\ServiceNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\WaitTask.h" />
     <ClInclude Include="src\engine\MeshManager.h" />
+    <ClInclude Include="src\game\BossFightController.h" />
     <ClInclude Include="src\game\enemies\boss\BodyRotateTask.h" />
     <ClInclude Include="src\game\enemies\boss\BossBody.h" />
     <ClInclude Include="src\game\enemies\boss\BossCage.h" />
