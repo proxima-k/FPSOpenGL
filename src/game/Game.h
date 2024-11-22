@@ -14,6 +14,7 @@ class Player;
 class Shooter;
 
 #define MAX_ENTITYS 1000
+#define MAX_HEAL_LINES 30
 
 class Game
 {
@@ -80,13 +81,19 @@ public:
 
     void renderHealingLines();
     HealingLine* spawn_healing_line(glm::vec3 startPos, glm::vec3 endPos) {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < MAX_HEAL_LINES; i++) {
             if (healingLines[i] == nullptr)
             {
+                std::cout << i << std::endl;
+                std::cout << "start pos :" << startPos.x << " " << startPos.y << " " << startPos.z << std::endl;
+                std::cout << "end pos :" << endPos.x << " " << endPos.y << " " << endPos.z << std::endl;
                 healingLines[i] = new HealingLine(startPos, endPos);
                 return healingLines[i];
             }
         }
+
+        std::cerr << "healing line array is full, cannot spawn more lines." << std::endl;
+        return nullptr;
     }
 
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
@@ -132,7 +139,7 @@ private:
 
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
     ParticleController* particleCtrl[20] = { nullptr };
-    HealingLine* healingLines[20] = { nullptr };
+    HealingLine* healingLines[MAX_HEAL_LINES] = { nullptr };
     Timer timer;
 };
 

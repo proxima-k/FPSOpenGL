@@ -30,7 +30,7 @@ Game::~Game()
 		delete entitys[i];
 		entitys[i] = nullptr;
 	}
-	
+
 	delete textureManager;
 }
 
@@ -55,17 +55,17 @@ void Game::update()
 	}
 
 	// handles healing line updates and destruction
-	for (int i = 0; i < 20; i++) {
-		HealingLine* healingLine = healingLines[i];
-		if (healingLine == nullptr) continue;
+	for (int i = 0; i < MAX_HEAL_LINES; i++) {
+		
+		if (healingLines[i] == nullptr) continue;
 
-		if (healingLine->destroyed) {
+		if (healingLines[i]->destroyed) {
 			std::cout << "deleting healing line" << std::endl;
-			delete healingLine;
+			delete healingLines[i];
 			healingLines[i] = nullptr;
 		}
 		else {
-			healingLine->update(deltaTime);
+			healingLines[i]->update(deltaTime);
 		}
 	}
 
@@ -79,7 +79,7 @@ void Game::update()
 			delete pCtrl;
 			particleCtrl[i] = nullptr;
 
-			std::cout << "Destroy Particle Controller" << std::endl;
+			//std::cout << "Destroy Particle Controller" << std::endl;
 			return;
 		}
 
@@ -110,7 +110,7 @@ void Game::render()
 }
 
 void Game::renderHealingLines() {
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < MAX_HEAL_LINES; i++) {
 		if (healingLines[i] == nullptr) continue;
 		healingLines[i]->draw();
 	}

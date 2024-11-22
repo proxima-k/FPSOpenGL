@@ -20,12 +20,7 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
     BossCage* bossCage = boss->bossCage;
     if (bossCage == nullptr) return;
 
-    // find empty slot, get it's offset 
-    // get random cell on the wall grid, spawn a cube
-    // assign cube's target location
-    // form a line towards the target location
 
-    // spawn position, index, offset direction, offsetMagnitude
     bodyIndex = boss->getRandomEmptyIndex();
     if (bodyIndex== -1) {
         state = BT::NodeState::FAILURE;
@@ -41,13 +36,14 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
     game->add_entity(newBossBody);
     boss->notifyBossBodyRegenerate(newBossBody, bodyIndex);
 
-    currentHealingCubeCount = MAX_HEALING_CUBE_COUNT;
+    currentHealingCubeCount = MAX_HEALING_CUBE_COUNT * (4 - blackboard.getValue<int>("healAttempts"));
     timer = MAX_HEALING_TIME;
     healingCubes.clear();
 
-    for (int i = 0; i < MAX_HEALING_CUBE_COUNT; i++) {
+
+    for (int i = 0; i < currentHealingCubeCount; i++) {
         glm::vec3 spawnPosition, cellNormal;
-        spawnPosition = bossCage->getCellCenterCoords(i * (360.f / MAX_HEALING_CUBE_COUNT), 4, cellNormal) + bossCage->centerWorldPosition;
+        spawnPosition = bossCage->getCellCenterCoords(i * (360.f / currentHealingCubeCount), 4, cellNormal) + bossCage->centerWorldPosition;
     
         BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, newBossBody, this, i, cellNormal);
         game->add_entity(newHealingCube);

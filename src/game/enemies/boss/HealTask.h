@@ -19,7 +19,7 @@ protected:
 	void onNodeFinish(BT::Blackboard& blackboard) override;
 
 private:
-	int MAX_HEALING_CUBE_COUNT = 15;
+	int MAX_HEALING_CUBE_COUNT = 9;
 	int currentHealingCubeCount = 0;
 
 	float MAX_HEALING_TIME = 20;
