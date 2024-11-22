@@ -49,7 +49,7 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
         glm::vec3 spawnPosition, cellNormal;
         spawnPosition = bossCage->getCellCenterCoords(i * (360.f / MAX_HEALING_CUBE_COUNT), 4, cellNormal) + bossCage->centerWorldPosition;
     
-        BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, newBossBody, this, i);
+        BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, newBossBody, this, i, cellNormal);
         game->add_entity(newHealingCube);
         healingCubes.push_back(newHealingCube);
     }

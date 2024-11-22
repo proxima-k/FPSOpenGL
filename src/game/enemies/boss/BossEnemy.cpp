@@ -14,6 +14,7 @@
 #include "LaunchPillarTask.h"
 #include "WaveAttackTask.h"
 #include "HealTask.h"
+#include "BossEntranceTask.h"
 
 #include "BossBody.h"
 #include "../../Game.h"
@@ -31,21 +32,27 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	// setup nodes for behavior tree
 	BT::RootNode* root = new BT::RootNode();
 	BT::SelectorNode* selector = new BT::SelectorNode();
-	BT::SequenceNode* sequence = new BT::SequenceNode();
+	BT::SequenceNode* sequence1 = new BT::SequenceNode();
+	BT::SequenceNode* sequence2 = new BT::SequenceNode();
 	BT::WaitTask* waitTask = new BT::WaitTask(2.6f, 0.6f);
 	BT::RandomSelectorNode* randomSelector = new BT::RandomSelectorNode();
 	EnoughHealthDecorator* enoughHealthDecorator = new EnoughHealthDecorator();
 	HealTask* healTask = new HealTask();
 	LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
 	WaveAttackTask* waveAttackTask = new WaveAttackTask();
+	BossEntranceTask* bossEntranceTask = new BossEntranceTask();
+	bossEntranceTask->canRepeat = false;
 
 	behaviorTree.setRootNode(root);
-	root->setChild(selector);
+	root->setChild(sequence1);
+	sequence1->addChild(bossEntranceTask);
+	sequence1->addChild(selector);
+	//root->setChild(selector);
 	selector->addChild(enoughHealthDecorator);
 	selector->addChild(healTask);
-	enoughHealthDecorator->setChild(sequence);
-	sequence->addChild(waitTask);
-	sequence->addChild(randomSelector);
+	enoughHealthDecorator->setChild(sequence2);
+	sequence2->addChild(waitTask);
+	sequence2->addChild(randomSelector);
 	randomSelector->addChild(waveAttackTask);
 	randomSelector->addChild(pillarAttackTask);
 	// randomSelector->addChild(projectileTask);

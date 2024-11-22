@@ -9,6 +9,9 @@ class BossBody;
 class HealTask : public BT::BaseNode {
 public:
 	void notifyHealingCubeDeath(int index);
+	float getHealPercentage() { return 1 - timer / MAX_HEALING_TIME; }
+
+	BossBody* newBossBody = nullptr;
 
 protected:
 	void onNodeStart(BT::Blackboard& blackboard) override;
@@ -24,7 +27,6 @@ private:
 
 	std::vector<BossHealingCube*> healingCubes;
 
-	BossBody* newBossBody = nullptr;
 	int bodyIndex;
 
 	float timeToSwapColor = 0.8f;

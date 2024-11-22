@@ -32,9 +32,9 @@ public:
 	glm::vec3 defaultPosition;
 	BossCage* bossCage = nullptr;
 
+	std::vector<BossBody*> bossBodies = std::vector<BossBody*>(8, nullptr);
 
 private:
-	std::vector<BossBody*> bossBodies = std::vector<BossBody*>(8, nullptr);
 	BT::BehaviorTree behaviorTree;
 
 	int currentBodyCount = 0;
