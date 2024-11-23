@@ -28,7 +28,7 @@ BossCage::BossCage(glm::vec3 centerWorldPosition, int xCellCount, int yCellCount
 	BT::RootNode* rootNode = new BT::RootNode();
 	BT::SequenceNode* sequenceNode = new BT::SequenceNode();
 	BT::WaitTask* waitTask = new BT::WaitTask();
-	FloorGridRevealTask* floorGridRevealTask = new FloorGridRevealTask();
+	//FloorGridRevealTask* floorGridRevealTask = new FloorGridRevealTask();
 	WallGridRevealTask* wallGridRevealTask = new WallGridRevealTask();
 
 	behaviorTree.setRootNode(rootNode);

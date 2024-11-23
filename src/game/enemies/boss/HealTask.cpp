@@ -11,21 +11,14 @@
 void HealTask::onNodeStart(BT::Blackboard& blackboard)
 {
     BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
-    if (boss == nullptr) {
-        state = BT::NodeState::FAILURE;
-        return;
-    }
-    boss->setCanCollide(false);
-    
     BossCage* bossCage = boss->bossCage;
-    if (bossCage == nullptr) return;
-
-
     bodyIndex = boss->getRandomEmptyIndex();
-    if (bodyIndex== -1) {
+    if (boss == nullptr || bossCage == nullptr || bodyIndex == -1) {
         state = BT::NodeState::FAILURE;
         return;
     }
+
+    boss->setCanCollide(false);
 
     // spawning new boss body
     glm::vec3 offsetDirection = boss->getOffsetDirectionFromIndex(bodyIndex);
@@ -33,13 +26,16 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
     newBossBody->setBossController(boss);
     newBossBody->collision_channel = Collision_Channel::None;
     newBossBody->smoothSizing = true;
+    newBossBody->health = 0;
     game->add_entity(newBossBody);
     boss->notifyBossBodyRegenerate(newBossBody, bodyIndex);
+    boss->setTargetColor(glm::vec3(1.f));
 
     currentHealingCubeCount = MAX_HEALING_CUBE_COUNT * (4 - blackboard.getValue<int>("healAttempts"));
+    currentTotalHealingCubes = currentHealingCubeCount;
+    healingCubesReadyCount = 0;
     timer = MAX_HEALING_TIME;
     healingCubes.clear();
-
 
     for (int i = 0; i < currentHealingCubeCount; i++) {
         glm::vec3 spawnPosition, cellNormal;
@@ -55,6 +51,8 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
 
 BT::NodeState HealTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
 {
+    if (healingCubesReadyCount < currentTotalHealingCubes) return BT::NodeState::RUNNING;
+
     if (currentHealingCubeCount <= 0) return BT::NodeState::FAILURE;
     if (timer <= 0) return BT::NodeState::SUCCESS; 
 
@@ -67,7 +65,7 @@ BT::NodeState HealTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard
         BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
         boss->setTargetColor(getColorFromIndex(colorIndex));
 
-        colorIndex++;
+        colorIndex+=2;
         if (colorIndex > 5) colorIndex = 0;
     }
     colorTimer -= deltaTime;
@@ -117,6 +115,16 @@ void HealTask::notifyHealingCubeDeath(int index)
     healingCubes[index] = nullptr;
 }
 
+void HealTask::notifyHealingCubeReady()
+{
+    healingCubesReadyCount++;
+
+    if (healingCubesReadyCount >= currentTotalHealingCubes) {
+        for (int i = 0; i < currentTotalHealingCubes; i++) {
+            healingCubes[i]->collision_channel = Collision_Channel::Enemy;
+        }
+    }
+}
 
 glm::vec3 HealTask::getColorFromIndex(int index)
 {

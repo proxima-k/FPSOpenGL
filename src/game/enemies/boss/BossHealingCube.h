@@ -30,13 +30,14 @@ public:
 		destroy();
 	}
 
+	void spawnHealingLine();
+
 private:
 	HealTask* healTaskNode = nullptr;
 	HealingLine* healingLine = nullptr;
 	BossBody* bossBodyToHeal = nullptr;
 	
 	BT::BehaviorTree behaviorTree;
-
 
 	Shader* shader;
 	glm::vec3 cellPosition;

@@ -9,9 +9,11 @@ class BossBody;
 class HealTask : public BT::BaseNode {
 public:
 	void notifyHealingCubeDeath(int index);
+	void notifyHealingCubeReady();
 	float getHealPercentage() { return 1 - timer / MAX_HEALING_TIME; }
 
 	BossBody* newBossBody = nullptr;
+	int currentTotalHealingCubes = 0;
 
 protected:
 	void onNodeStart(BT::Blackboard& blackboard) override;
@@ -26,6 +28,7 @@ private:
 	float timer = 0;
 
 	std::vector<BossHealingCube*> healingCubes;
+	int healingCubesReadyCount = 0;
 
 	int bodyIndex;
 

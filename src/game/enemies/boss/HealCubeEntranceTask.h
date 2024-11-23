@@ -2,7 +2,12 @@
 
 #include <behavior_tree/nodes/BaseNode.h>
 
-class FloorGridRevealTask : public BT::BaseNode {
+class BossHealingCube;
+
+class HealCubeEntranceTask : public BT::BaseNode {
+public:
+	HealCubeEntranceTask(float offset);
+
 protected:
 	// Inherited via BaseNode
 	void onNodeStart(BT::Blackboard& blackboard) override;
@@ -11,5 +16,7 @@ protected:
 
 private:
 	float t = 0.f;
-	float intensity = 1.f;
+	float timer = 0.f;
+
+	BossHealingCube* healCube = nullptr;
 };

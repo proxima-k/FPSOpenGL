@@ -166,7 +166,7 @@
     <ClCompile Include="src\game\enemies\boss\BossCage.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEntranceTask.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossHealingCube.cpp" />
-    <ClCompile Include="src\game\enemies\boss\FloorGridRevealTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\HealCubeEntranceTask.cpp" />
     <ClCompile Include="src\game\enemies\boss\HealingLine.cpp" />
     <ClCompile Include="src\game\enemies\boss\HealTask.cpp" />
     <ClCompile Include="src\game\enemies\boss\WallGridRevealTask.cpp" />
@@ -254,7 +254,7 @@
     <ClInclude Include="src\game\enemies\boss\BossEntranceTask.h" />
     <ClInclude Include="src\game\enemies\boss\BossHealingCube.h" />
     <ClInclude Include="src\game\enemies\boss\EnoughHealthDecorator.h" />
-    <ClInclude Include="src\game\enemies\boss\FloorGridRevealTask.h" />
+    <ClInclude Include="src\game\enemies\boss\HealCubeEntranceTask.h" />
     <ClInclude Include="src\game\enemies\boss\HealingLine.h" />
     <ClInclude Include="src\game\enemies\boss\HealTask.h" />
     <ClInclude Include="src\game\enemies\boss\LerpBodyColorService.h" />

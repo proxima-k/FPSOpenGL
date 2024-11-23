@@ -45,7 +45,7 @@ void main()
     {
         outColor = vec4(u_Color, 1.0);
     }
-    else if (dotProduct > 0)
+    else if (dotProduct > -0.00001)
     {
         outColor = vec4(vec3(1.0), 1.0);
     }

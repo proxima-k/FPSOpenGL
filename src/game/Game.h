@@ -84,9 +84,6 @@ public:
         for (int i = 0; i < MAX_HEAL_LINES; i++) {
             if (healingLines[i] == nullptr)
             {
-                std::cout << i << std::endl;
-                std::cout << "start pos :" << startPos.x << " " << startPos.y << " " << startPos.z << std::endl;
-                std::cout << "end pos :" << endPos.x << " " << endPos.y << " " << endPos.z << std::endl;
                 healingLines[i] = new HealingLine(startPos, endPos);
                 return healingLines[i];
             }
