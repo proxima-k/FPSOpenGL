@@ -220,6 +220,8 @@ int main(void)
             game->update();
             game->render();
 
+
+            // todo: fix the loop here
             bossFightController.update(deltaTime);
             floorGrid->update();
 
@@ -278,6 +280,8 @@ int main(void)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
+
+    // todo: potential issues with custom framebuffer
     glViewport(0, 0, width, height);
     windowWidth = width;
     windowHeight = height;

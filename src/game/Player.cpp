@@ -39,7 +39,7 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::checkCollision() 
 {
-    return;
+    //return;
 
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
@@ -55,8 +55,8 @@ void Player::die()
 {
     game->gameOver();
 
-    game->reset();
-    this->reset();
+    //game->reset();
+    //this->reset();
 }
 
 void Player::reset()

@@ -124,7 +124,7 @@ public:
 
     WaveController* waveController;
 
-    GameStates currentGameState = GameStates::Playing;
+    GameStates currentGameState = GameStates::Menu;
 
     float playerDamageMultiplier = 1.0f;
     float playerSpeedMultiplier = 1.0f;
