@@ -173,6 +173,9 @@
     <ClCompile Include="src\game\enemies\boss\WaveAttackTask.cpp" />
     <ClCompile Include="src\game\enemies\wave_enemy\WaveEnemy.cpp" />
     <ClCompile Include="src\game\enemies\wave_enemy\WaveRiseAndFallTask.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\Wave.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\WaveController.cpp" />
+    <ClCompile Include="src\game\enemies\wave_system\WaveSequence.cpp" />
     <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
@@ -263,6 +266,9 @@
     <ClInclude Include="src\game\enemies\wave_enemy\WaveEnemy.h" />
     <ClInclude Include="src\game\enemies\pillar_enemy\WarningTask.h" />
     <ClInclude Include="src\game\enemies\wave_enemy\WaveRiseAndFallTask.h" />
+    <ClInclude Include="src\game\enemies\wave_system\Wave.h" />
+    <ClInclude Include="src\game\enemies\wave_system\WaveController.h" />
+    <ClInclude Include="src\game\enemies\wave_system\WaveType.h" />
     <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />
     <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />

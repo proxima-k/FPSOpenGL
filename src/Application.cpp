@@ -201,7 +201,6 @@ int main(void)
 
         BossFightController bossFightController;
 
-
         while (!glfwWindowShouldClose(window))
         {
             // LOGICS =========================================================
