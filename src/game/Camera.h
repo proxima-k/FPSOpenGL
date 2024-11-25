@@ -10,31 +10,33 @@
 class Camera {
 public:
     static Camera* mainCamera;
+    Transform transform;
     
-    Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsigned int screenHeight);
+    Camera(glm::vec3 worldUp, unsigned int screenWidth, unsigned int screenHeight);
 
-    void processMouseMovement(float xPos, float yPos);
-
-    glm::vec3 getCameraForward() const { return cameraForward; }
-    glm::vec3 getCameraUp() const { return cameraUp; }
-
-    float getResolutionRatio() { return (float)screenWidth / screenHeight; }
+    glm::vec3 getWorldUp() const { return worldUp; }
 
     void updateScreenSize(unsigned int width, unsigned int height) { screenWidth = width; screenHeight = height; }
 
-    Transform transform;
+    float getResolutionRatio() { return (float)screenWidth / screenHeight; }
+    unsigned int getScreenWidth() { return screenWidth; }
+    unsigned int getScreenHeight() { return screenHeight; }
 
 private:
-    glm::vec3 cameraForward;
-    glm::vec3 cameraUp;
-
-    float lastX;
-    float lastY;
-    bool firstMouse;
-
-    float currentPitch = 0;
+    // todo: change to worldUp?
+    glm::vec3 worldUp;
 
     unsigned int screenWidth, screenHeight;
 };
 
 #endif
+/*
+   //void processMouseMovement(float xPos, float yPos);
+   //glm::vec3 getCameraForward() const { return cameraForward; }
+   glm::vec3 cameraForward;
+   float lastX;
+   float lastY;
+   bool firstMouse;
+
+   float currentPitch = 0;
+*/

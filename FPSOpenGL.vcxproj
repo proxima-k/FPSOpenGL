@@ -201,6 +201,8 @@
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\DefaultCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
+    <ClCompile Include="src\game\states\GameStateManager.cpp" />
+    <ClCompile Include="src\game\states\PlayingState.cpp" />
     <ClCompile Include="src\game\ui\UI.cpp" />
     <ClCompile Include="src\game\ui\UICards.cpp" />
     <ClCompile Include="src\game\WallGrid.cpp" />
@@ -269,6 +271,8 @@
     <ClInclude Include="src\game\enemies\wave_system\Wave.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveController.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveType.h" />
+    <ClInclude Include="src\engine\state_machine\BaseState.h" />
+    <ClInclude Include="src\engine\state_machine\StateManager.h" />
     <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />
     <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />
@@ -299,6 +303,11 @@
     <ClInclude Include="src\engine\Timer.h" />
     <ClInclude Include="src\game\shooting\cards\DefaultCard.h" />
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
+    <ClInclude Include="src\game\states\BossFightState.h" />
+    <ClInclude Include="src\game\states\GameStateManager.h" />
+    <ClInclude Include="src\game\states\MainMenuState.h" />
+    <ClInclude Include="src\game\states\PlayingState.h" />
+    <ClInclude Include="src\game\states\SelectCardState.h" />
     <ClInclude Include="src\game\ui\UI.h" />
     <ClInclude Include="src\game\ui\UICards.h" />
     <ClInclude Include="src\game\WallGrid.h" />

@@ -12,6 +12,8 @@
 
 #include "enemies/wave_system/WaveController.h"
 
+#include "states/GameStateManager.h"
+
 class Player;
 class Shooter;
 
@@ -98,8 +100,6 @@ public:
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
     Entity* get_colliding_entity_OBB(Entity* other, Collision_Channel channel);
 
-    void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
-
     void enterSelectCardState();
     void addPlayerXP(int xp) { crtPlayerXP += xp; enterSelectCardState(); }
     void level_up_player() {
@@ -115,8 +115,8 @@ public:
     int getPlayerMaxXP() { return maxPlayerXP; }
     int get_player_level() { return playerLevel; }
 
-    Mesh* cubeEnemyMesh;
-    Shader* cubeEnemyShader;
+    //Mesh* cubeEnemyMesh;
+    //Shader* cubeEnemyShader;
     Camera* camera;
     Player* player;
 
@@ -134,6 +134,7 @@ public:
 
     int minutesUntilBossSpawns = 5;
     float timeLeftUntilBoss = (minutesUntilBossSpawns * 60 + 1);
+
 private:
     float deltaTime = 0.f;
     float lastFrameTime = 0.f;
@@ -146,6 +147,8 @@ private:
     ParticleController* particleCtrl[20] = { nullptr };
     HealingLine* healingLines[MAX_HEAL_LINES] = { nullptr };
     Timer timer;
+
+    GameStateManager gameStateManager;
 };
 
 extern Game* game;

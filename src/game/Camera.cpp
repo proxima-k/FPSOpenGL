@@ -8,17 +8,12 @@
 
 Camera* Camera::mainCamera = nullptr;
 
-Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsigned int screenHeight)
-    : transform(transform), cameraUp(up), firstMouse(true), screenWidth(screenWidth), screenHeight(screenHeight)
-{
-    cameraForward = glm::vec3(0.0f, 0.0f, 1.0f);
-    transform.rotation = glm::vec3(0, 0, 0);
-    lastX = screenWidth / 2.0;  // assuming initial window width of 640
-    lastY = screenHeight / 2.0;  // assuming initial window height of 640
-}
-
+Camera::Camera(glm::vec3 worldUp, unsigned int screenWidth, unsigned int screenHeight)
+    : worldUp(worldUp), screenWidth(screenWidth), screenHeight(screenHeight) {}
+/*
 void Camera::processMouseMovement(float xPos, float yPos)
 {
+    std::cout << xPos << " " << yPos << std::endl;
     if (game->bGameOver) return;
 
     if (firstMouse)
@@ -57,3 +52,4 @@ void Camera::processMouseMovement(float xPos, float yPos)
 
     cameraForward = transform.getForward();
 }
+*/

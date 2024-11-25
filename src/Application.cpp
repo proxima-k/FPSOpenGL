@@ -64,15 +64,15 @@ bool firstMouse = true;
 float deltaTime = 0.f;
 float lastFrameTime = 0.f;
 
-Camera playerCamera(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
-Player player(&playerCamera);
+Camera playerCamera(glm::vec3(0.0f, 1.0f, 0.0f), windowWidth, windowHeight);
+Player* player = nullptr;
 UI ui;
 Game* game = nullptr;
 Grid* floorGrid = nullptr;
 AudioManager* audioManager = nullptr;
 
-SteamManager* steamManager = nullptr;
-
+//SteamManager* steamManager = nullptr;
+/*
 GLuint LoadTextureFromFile(const char* filename)
 {
     int width, height, channels;
@@ -98,6 +98,7 @@ GLuint LoadTextureFromFile(const char* filename)
 
     return textureID;
 }
+*/
 
 int main(void)
 {
@@ -163,8 +164,8 @@ int main(void)
 
     game = new Game();
     audioManager = new AudioManager();
-    game->player = &player;
-    steamManager = new SteamManager();
+    game->player = player;
+    //steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
 
     {
@@ -186,10 +187,12 @@ int main(void)
         // setup card mesh, shader and camera
         Shader* meshShader = shaderManager->getShader("mesh");
 		Mesh* cubeMesh = meshManager->getMesh("cube");
-        player.shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
-		player.shooter.setPlayer(&player);
 
-        game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
+        player = new Player(&playerCamera, window);
+        player->shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
+		player->shooter.setPlayer(player);
+
+        //game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
         audioManager->init();
         ui.init(window);
 
@@ -197,7 +200,7 @@ int main(void)
         floorGrid = new Grid(16, 16, 1);
         floorGrid->setShader(shaderManager->getShader("grid"));
         floorGrid->setCamera(&playerCamera);
-        floorGrid->setPlayer(&player);
+        floorGrid->setPlayer(player);
 
         BossFightController bossFightController;
 
@@ -215,7 +218,7 @@ int main(void)
 
             if (game->currentGameState == Game::GameStates::Playing)
             {
-                player.update(window, deltaTime);
+                player->update(deltaTime);
             }
             game->update();
             game->render();
@@ -290,11 +293,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
     if (game->currentGameState == Game::GameStates::Playing)
-    playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
+    //playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
+    player->mouse_movement_callback(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     if (game->currentGameState == Game::GameStates::Playing)
-    player.mouse_button_callback(window, button, action, mods);
+    player->mouse_button_callback(window, button, action, mods);
 }

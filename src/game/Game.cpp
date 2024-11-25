@@ -44,6 +44,9 @@ void Game::update()
 	deltaTime = currentFrame - lastFrameTime;
 	lastFrameTime = currentFrame;
 
+	// update game states here
+	gameStateManager.update(deltaTime);
+
 	// updates all the entitys
 	for (int i = 0; i < MAX_ENTITYS; i++) 
 	{
@@ -165,7 +168,9 @@ void Game::enterSelectCardState()
 		for (int i = 0; i < MAX_ENTITYS; i++) {
 			if (entitys[i] != nullptr) {
 				if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
-					entitys[i]->destroyed = true;
+					/*entitys[i]->destroyed = true;*/
+					delete entitys[i];
+					entitys[i] = nullptr;
 				}
 			}
 		}
@@ -213,12 +218,4 @@ void Game::reset()
 		delete entitys[i];
 		entitys[i] = nullptr;
 	}
-}
-
-// saves the mesh, shader and camera to be used when spawning new entities
-void Game::setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera)
-{
-	this->cubeEnemyMesh = cardMesh;
-	this->cubeEnemyShader = cardShader;
-	this->camera = camera;
 }
