@@ -12,6 +12,9 @@
 #include "../graphics/Mesh.h"
 #include "../graphics/Shader.h"
 
+#include "Grid.h"
+
+
 Game::Game()
 {
 	for (int i = 0; i < MAX_ENTITYS; ++i)
@@ -22,8 +25,6 @@ Game::Game()
 	textureManager = new TextureManager;
 	textureManager->init();
 
-	waveController = new WaveController;
-	waveController->populate_queue();
 }
 
 Game::~Game()
@@ -36,6 +37,8 @@ Game::~Game()
 
 	delete textureManager;
 	delete waveController;
+	delete bossFightController;
+	delete gameStateManager;
 }
 
 void Game::update()
@@ -44,8 +47,11 @@ void Game::update()
 	deltaTime = currentFrame - lastFrameTime;
 	lastFrameTime = currentFrame;
 
+
 	// update game states here
-	gameStateManager.update(deltaTime);
+	if (gameStateManager != nullptr)
+		gameStateManager->update(deltaTime);
+
 
 	// updates all the entitys
 	for (int i = 0; i < MAX_ENTITYS; i++) 
@@ -57,6 +63,7 @@ void Game::update()
 			entitys[i] = nullptr;
 		}
 		else {
+			if (!isInGame()) continue;
 			entitys[i]->update(deltaTime);
 		}
 	}
@@ -72,6 +79,7 @@ void Game::update()
 			healingLines[i] = nullptr;
 		}
 		else {
+			if (!isInGame()) continue;
 			healingLines[i]->update(deltaTime);
 		}
 	}
@@ -90,13 +98,16 @@ void Game::update()
 			return;
 		}
 
+		if (!isInGame()) continue;
 		pCtrl->update(deltaTime);
 	}
 
-	if (currentGameState != GameStates::SelectCards && currentGameState != GameStates::Menu) {
+	bossFightController->update(deltaTime);
+	floorGrid->update();
+	/*if (currentGameState != GameStates::SelectCards && currentGameState != GameStates::Menu) {
 		timeLeftUntilBoss -= deltaTime;
 		waveController->update(deltaTime);
-	}
+	}*/
 }
 
 // calls the draw function on all the entities
@@ -123,6 +134,14 @@ void Game::renderHealingLines() {
 	for (int i = 0; i < MAX_HEAL_LINES; i++) {
 		if (healingLines[i] == nullptr) continue;
 		healingLines[i]->draw();
+	}
+}
+
+void Game::renderGrid() {
+	bossFightController->drawBossCage();
+	if (!bossFightController->bossFightIsActive()) {
+		if (floorGrid != nullptr)
+			floorGrid->draw();
 	}
 }
 
@@ -165,33 +184,27 @@ Entity* Game::get_colliding_entity_OBB(Entity* self, Collision_Channel channel)
 void Game::enterSelectCardState()
 {
 	if (crtPlayerXP >= maxPlayerXP) {
-		for (int i = 0; i < MAX_ENTITYS; i++) {
-			if (entitys[i] != nullptr) {
-				if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
-					/*entitys[i]->destroyed = true;*/
-					delete entitys[i];
-					entitys[i] = nullptr;
-				}
-			}
-		}
+		clearEnemies();
 		crtPlayerXP = 0;
 		level_up_player();
-
-		currentGameState = GameStates::SelectCards;
+		//currentGameState = GameStates::SelectCards;
+		gameStateManager->changeState(GameStateManager::State::SelectCards);
 	}
 }
 
 void Game::gameOver()
 {
-	currentGameState = Menu;
+	//currentGameState = Menu;
 
-	for (int i = 0; i < MAX_ENTITYS; i++)
+	/*for (int i = 0; i < MAX_ENTITYS; i++)
 	{
 		if (entitys[i] != nullptr)
 		{
 			entitys[i]->destroy();
 		}
-	}
+	}*/
+
+	gameStateManager->changeState(GameStateManager::State::MainMenu);
 }
 
 void Game::reset()
@@ -200,7 +213,8 @@ void Game::reset()
 	maxPlayerXP = 100;
 	playerLevel = 1;
 
-	timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
+	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
+	timeLeftUntilBoss = 10.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
@@ -211,11 +225,23 @@ void Game::reset()
 	player->reset();
 	waveController->reset_waves();
 
-	GameStates currentGameState = GameStates::Playing;
+	//GameStates currentGameState = GameStates::Playing;
 
 	for (int i = 0; i < MAX_ENTITYS; ++i)
 	{
 		delete entitys[i];
 		entitys[i] = nullptr;
+	}
+}
+
+void Game::clearEnemies() {
+	for (int i = 0; i < MAX_ENTITYS; i++) {
+		if (entitys[i] != nullptr) {
+			if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
+				/*entitys[i]->destroyed = true;*/
+				delete entitys[i];
+				entitys[i] = nullptr;
+			}
+		}
 	}
 }

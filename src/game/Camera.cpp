@@ -10,6 +10,22 @@ Camera* Camera::mainCamera = nullptr;
 
 Camera::Camera(glm::vec3 worldUp, unsigned int screenWidth, unsigned int screenHeight)
     : worldUp(worldUp), screenWidth(screenWidth), screenHeight(screenHeight) {}
+
+
+//void Camera::lookAt(glm::vec3 targetPosition)
+//{
+//    glm::vec3 forward = glm::normalize(targetPosition - transform.position);
+//    glm::vec3 right = glm::normalize(glm::cross(worldUp, forward)); 
+//    glm::vec3 up = glm::cross(forward, right);
+//
+//    // Create a rotation matrix from the basis vectors
+//    glm::mat3 rotationMatrix = glm::mat3(right, up, forward);
+//
+//    // Convert rotation matrix to quaternion
+//    transform.rotation = glm::quat_cast(rotationMatrix);
+//}
+
+
 /*
 void Camera::processMouseMovement(float xPos, float yPos)
 {

@@ -201,7 +201,9 @@
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\DefaultCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
+    <ClCompile Include="src\game\states\BossFightState.cpp" />
     <ClCompile Include="src\game\states\GameStateManager.cpp" />
+    <ClCompile Include="src\game\states\MainMenuState.cpp" />
     <ClCompile Include="src\game\states\PlayingState.cpp" />
     <ClCompile Include="src\game\ui\UI.cpp" />
     <ClCompile Include="src\game\ui\UICards.cpp" />

@@ -40,6 +40,8 @@ public:
 	float speed = 1600;
 	Physicsbody physicsbody;
 
+	bool canInput = true;
+
 private:
 	Camera* camera = nullptr;
 	GLFWwindow* window = nullptr;

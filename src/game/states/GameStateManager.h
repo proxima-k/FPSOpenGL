@@ -27,40 +27,54 @@ public:
         playingState = new PlayingState(this);
         selectCardState = new SelectCardState(this);
         bossFightState = new BossFightState(this);
+
+        changeStateInternal(mainMenuState);
+    }
+    ~GameStateManager() {
+        delete mainMenuState;
+        delete playingState;
+        delete selectCardState;
+        delete bossFightState;
     }
 
     void changeState(State targetState) {
+        previousState = currentState;
         switch (targetState) {
-        case MainMenu:
+        case State::MainMenu:
             changeStateInternal(mainMenuState);
             break;
-        case Playing:
+        case State::Playing:
             changeStateInternal(playingState);
             break;
-        case SelectCards:
+        case State::SelectCards:
             changeStateInternal(selectCardState);
             break;
-        case BossFight:
+        case State::BossFight:
             changeStateInternal(bossFightState);
             break;
-        case Dead:
+        case State::Dead:
             break;
             //changeStateInternal();
         default:
             //std::cout << "state not found" << std::endl;
             break;
         }
-        targetState = currentState;
+        currentState = targetState;
     }
     
     State getCurrentState() {
         return currentState;
     }
 
+    State getPreviousState() {
+        return previousState;
+    }
+
     Game* game = nullptr;
 
 private:
     State currentState = State::MainMenu;
+    State previousState = State::MainMenu;
 
     MainMenuState* mainMenuState = nullptr;
     PlayingState* playingState = nullptr;

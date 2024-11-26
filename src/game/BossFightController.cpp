@@ -12,6 +12,9 @@ void BossFightController::update(float deltaTime)
 {
 	if (cage != nullptr)
 		cage->update(deltaTime);
+
+	/*if (boss != nullptr)
+		boss->update(deltaTime);*/
 }
 
 void BossFightController::initializeBossFight()
@@ -49,7 +52,7 @@ void BossFightController::initializeBossFight()
 
 void BossFightController::notifyBossDied() 
 {
-
+	// notify game that boss died
 }
 
 void BossFightController::cleanUp()

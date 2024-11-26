@@ -164,7 +164,6 @@ int main(void)
 
     game = new Game();
     audioManager = new AudioManager();
-    game->player = player;
     //steamManager = new SteamManager();
     Camera::mainCamera = &playerCamera;
 
@@ -185,24 +184,27 @@ int main(void)
         outlinePP.setNormalTextureID(FBO.GetNormalID());
 
         // setup card mesh, shader and camera
-        Shader* meshShader = shaderManager->getShader("mesh");
-		Mesh* cubeMesh = meshManager->getMesh("cube");
+        /*Shader* meshShader = shaderManager->getShader("mesh");
+		Mesh* cubeMesh = meshManager->getMesh("cube");*/
 
         player = new Player(&playerCamera, window);
-        player->shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
+        player->transform.position = glm::vec3(0, 1, 0);
 		player->shooter.setPlayer(player);
-
+        //player->shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
         //game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
+        game->player = player;
+        game->camera = &playerCamera;
+
         audioManager->init();
         ui.init(window);
-
 
         floorGrid = new Grid(16, 16, 1);
         floorGrid->setShader(shaderManager->getShader("grid"));
         floorGrid->setCamera(&playerCamera);
         floorGrid->setPlayer(player);
 
-        BossFightController bossFightController;
+        game->baseFloorGrid = floorGrid;
+        game->init();
 
         while (!glfwWindowShouldClose(window))
         {
@@ -216,17 +218,13 @@ int main(void)
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            if (game->currentGameState == Game::GameStates::Playing)
+            /*if (game->currentGameState == Game::GameStates::Playing)
             {
                 player->update(deltaTime);
-            }
+            }*/
             game->update();
             game->render();
 
-
-            // todo: fix the loop here
-            bossFightController.update(deltaTime);
-            floorGrid->update();
 
             // GRAPHICS =======================================================
             FBO.Bind();
@@ -247,17 +245,11 @@ int main(void)
             glEnable(GL_DEPTH_TEST);
             outlinePP.render();
             
-            // floor grid pass
-            //bossCage.update(deltaTime);
-            //bossCage.draw();
-            bossFightController.drawBossCage();
-
+            // grid pass
+            game->renderGrid();
+            /*bossFightController.drawBossCage();
             if (!bossFightController.bossFightIsActive())
-                floorGrid->draw();
-
-            if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-                bossFightController.initializeBossFight();
-            
+                floorGrid->draw();*/
 
             // healing lines pass
             game->renderHealingLines();
@@ -292,13 +284,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_movement_callback(GLFWwindow* window, double mouseXPos, double mouseYPos)
 {
-    if (game->currentGameState == Game::GameStates::Playing)
+    if (game->isInGame())
     //playerCamera.processMouseMovement(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
     player->mouse_movement_callback(static_cast<float>(mouseXPos), static_cast<float>(mouseYPos));
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (game->currentGameState == Game::GameStates::Playing)
+    if (game->isInGame())
     player->mouse_button_callback(window, button, action, mods);
 }

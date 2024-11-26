@@ -7,14 +7,14 @@ class GameStateManager;
 
 class SelectCardState : public SM::BaseState {
 public:
-	SelectCardState(GameStateManager* gameStateManager);
+	SelectCardState(GameStateManager* gameStateManager) {};
 
-	void onEnterState() override;
-	void onUpdateState(float deltaTime) override;
-	void onExitState() override;
+	void onEnterState() override {};
+	void onUpdateState(float deltaTime) override {};
+	void onExitState() override {};
 
 private:
 	// reference to the statemanager to access player
-	GameStateManager* gameStateManager;
+	GameStateManager* gameStateManager = nullptr;
 	//Player* player;
 };

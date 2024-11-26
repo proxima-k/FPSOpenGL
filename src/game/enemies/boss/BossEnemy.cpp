@@ -67,6 +67,7 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	health = maxHealth;
 
 	initMeshRenderer();
+	setCanCollide(false);
 }
 
 BossEnemy::~BossEnemy()

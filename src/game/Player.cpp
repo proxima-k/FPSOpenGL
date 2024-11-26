@@ -19,6 +19,7 @@ void Player::update(float deltaTime)
 {
     physicsbody.update();
 
+    if (!canInput) return;
     processKeyboard(window, deltaTime);
     processAudioInput(window);
 
@@ -65,8 +66,14 @@ void Player::reset()
     shooter.emptyAllQueues();
 
     transform.position = transform.getUp() * (transform.scale.y / 2.f);
+    transform.rotation = glm::quat(1, 0, 0, 0);
+    
     lastX = camera->getScreenWidth()  / 2.0;
     lastY = camera->getScreenHeight() / 2.0;
+    currentPitch = 0;
+    physicsbody.velocity = glm::vec3(0);
+    physicsbody.acceleration = glm::vec3(0);
+    firstMouse = true;
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -160,6 +167,8 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
 
 void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+    if (!canInput) return;
+
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
         shooter.shootDefault(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());
@@ -172,7 +181,9 @@ void Player::mouse_button_callback(GLFWwindow* window, int button, int action, i
 
 void Player::mouse_movement_callback(float xPos, float yPos)
 {
-    if (game->bGameOver) return;
+    //if (game->bGameOver) return;
+
+    if (!canInput) return;
 
     if (firstMouse)
     {

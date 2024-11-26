@@ -13,9 +13,11 @@
 #include "enemies/wave_system/WaveController.h"
 
 #include "states/GameStateManager.h"
+#include "BossFightController.h"
 
 class Player;
 class Shooter;
+class Grid;
 
 #define MAX_ENTITYS 1000
 #define MAX_HEAL_LINES 30
@@ -36,6 +38,13 @@ public:
 
     void update();
     void render();
+    void init() {
+        bossFightController = new BossFightController();
+        waveController = new WaveController();
+        waveController->populate_queue();
+        gameStateManager = new GameStateManager(this);
+        //gameStateManager->changeState(GameStateManager::State::MainMenu);
+    }
 
     template<typename EntityType>
     EntityType* spawn_entity(glm::vec3 position) {
@@ -97,6 +106,8 @@ public:
         return nullptr;
     }
 
+    void renderGrid();
+
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
     Entity* get_colliding_entity_OBB(Entity* other, Collision_Channel channel);
 
@@ -110,21 +121,28 @@ public:
 
     void gameOver();
     void reset();
+    void clearEnemies();
 
     int getPlayerXP() { return crtPlayerXP; }
     int getPlayerMaxXP() { return maxPlayerXP; }
     int get_player_level() { return playerLevel; }
 
-    //Mesh* cubeEnemyMesh;
-    //Shader* cubeEnemyShader;
+    void changeState(GameStateManager::State newState) { gameStateManager->changeState(newState); }
+    GameStateManager::State getCurrentState() { return gameStateManager->getCurrentState(); }
+    bool isInGame() {
+        return (getCurrentState() == GameStateManager::State::Playing || getCurrentState() == GameStateManager::State::BossFight);
+    }
+
     Camera* camera;
     Player* player;
 
     TextureManager* textureManager;
+    WaveController* waveController = nullptr;
+    BossFightController* bossFightController = nullptr;
+    GameStateManager* gameStateManager = nullptr;
+    Grid* baseFloorGrid = nullptr;
 
-    WaveController* waveController;
-
-    GameStates currentGameState = GameStates::Menu;
+    //GameStates currentGameState = GameStates::Menu;
 
     float playerDamageMultiplier = 1.0f;
     float playerSpeedMultiplier = 1.0f;
@@ -134,6 +152,7 @@ public:
 
     int minutesUntilBossSpawns = 5;
     float timeLeftUntilBoss = (minutesUntilBossSpawns * 60 + 1);
+    //float timeLeftUntilBoss = 10.f;
 
 private:
     float deltaTime = 0.f;
@@ -147,8 +166,6 @@ private:
     ParticleController* particleCtrl[20] = { nullptr };
     HealingLine* healingLines[MAX_HEAL_LINES] = { nullptr };
     Timer timer;
-
-    GameStateManager gameStateManager;
 };
 
 extern Game* game;

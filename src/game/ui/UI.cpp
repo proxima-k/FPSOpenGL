@@ -83,9 +83,11 @@ void UI::render(GLFWwindow* window)
     ImVec2 deckPosPassives(windowWidth - cardSize.x - 20, windowHeight - cardSize.y - 20);
     ImVec2 deckPosActives(windowWidth - cardSize.x * 2 - 40, windowHeight - cardSize.y - 20);
 
-    switch (game->currentGameState)
+    //std::cout << game->getCurrentState() << std::endl;
+    switch (game->getCurrentState())
     {
-    case Game::GameStates::Playing:
+    case GameStateManager::State::BossFight:
+    case GameStateManager::State::Playing:
             renderPlayModeUI(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -96,7 +98,7 @@ void UI::render(GLFWwindow* window)
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
-    case Game::GameStates::SelectCards:
+    case GameStateManager::State::SelectCards:
             renderPlayModeUI(windowSize);
             cards.renderCardSelection(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -107,11 +109,11 @@ void UI::render(GLFWwindow* window)
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
-    case Game::GameStates::Dead:
+    case GameStateManager::State::Dead:
             ImGui::Text("HA DEAD");
         break;
 
-    case Game::GameStates::Menu:
+    case GameStateManager::State::MainMenu:
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
             ImVec2 menuSpriteSize = { windowWidth, windowHeight };
@@ -127,7 +129,7 @@ void UI::render(GLFWwindow* window)
 
             if (clicked) {
                 game->reset();
-                game->currentGameState = Game::GameStates::Playing;
+                game->changeState(GameStateManager::State::Playing);
             }
 
             if (menuFont)
@@ -142,7 +144,6 @@ void UI::render(GLFWwindow* window)
 
             ImGui::SetCursorPos({ (windowWidth / 7) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
-
         break;
     }
 

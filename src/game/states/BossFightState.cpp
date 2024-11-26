@@ -1,25 +1,25 @@
-#include "PlayingState.h"
+#include "BossFightState.h"
 
-#include <glm/glm.hpp>
-
+#include "GameStateManager.h"
+#include "../Game.h"
 #include "../Player.h"
 #include "../BossFightController.h"
-#include "../Game.h"
-#include "GameStateManager.h"
 
-PlayingState::PlayingState(GameStateManager* gameStateManager)
+BossFightState::BossFightState(GameStateManager* gameStateManager)
 	: gameStateManager(gameStateManager) {}
 
-void PlayingState::onEnterState()
+void BossFightState::onEnterState()
 {
 	game = gameStateManager->game;
 	player = game->player;
 	camera = game->camera;
 
 	game->bossFightController->cleanUp();
+
+	//game->bossFightController->cleanUp();
 	if (gameStateManager->getPreviousState() == GameStateManager::State::MainMenu) {
 		player->reset();
-		
+
 		t = 0.f;
 		player->canInput = false;
 		startPointTf.position = player->transform.position;
@@ -29,13 +29,12 @@ void PlayingState::onEnterState()
 		player->canInput = true;
 		t = 1.f;
 	}
+
 }
 
-void PlayingState::onUpdateState(float deltaTime)
+void BossFightState::onUpdateState(float deltaTime)
 {
 	player->update(deltaTime);
-	game->timeLeftUntilBoss -= deltaTime;
-	game->waveController->update(deltaTime);
 
 	// lerp camera movement back to original
 	// if t isn't at 1 then player cannot input
@@ -47,14 +46,10 @@ void PlayingState::onUpdateState(float deltaTime)
 	}
 	else {
 		player->canInput = true;
-	}
-
-	if (game->timeLeftUntilBoss <= 0) {
-		game->clearEnemies();
-		gameStateManager->changeState(GameStateManager::State::BossFight);
+		game->bossFightController->initializeBossFight();
 	}
 }
 
-void PlayingState::onExitState()
+void BossFightState::onExitState()
 {
 }

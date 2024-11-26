@@ -43,8 +43,8 @@ private:
 
 	float colorTValue = 0;
 	glm::vec3 targetColor = glm::vec3(1);
-	glm::vec3 currentColor = glm::vec3(0);
-	glm::vec3 startColor = glm::vec3(0);
+	glm::vec3 currentColor = glm::vec3(0.1f);
+	glm::vec3 startColor = glm::vec3(0.1f);
 
 	void setBodyColor(glm::vec3 color);
 };

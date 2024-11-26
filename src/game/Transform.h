@@ -54,6 +54,19 @@ public:
 		float beforeSqrt = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
 		return glm::sqrt(beforeSqrt);
 	}
+
+	void lookAt(glm::vec3 targetPosition, glm::vec3 worldUp = glm::vec3(0, 1, 0)) 
+	{
+		glm::vec3 forward = glm::normalize(targetPosition - position);
+		glm::vec3 right = glm::normalize(glm::cross(worldUp, forward));
+		glm::vec3 up = glm::cross(forward, right);
+
+		// Create a rotation matrix from the basis vectors
+		glm::mat3 rotationMatrix = glm::mat3(right, up, forward);
+
+		// Convert rotation matrix to quaternion
+		rotation = glm::quat_cast(rotationMatrix);
+	}
 };
 
 // old code
