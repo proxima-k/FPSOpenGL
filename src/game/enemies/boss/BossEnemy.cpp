@@ -15,6 +15,7 @@
 #include "WaveAttackTask.h"
 #include "HealTask.h"
 #include "BossEntranceTask.h"
+#include "GrassAttackTask.h"
 
 #include "BossBody.h"
 #include "../../Game.h"
@@ -40,6 +41,7 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	HealTask* healTask = new HealTask();
 	LaunchPillarTask* pillarAttackTask = new LaunchPillarTask();
 	WaveAttackTask* waveAttackTask = new WaveAttackTask();
+	GrassAttackTask* grassAttackTask = new GrassAttackTask();
 	BossEntranceTask* bossEntranceTask = new BossEntranceTask();
 	bossEntranceTask->canRepeat = false;
 
@@ -53,8 +55,9 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	enoughHealthDecorator->setChild(sequence2);
 	sequence2->addChild(waitTask);
 	sequence2->addChild(randomSelector);
-	randomSelector->addChild(waveAttackTask);
-	randomSelector->addChild(pillarAttackTask);
+	//randomSelector->addChild(waveAttackTask);
+	//randomSelector->addChild(pillarAttackTask);
+	randomSelector->addChild(grassAttackTask);
 	// randomSelector->addChild(projectileTask);
 	// randomSelector->addChild(spawnEnemiesTask);
 
