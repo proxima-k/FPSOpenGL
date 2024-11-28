@@ -55,9 +55,10 @@ BossEnemy::BossEnemy(glm::vec3 position)
 	enoughHealthDecorator->setChild(sequence2);
 	sequence2->addChild(waitTask);
 	sequence2->addChild(randomSelector);
-	//randomSelector->addChild(waveAttackTask);
-	//randomSelector->addChild(pillarAttackTask);
+	randomSelector->addChild(waveAttackTask);
+	randomSelector->addChild(pillarAttackTask);
 	randomSelector->addChild(grassAttackTask);
+	
 	// randomSelector->addChild(projectileTask);
 	// randomSelector->addChild(spawnEnemiesTask);
 

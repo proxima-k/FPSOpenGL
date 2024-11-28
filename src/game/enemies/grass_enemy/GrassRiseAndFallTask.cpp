@@ -10,7 +10,7 @@ void GrassRiseAndFallTask::onNodeStart(BT::Blackboard& blackboard)
     if (entity != nullptr) {
         updateHeight();
         entity->collision_channel = Collision_Channel::Enemy;
-        entity->meshRenderer->setColor(glm::vec3(0.3f, 1.f, 0.3f));
+        entity->meshRenderer->setColor(glm::vec3(0.5f, 0.99f, 0.f));
     }
     else {
         state = BT::NodeState::FAILURE;
@@ -26,7 +26,8 @@ BT::NodeState GrassRiseAndFallTask::onNodeUpdate(float deltaTime, BT::Blackboard
     switch (currentState) {
     // rise
     case 0:
-        currentHeight = glm::mix(MIN_HEIGHT, MAX_HEIGHT, (1.f - (timer / riseTime)));
+        currentHeight = glm::mix(MIN_HEIGHT, MAX_HEIGHT,
+            (-glm::pow(((1.f - (timer / riseTime)) - 1), 4) + 1));
         updateHeight();
         
         if (timer <= 0) {
@@ -47,7 +48,8 @@ BT::NodeState GrassRiseAndFallTask::onNodeUpdate(float deltaTime, BT::Blackboard
     
     // fall
     case 2:
-        currentHeight = glm::mix(MIN_HEIGHT, MAX_HEIGHT, (timer / fallTime));
+        float tEquation = glm::pow(((timer / fallTime) - 1), 2);
+        currentHeight = glm::mix(MAX_HEIGHT, 0.f, tEquation);
         updateHeight();
 
         if (timer <= 0) {

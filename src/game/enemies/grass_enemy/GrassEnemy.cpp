@@ -10,12 +10,12 @@
 #include "../pillar_enemy/WarningTask.h"
 #include "GrassRiseAndFallTask.h"
 
-GrassEnemy::GrassEnemy(glm::vec3 position, float warningTime, float riseTime, float attackTime, float fallTime, float maxHeight, float speedOffset)
+GrassEnemy::GrassEnemy(glm::vec3 position, float warningTime, float riseTime, float attackTime, float fallTime, float maxHeight, float scaleSpeed)
 {
 	BT::RootNode* root = new BT::RootNode();
 	BT::SequenceNode* sequence = new BT::SequenceNode();
-	WarningTask* warningTask = new WarningTask(warningTime, speedOffset);
-	GrassRiseAndFallTask* attackTask = new GrassRiseAndFallTask(riseTime, attackTime, fallTime, maxHeight, 5.f);
+	WarningTask* warningTask = new WarningTask(warningTime, scaleSpeed, true);
+	GrassRiseAndFallTask* attackTask = new GrassRiseAndFallTask(riseTime, attackTime, fallTime, maxHeight);
 
 	behaviorTree.setRootNode(root);
 	root->setChild(sequence);
@@ -30,5 +30,5 @@ GrassEnemy::GrassEnemy(glm::vec3 position, float warningTime, float riseTime, fl
 	transform.position = position;
 
 	this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	this->meshRenderer->setColor(glm::vec3(0.5f, 1.f, 0.5f));
+	this->meshRenderer->setColor(glm::vec3(0.54f, 0.72f, 0.26f));
 }

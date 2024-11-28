@@ -17,7 +17,7 @@ private:
 	float warningTime = 5.f;
 	float riseTime = 0.3f;
 	float attackTime = 5.f;
-	float fallTime = 0.2f;
+	float fallTime = 0.5f;
 
 	BossCage* cage;
 };

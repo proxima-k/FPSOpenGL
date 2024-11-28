@@ -115,10 +115,10 @@ void Game::render()
 {
 	for (int i = 0; i < MAX_ENTITYS; i++)
 	{
-		if (entitys[i] != nullptr)
-		{
-			entitys[i]->draw();
-		}
+		if (entitys[i] == nullptr || entitys[i]->destroyed)
+			continue;
+
+		entitys[i]->draw();
 	}
 
 	for (int i = 0; i < 20; i++)
@@ -214,7 +214,7 @@ void Game::reset()
 	playerLevel = 1;
 
 	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
-	timeLeftUntilBoss = 10.f;
+	timeLeftUntilBoss = 2.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;

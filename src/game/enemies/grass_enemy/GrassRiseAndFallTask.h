@@ -6,8 +6,8 @@ class Entity;
 
 class GrassRiseAndFallTask : public BT::BaseNode {
 public:
-	GrassRiseAndFallTask(float riseTime, float waitTime, float fallTime, float maxHeight = 1.5f, float speed = 4)
-		: riseTime(riseTime), waitTime(waitTime), fallTime(fallTime), MAX_HEIGHT(maxHeight), speed(speed) {}
+	GrassRiseAndFallTask(float riseTime, float waitTime, float fallTime, float maxHeight = 1.5f)
+		: riseTime(riseTime), waitTime(waitTime), fallTime(fallTime), MAX_HEIGHT(maxHeight) {}
 
 protected:
 	void onNodeStart(BT::Blackboard& blackboard) override;
@@ -20,7 +20,6 @@ private:
 	Entity* entity = nullptr;
 	
 	float timer = 0.f;
-	float speed = 1;
 	float riseTime = 1.2f;
 	float waitTime = 5.f;
 	float fallTime = 1.2f;

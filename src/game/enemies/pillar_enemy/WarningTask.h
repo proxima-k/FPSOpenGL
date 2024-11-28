@@ -4,7 +4,7 @@
 
 class WarningTask : public BT::BaseNode {
 public:
-	WarningTask(float waitTime = 1.0f, float speedOffset = 5.f);
+	WarningTask(float waitTime = 1.0f, float speedOffset = 5.f, bool randomScaleTimeOffset = false);
 
 protected:
 	void onNodeStart(BT::Blackboard& blackboard) override;
@@ -14,5 +14,8 @@ protected:
 private:
 	float timer = .0f;
 	float waitTime = 1.0f;
-	float speedOffset = 5.f;
+	float scaleSpeed = 5.f; // this needs to be larger than 1
+
+	bool randomScaleTimeOffset = false;
+	float timeOffset;
 };
