@@ -128,6 +128,9 @@ void Game::render()
 		if (pCtrl != nullptr)
 			pCtrl->render();
 	}
+
+	if (player->canDrawBody)
+		player->draw();
 }
 
 void Game::renderHealingLines() {

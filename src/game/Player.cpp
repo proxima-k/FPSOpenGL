@@ -1,5 +1,8 @@
 #include<iostream>
 
+#include <MeshManager.h>
+#include <ShaderManager.h>
+
 #include "Player.h"
 #include"Transform.h"
 #include "Game.h"
@@ -9,10 +12,13 @@
 Player::Player(Camera* camera, GLFWwindow* window)
     : Entity(), camera(camera), physicsbody(), window(window)
 { 
-    transform.scale = glm::vec3(1.f);
+    transform.scale = glm::vec3(0.9f);
     transform.position = transform.getUp() * (transform.scale.y / 2.f);
     physicsbody.bGravity = true;
     collision_channel = Collision_Channel::Player;
+
+    this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
+    meshRenderer->setColor(glm::vec3(1.f));
 }
 
 void Player::update(float deltaTime) 

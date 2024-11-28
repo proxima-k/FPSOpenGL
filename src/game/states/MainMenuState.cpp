@@ -18,6 +18,7 @@ void MainMenuState::onEnterState()
 	timeElapsed = 0.f;
 	t = 0.f;
 
+	player->canDrawBody = true;
 }
 
 void MainMenuState::onUpdateState(float deltaTime)
@@ -46,4 +47,5 @@ void MainMenuState::onExitState()
 {
 	//camera->transform.position = player->transform.position;
 	//camera->lookAt(player->transform.position);
+	player->canDrawBody = false;
 }

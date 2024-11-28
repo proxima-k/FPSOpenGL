@@ -188,7 +188,7 @@ int main(void)
 		Mesh* cubeMesh = meshManager->getMesh("cube");*/
 
         player = new Player(&playerCamera, window);
-        player->transform.position = glm::vec3(0, 1, 0);
+        //player->transform.position = glm::vec3(0, 0, 0);
 		player->shooter.setPlayer(player);
         //player->shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
         //game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);

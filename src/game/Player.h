@@ -41,6 +41,7 @@ public:
 	Physicsbody physicsbody;
 
 	bool canInput = true;
+	bool canDrawBody = false;
 
 private:
 	Camera* camera = nullptr;
