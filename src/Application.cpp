@@ -31,6 +31,7 @@
 #include "game/enemies/ShootingEnemy.h"
 
 #include "game/Grid.h"
+#include "game/YAxisLine.h"
 #include "game/WallGrid.h"
 #include "game/enemies/boss/BossCage.h"
 #include "game/BossFightController.h"
@@ -70,35 +71,7 @@ UI ui;
 Game* game = nullptr;
 Grid* floorGrid = nullptr;
 AudioManager* audioManager = nullptr;
-
-//SteamManager* steamManager = nullptr;
-/*
-GLuint LoadTextureFromFile(const char* filename)
-{
-    int width, height, channels;
-    unsigned char* pixels = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
-    if (!pixels)
-    {
-        std::cerr << "Failed to load image: " << filename << std::endl;
-        return 0;
-    }
-
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    stbi_image_free(pixels);
-
-    return textureID;
-}
-*/
+YAxisLine* yAxisLine = nullptr;
 
 int main(void)
 {
@@ -162,17 +135,16 @@ int main(void)
     }
     //std::cout << glGetString(GL_VERSION) << std::endl;
 
-    game = new Game();
-    audioManager = new AudioManager();
-    //steamManager = new SteamManager();
-    Camera::mainCamera = &playerCamera;
 
     {
+        game = new Game();
+        audioManager = new AudioManager();
+        Camera::mainCamera = &playerCamera;
+
         meshManager = new MeshManager();
         shaderManager = new ShaderManager();
 		meshManager->init();
         shaderManager->init();
-
 
         // setup post processing components
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -183,28 +155,26 @@ int main(void)
         outlinePP.setDepthTextureID(FBO.GetDepthID());
         outlinePP.setNormalTextureID(FBO.GetNormalID());
 
-        // setup card mesh, shader and camera
-        /*Shader* meshShader = shaderManager->getShader("mesh");
-		Mesh* cubeMesh = meshManager->getMesh("cube");*/
-
-        player = new Player(&playerCamera, window);
         //player->transform.position = glm::vec3(0, 0, 0);
+        player = new Player(&playerCamera, window);
 		player->shooter.setPlayer(player);
-        //player->shooter.setCardRenderer(cubeMesh, meshShader, &playerCamera);
-        //game->setMeshRenderer(cubeMesh, meshShader, &playerCamera);
         game->player = player;
         game->camera = &playerCamera;
-
-        audioManager->init();
-        ui.init(window);
 
         floorGrid = new Grid(16, 16, 1);
         floorGrid->setShader(shaderManager->getShader("grid"));
         floorGrid->setCamera(&playerCamera);
         floorGrid->setPlayer(player);
-
         game->baseFloorGrid = floorGrid;
+
+        yAxisLine = new YAxisLine();
+        yAxisLine->init(&playerCamera, player);
+        game->yAxisLine = yAxisLine;
+
         game->init();
+
+        audioManager->init();
+        ui.init(window);
 
         while (!glfwWindowShouldClose(window))
         {

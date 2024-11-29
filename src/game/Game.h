@@ -18,6 +18,7 @@
 class Player;
 class Shooter;
 class Grid;
+class YAxisLine;
 
 #define MAX_ENTITYS 1000
 #define MAX_PARTICLE_CTRLS 15
@@ -142,6 +143,7 @@ public:
     BossFightController* bossFightController = nullptr;
     GameStateManager* gameStateManager = nullptr;
     Grid* baseFloorGrid = nullptr;
+    YAxisLine* yAxisLine = nullptr;
 
     //GameStates currentGameState = GameStates::Menu;
 

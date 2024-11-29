@@ -13,7 +13,7 @@
 #include "../graphics/Shader.h"
 
 #include "Grid.h"
-
+#include "YAxisLine.h"
 
 Game::Game()
 {
@@ -145,6 +145,8 @@ void Game::renderGrid() {
 	if (!bossFightController->bossFightIsActive()) {
 		if (floorGrid != nullptr)
 			floorGrid->draw();
+		if (yAxisLine != nullptr)
+			yAxisLine->draw();
 	}
 }
 
@@ -217,7 +219,7 @@ void Game::reset()
 	playerLevel = 1;
 
 	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
-	timeLeftUntilBoss = 2.f;
+	timeLeftUntilBoss = 10.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
