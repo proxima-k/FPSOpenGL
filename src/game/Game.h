@@ -20,6 +20,7 @@ class Shooter;
 class Grid;
 
 #define MAX_ENTITYS 1000
+#define MAX_PARTICLE_CTRLS 15
 #define MAX_HEAL_LINES 30
 
 class Game
@@ -83,7 +84,7 @@ public:
     }
 
     void spawn_particle_source(glm::vec3 startPos, const int particleAmount, const float duration, const float speed) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < MAX_PARTICLE_CTRLS; i++) {
             if (particleCtrl[i] == nullptr)
             {
                 particleCtrl[i] = new ParticleController(startPos, particleAmount, duration, speed);

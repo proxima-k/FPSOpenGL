@@ -84,7 +84,7 @@ void Game::update()
 		}
 	}
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < MAX_PARTICLE_CTRLS; i++)
 	{
 		auto* pCtrl = particleCtrl[i];
 
@@ -121,7 +121,7 @@ void Game::render()
 		entitys[i]->draw();
 	}
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < MAX_PARTICLE_CTRLS; i++)
 	{
 		auto* pCtrl = particleCtrl[i];
 
