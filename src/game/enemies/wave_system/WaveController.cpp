@@ -53,8 +53,10 @@ void WaveController::update(float dt) {
 	auto sequence = waveQueue.front();
 	for (size_t index = 0; index < sequence.enemiesToSpawn.size(); index++) {
 		auto* wave = sequence.enemiesToSpawn[index];
+		if (spawnedOnce) return;
 		if (wave->currentTime <= 0) {
 			spawn_enemy_by_type(wave->enemyToSpawn);
+			spawnedOnce = true;
 			wave->currentTime = wave->spawnInterval;
 		}
 	}

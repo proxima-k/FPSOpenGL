@@ -10,13 +10,31 @@
 
 TrailMesh::TrailMesh(const float* vertices, unsigned int size) : verticesCount(size)
 {
+    std::vector<float> testVertices;
+    // form a triangle
+	
+    testVertices.push_back(0.0f);
+	testVertices.push_back(0.0f);
+    testVertices.push_back(0.0f);
+
+    testVertices.push_back(10.0f);
+    testVertices.push_back(10.0f);
+    testVertices.push_back(0.0f);
+
+    testVertices.push_back(10.0f);
+    testVertices.push_back(-10.0f);
+    testVertices.push_back(0.0f);
+
+
 	VAO = new VertexArray();
-	VBO = new VertexBuffer(vertices, size);
+	VBO = new VertexBuffer(&testVertices[0], testVertices.size() * sizeof(float));
 
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
 
 	VAO->AddBuffer(*VBO, layout);
+
+	verticesCount = testVertices.size();
 }
 
 TrailMesh::TrailMesh(std::vector<float> vertices)
@@ -69,9 +87,14 @@ void TrailMesh::addVertex(const glm::vec3 newVertice, float width)
         verticesVector.push_back(segment.z);
     }
 
+    VAO->Bind();
     VBO->Bind();
     glBufferData(GL_ARRAY_BUFFER, verticesVector.size() * sizeof(float), verticesVector.data(), GL_DYNAMIC_DRAW);
     verticesCount = verticesVector.size() / 3;
+    //verticesCount = verticesVector.size();
+	std::cout << "======================" << std::endl;
+    std::cout << verticesVector.size() << std::endl;
+    std::cout << verticesCount << std::endl;
 }
 
 void TrailMesh::Bind()

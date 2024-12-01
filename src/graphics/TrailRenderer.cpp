@@ -44,6 +44,9 @@ void TrailRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale
 
 	// Model matrix
 	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, position);
+	model *= glm::toMat4(rotation);
+	model = glm::scale(model, scale);
 
 	// View matrix
 	glm::mat4 view;
@@ -53,15 +56,15 @@ void TrailRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), targetCamera->getResolutionRatio(), 0.1f, 100.f);
 
-	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	unsigned int viewLoc = glGetUniformLocation(shader->GetID(), "u_View");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	unsigned int projLoc = glGetUniformLocation(shader->GetID(), "u_Projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-	unsigned int colorLoc = glGetUniformLocation(shader->GetID(), "u_Color");
-	GLCall(glUniform3fv(colorLoc, 1, glm::value_ptr(meshColor)));
 	
-	GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, mesh->getVerticesCount()));
+
+	shader->SetMat4("u_Model", model);
+	shader->SetMat4("u_View", view);
+	shader->SetMat4("u_Projection", projection);
+
+	shader->SetFloat3("u_Color", meshColor);
+	
+	GLCall(glDrawArrays(GL_TRIANGLES, 0, mesh->getVerticesCount()));
+
+
 }

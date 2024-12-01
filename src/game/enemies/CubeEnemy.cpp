@@ -9,7 +9,7 @@
 CubeEnemy::CubeEnemy(glm::vec3 position)
 	: Enemy(position), physicsBody(), trailRenderer()
 {
-	Shader* trailShader = shaderManager->getShader("mesh");
+	Shader* trailShader = shaderManager->getShader("trail");
 	TrailMesh* trailMesh = new TrailMesh({});
 
 	trailMesh->maxTrailPoints = 25;
@@ -45,13 +45,14 @@ void CubeEnemy::update(float deltaTime)
     float rotationSpeed = 3.0f;
     transform.rotation = glm::slerp(transform.rotation, targetRotation, rotationSpeed * deltaTime);
 
-    if (glm::distance(lastPosition, transform.position) > 0.02f)
+	// Trail
+    /*if (glm::distance(lastPosition, transform.position) > 0.02f)
     {
         TrailMesh* trailMesh = trailRenderer.getMesh();
         glm::vec3 newPos = transform.position;
         trailMesh->addVertex(newPos, 0.1f);
         lastPosition = transform.position;
-    }
+    }*/
 
     physicsBody.update();
     trailRenderer.draw(transform.position, transform.rotation, glm::vec3(1.0f));

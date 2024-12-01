@@ -23,6 +23,6 @@ private:
 	TrailMesh* mesh = nullptr;
 	Shader* shader = nullptr;
 	Camera* targetCamera = nullptr;
-	glm::vec3 meshColor;
+	glm::vec3 meshColor = glm::vec3(1);
 };
 

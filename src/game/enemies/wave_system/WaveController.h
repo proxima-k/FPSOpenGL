@@ -21,5 +21,7 @@ public:
 	WaveSequence create_wave_sequence(std::vector<Wave*> waves);
 
 private:
+
+	bool spawnedOnce = false;
 	std::queue<WaveSequence> waveQueue;
 };
