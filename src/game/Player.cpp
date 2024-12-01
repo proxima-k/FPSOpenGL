@@ -9,6 +9,8 @@
 #include "imgui/imgui.h"
 #include "AudioManager.h"
 
+#include "enemies/boss/BossCage.h"
+
 Player::Player(Camera* camera, GLFWwindow* window)
     : Entity(), camera(camera), physicsbody(), window(window)
 { 
@@ -119,7 +121,7 @@ void Player::update_iframe(float dt)
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
-{
+{   
     // movement
     const float playerSpeed = speed * game->playerSpeedMultiplier * deltaTime;
     physicsbody.acceleration = glm::vec3(0.0f);
@@ -169,6 +171,16 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     }
 
     // apply velocity
+
+    if (game->bossFightController->getCage() != nullptr) {
+        BossCage* cage = game->bossFightController->getCage();
+        glm::vec2 minBounds = cage->minBounds;
+        glm::vec2 maxBounds = cage->maxBounds;
+
+        transform.position.x = glm::clamp(transform.position.x, minBounds.x + 0.5f, maxBounds.x - 0.5f);
+        transform.position.z = glm::clamp(transform.position.z, minBounds.y + 0.5f, maxBounds.y - 0.5f);
+    }
+
     transform.position += physicsbody.velocity * deltaTime;
     transform.position.y = glm::clamp(transform.position.y, 0.0f + playerHeight, 100.0f);
 }

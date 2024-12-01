@@ -217,7 +217,7 @@ void Game::reset()
 	playerLevel = 1;
 
 	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
-	timeLeftUntilBoss = 40.f;
+	timeLeftUntilBoss = 5.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;

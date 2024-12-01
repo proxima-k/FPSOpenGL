@@ -20,6 +20,8 @@ public:
 	void drawBossCage();
 	bool bossFightIsActive() { return hasInitialized; }
 
+	BossCage* getCage() { return cage; }
+
 private:
 	BossCage* cage = nullptr;
 	BossEnemy* boss = nullptr;
