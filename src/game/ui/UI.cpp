@@ -10,6 +10,8 @@
 #include "../shooting/cards/CosineCard.h"
 #include "../shooting/cards/SineCard.h"
 
+#include "../enemies/boss/BossEnemy.h"
+
 UI::UI() : crosshair(0), kanitFont(nullptr) {}
 
 UI::~UI() {
@@ -94,6 +96,9 @@ void UI::render(GLFWwindow* window)
     switch (game->getCurrentState())
     {
     case GameStateManager::State::BossFight:
+            renderBossUI(windowSize);
+        break;
+
     case GameStateManager::State::Playing:
             renderPlayModeUI(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -212,7 +217,6 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     ImGui::Text("%s", timeText);
 
     displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
-   
     
     ImGui::SetCursorPos(levelPos);
     ImGui::Text("Lvl %d", game->get_player_level());
@@ -230,22 +234,65 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     
     ImGui::SetCursorPos(crosshairPos);
     ImGui::Image((void*)(intptr_t)crosshair, ImVec2(currentCrosshairSize, currentCrosshairSize));
-    }
-    void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
-    {
-        ImDrawList* drawList = ImGui::GetWindowDrawList();
-        ImVec2 pos = ImGui::GetCursorScreenPos();
+}
 
-        drawList->AddRectFilled(
-            pos,
-            ImVec2(pos.x + size.x * fraction, pos.y + size.y),
-            ImGui::GetColorU32(barColor)
-    );
+void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
+{
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+
+    drawList->AddRectFilled(
+        pos,
+        ImVec2(pos.x + size.x * fraction, pos.y + size.y),
+        ImGui::GetColorU32(barColor));
 }
 
 void UI::renderGameOverUI(ImVec2 windowSize)
 {
 
+}
+
+void UI::renderBossUI(ImVec2 windowSize) {
+    BossEnemy* boss = game->bossFightController->getBoss();
+    if (boss == nullptr) return;
+
+    auto [crtHP, maxHP] = boss->getTotalCrtHP();
+    float displayHpFraction = (maxHP > 0) ? crtHP / maxHP : 0.0f;
+
+    static float previousHpFraction = displayHpFraction;
+
+    const float lerpSpeed = 0.1f;
+    previousHpFraction += (displayHpFraction - previousHpFraction) * lerpSpeed;
+
+    ImVec2 barSize(windowSize.x, 25);
+    ImVec4 barColor(1.00f, 0.0f, 0.0f, 1.0f);
+    customProgressBar(previousHpFraction, barSize, barColor);
+
+    ImVec2 bossName((windowSize.x) / 2.0f - (40 / 2), 0);
+
+    ImGui::SetCursorPos(bossName);
+    ImGui::Text("Two Cubed");
+
+    static float currentCrosshairSize = 40.0f;
+    static float targetCrosshairSize = 40.0f;
+    const float lerpSpeedCrosshair = 0.2f;
+    const float enlargedSize = 55.0f;
+
+    ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
+
+    if (ImGui::IsMouseClicked(0))
+    {
+        targetCrosshairSize = enlargedSize;
+    }
+    currentCrosshairSize += (targetCrosshairSize - currentCrosshairSize) * lerpSpeedCrosshair;
+
+    if (currentCrosshairSize >= enlargedSize - 5)
+    {
+        targetCrosshairSize = 40.0f;
+    }
+
+    ImGui::SetCursorPos(crosshairPos);
+    ImGui::Image((void*)(intptr_t)crosshair, ImVec2(currentCrosshairSize, currentCrosshairSize));
 }
 
 void UI::shutdown()

@@ -230,6 +230,17 @@ void BossEnemy::setTargetColor(glm::vec3 color)
 	startColor = currentColor;
 }
 
+std::tuple<float, float> BossEnemy::getTotalCrtHP() {
+	float crtHp = 0;
+	float maxHp = 8 * 20;
+
+	for (auto body : bossBodies) {
+		if(body != nullptr)
+			crtHp += body->health;
+	}
+	return std::make_tuple(crtHp, maxHp);
+}
+
 void BossEnemy::die(float xp) {
 	bossFightController->notifyBossDied();
 	destroy();

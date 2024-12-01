@@ -21,6 +21,7 @@ public:
 	bool bossFightIsActive() { return hasInitialized; }
 
 	BossCage* getCage() { return cage; }
+	BossEnemy* getBoss() { return boss; }
 
 private:
 	BossCage* cage = nullptr;

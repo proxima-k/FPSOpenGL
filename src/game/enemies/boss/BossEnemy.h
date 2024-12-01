@@ -30,6 +30,7 @@ public:
 	void setCanCollide(bool canCollide);
 	void setTargetColor(glm::vec3 color);
 
+	std::tuple<float, float> getTotalCrtHP();
 	void die(float xp) override;
 
 	glm::vec3 defaultPosition;
