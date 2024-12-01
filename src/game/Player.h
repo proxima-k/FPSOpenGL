@@ -31,6 +31,8 @@ public:
 	void update_dash(float dt);
 	void update_iframe(float dt);
 
+	void reset_pitch() { currentPitch = 0; }
+
 	Camera* getCamera() const { return camera; }
 
 	Shooter shooter;

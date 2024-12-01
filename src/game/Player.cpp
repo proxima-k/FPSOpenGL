@@ -82,7 +82,7 @@ void Player::reset()
 
     lastX = camera->getScreenWidth() / 2.0;
     lastY = camera->getScreenHeight() / 2.0;
-    currentPitch = 0;
+    reset_pitch();
     physicsbody.velocity = glm::vec3(0);
     physicsbody.acceleration = glm::vec3(0);
     firstMouse = true;

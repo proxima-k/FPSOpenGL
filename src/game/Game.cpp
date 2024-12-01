@@ -217,7 +217,7 @@ void Game::reset()
 	playerLevel = 1;
 
 	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
-	timeLeftUntilBoss = 10.f;
+	timeLeftUntilBoss = 40.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
@@ -227,7 +227,6 @@ void Game::reset()
 
 	player->reset();
 	waveController->reset_waves();
-	camera->reset_pitch();
 
 	//GameStates currentGameState = GameStates::Playing;
 

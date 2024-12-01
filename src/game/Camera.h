@@ -18,9 +18,6 @@ public:
 
     void updateScreenSize(unsigned int width, unsigned int height) { screenWidth = width; screenHeight = height; }
 
-    void reset_pitch() { currentPitch = 0;  }
-
-    Transform transform;
     float getResolutionRatio() { return (float)screenWidth / screenHeight; }
     unsigned int getScreenWidth() { return screenWidth; }
     unsigned int getScreenHeight() { return screenHeight; }

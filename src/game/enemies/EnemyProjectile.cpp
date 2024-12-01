@@ -12,11 +12,20 @@ EnemyProjectile::EnemyProjectile(glm::vec3 position)
 	transform.scale *= 0.1f;
 	projectileSpeed = 8.0f;
 
-	collision_channel == Collision_Channel::Enemy;
+	collision_channel = Collision_Channel::Enemy;
 }
 
 void EnemyProjectile::update(float dt) {
 	transform.position += transform.getForward() * glm::vec3(projectileSpeed) * dt;
+
+	timer.updateTimer(dt);
+
+	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Player);
+	if (hit_actor != nullptr)
+	{
+		destroy();
+	}
+
 }
 
 void EnemyProjectile::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
@@ -25,4 +34,6 @@ void EnemyProjectile::launch(glm::vec3 launchPosition, glm::vec3 launchDirection
 
 	transform.position = launchPosition;
 	transform.rotation = glm::quatLookAt(glm::normalize(launchDirection), glm::normalize(upDirection));
+
+	initializeTimer(aliveTime);
 }
