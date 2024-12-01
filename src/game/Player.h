@@ -32,6 +32,7 @@ public:
 	void update_iframe(float dt);
 
 	void reset_pitch() { currentPitch = 0; }
+	glm::vec3 getWorldUp() const { return glm::vec3(0, 1, 0); }
 
 	Camera* getCamera() const { return camera; }
 

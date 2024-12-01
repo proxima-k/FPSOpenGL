@@ -50,7 +50,7 @@ void ShootingEnemy::update(float deltaTime)
     glm::vec3 dirToCamera = glm::normalize(camPos - transform.position);
 
     glm::quat targetRotation = glm::quatLookAt(dirToCamera, glm::vec3(0, 1, 0));
-    float rotationSpeed = 3.0f;
+    float rotationSpeed = 7.0f;
     transform.rotation = glm::slerp(transform.rotation, targetRotation, rotationSpeed * deltaTime);
 
     switch (state)

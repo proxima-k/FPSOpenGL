@@ -12,7 +12,7 @@
 Player::Player(Camera* camera, GLFWwindow* window)
     : Entity(), camera(camera), physicsbody(), window(window)
 { 
-    transform.scale = glm::vec3(0.9f);
+    transform.scale = glm::vec3(0.4f, 0.7f, 0.4f);
     transform.position = transform.getUp() * (transform.scale.y / 2.f);
     physicsbody.bGravity = true;
     collision_channel = Collision_Channel::Player;
@@ -125,13 +125,13 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     physicsbody.acceleration = glm::vec3(0.0f);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        physicsbody.acceleration += playerSpeed * camera->transform.getForward();
+        physicsbody.acceleration += (playerSpeed * transform.getForward()) * glm::vec3(1, 0, 1);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        physicsbody.acceleration -= playerSpeed * camera->transform.getForward();
+        physicsbody.acceleration -= (playerSpeed * transform.getForward()) * glm::vec3(1, 0, 1);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        physicsbody.acceleration -= glm::normalize(glm::cross(camera->transform.getForward(), camera->getWorldUp())) * playerSpeed;
+        physicsbody.acceleration -= glm::normalize(glm::cross(transform.getForward(), getWorldUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        physicsbody.acceleration += glm::normalize(glm::cross(camera->transform.getForward(), camera->getWorldUp())) * playerSpeed;
+        physicsbody.acceleration += glm::normalize(glm::cross(transform.getForward(), getWorldUp())) * playerSpeed;
 
     // debug
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
@@ -246,6 +246,7 @@ void Player::mouse_movement_callback(float xPos, float yPos)
     // Rotate the Yaw of the camera (looking left and right)
     glm::quat yRotate = glm::angleAxis(glm::radians(-xOffset), glm::vec3(0, 1, 0));
     camera->transform.rotation = yRotate * camera->transform.rotation;
+    transform.rotation = yRotate * camera->transform.rotation;
 
     // constrain pitch to avoid overturn
     float newPitch = currentPitch + yOffset;
