@@ -8,13 +8,21 @@
 #include "../engine/Timer.h"
 #include "../engine/TextureManager.h"
 #include "../engine/ParticleController.h"
+#include "../game/enemies/boss/HealingLine.h"
 
 #include "enemies/wave_system/WaveController.h"
 
+#include "states/GameStateManager.h"
+#include "BossFightController.h"
+
 class Player;
 class Shooter;
+class Grid;
+class YAxisLine;
 
 #define MAX_ENTITYS 1000
+#define MAX_PARTICLE_CTRLS 15
+#define MAX_HEAL_LINES 30
 
 class Game
 {
@@ -32,6 +40,13 @@ public:
 
     void update();
     void render();
+    void init() {
+        bossFightController = new BossFightController();
+        waveController = new WaveController();
+        waveController->populate_queue();
+        gameStateManager = new GameStateManager(this);
+        //gameStateManager->changeState(GameStateManager::State::MainMenu);
+    }
 
     template<typename EntityType>
     EntityType* spawn_entity(glm::vec3 position) {
@@ -70,7 +85,7 @@ public:
     }
 
     void spawn_particle_source(glm::vec3 startPos, const int particleAmount, const float duration, const float speed) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < MAX_PARTICLE_CTRLS; i++) {
             if (particleCtrl[i] == nullptr)
             {
                 particleCtrl[i] = new ParticleController(startPos, particleAmount, duration, speed);
@@ -79,10 +94,24 @@ public:
         }
     }
 
+    void renderHealingLines();
+    HealingLine* spawn_healing_line(glm::vec3 startPos, glm::vec3 endPos) {
+        for (int i = 0; i < MAX_HEAL_LINES; i++) {
+            if (healingLines[i] == nullptr)
+            {
+                healingLines[i] = new HealingLine(startPos, endPos);
+                return healingLines[i];
+            }
+        }
+
+        std::cerr << "healing line array is full, cannot spawn more lines." << std::endl;
+        return nullptr;
+    }
+
+    void renderGrid();
+
     Entity* get_coliding_entity(Entity* other, Collision_Channel channel);
     Entity* get_colliding_entity_OBB(Entity* other, Collision_Channel channel);
-
-    void setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
 
     void enterSelectCardState();
     void addPlayerXP(int xp) { crtPlayerXP += xp; enterSelectCardState(); }
@@ -94,21 +123,29 @@ public:
 
     void gameOver();
     void reset();
+    void clearEnemies();
 
     int getPlayerXP() { return crtPlayerXP; }
     int getPlayerMaxXP() { return maxPlayerXP; }
     int get_player_level() { return playerLevel; }
 
-    Mesh* cubeEnemyMesh;
-    Shader* cubeEnemyShader;
+    void changeState(GameStateManager::State newState) { gameStateManager->changeState(newState); }
+    GameStateManager::State getCurrentState() { return gameStateManager->getCurrentState(); }
+    bool isInGame() {
+        return (getCurrentState() == GameStateManager::State::Playing || getCurrentState() == GameStateManager::State::BossFight);
+    }
+
     Camera* camera;
     Player* player;
 
     TextureManager* textureManager;
+    WaveController* waveController = nullptr;
+    BossFightController* bossFightController = nullptr;
+    GameStateManager* gameStateManager = nullptr;
+    Grid* baseFloorGrid = nullptr;
+    YAxisLine* yAxisLine = nullptr;
 
-    WaveController* waveController;
-
-    GameStates currentGameState = GameStates::Playing;
+    //GameStates currentGameState = GameStates::Menu;
 
     float playerDamageMultiplier = 1.0f;
     float playerSpeedMultiplier = 1.0f;
@@ -118,6 +155,8 @@ public:
 
     int minutesUntilBossSpawns = 5;
     float timeLeftUntilBoss = (minutesUntilBossSpawns * 60 + 1);
+    //float timeLeftUntilBoss = 10.f;
+
 private:
     float deltaTime = 0.f;
     float lastFrameTime = 0.f;
@@ -128,6 +167,7 @@ private:
 
 	Entity* entitys[MAX_ENTITYS] = { nullptr };
     ParticleController* particleCtrl[20] = { nullptr };
+    HealingLine* healingLines[MAX_HEAL_LINES] = { nullptr };
     Timer timer;
 };
 

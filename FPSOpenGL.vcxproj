@@ -160,17 +160,31 @@
   <ItemGroup>
     <ClCompile Include="src\engine\behavior_tree\nodes\BaseNode.cpp" />
     <ClCompile Include="src\engine\behavior_tree\nodes\CompositeNode.cpp" />
-    <ClCompile Include="src\engine\behavior_tree\nodes\Root.cpp" />
+    <ClCompile Include="src\engine\behavior_tree\nodes\WaitTask.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
     <ClCompile Include="src\game\enemies\bomber\BomberEnemy.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\Caterpillar.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\CaterpillarBody.cpp" />
     <ClCompile Include="src\game\enemies\EnemyProjectile.cpp" />
+    <ClCompile Include="src\game\BossFightController.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BodyRotateTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossBody.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossCage.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossEntranceTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\BossHealingCube.cpp" />
+    <ClCompile Include="src\game\enemies\boss\GrassAttackTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\HealCubeEntranceTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\HealingLine.cpp" />
+    <ClCompile Include="src\game\enemies\boss\HealTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\WallGridRevealTask.cpp" />
+    <ClCompile Include="src\game\enemies\boss\WaveAttackTask.cpp" />
+    <ClCompile Include="src\game\enemies\grass_enemy\GrassEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\grass_enemy\GrassRiseAndFallTask.cpp" />
+    <ClCompile Include="src\game\enemies\wave_enemy\WaveEnemy.cpp" />
+    <ClCompile Include="src\game\enemies\wave_enemy\WaveRiseAndFallTask.cpp" />
     <ClCompile Include="src\game\enemies\wave_system\Wave.cpp" />
-    <ClCompile Include="src\game\enemies\wave_system\Wave.h" />
     <ClCompile Include="src\game\enemies\wave_system\WaveController.cpp" />
     <ClCompile Include="src\game\enemies\wave_system\WaveSequence.cpp" />
-    <ClCompile Include="src\game\enemies\wave_system\WaveSequence.h" />
     <ClCompile Include="src\game\OBB.cpp" />
     <ClCompile Include="src\engine\ShaderManager.cpp" />
     <ClCompile Include="src\game\enemies\boss\BossEnemy.cpp" />
@@ -196,10 +210,16 @@
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\DefaultCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
+    <ClCompile Include="src\game\states\BossFightState.cpp" />
+    <ClCompile Include="src\game\states\GameStateManager.cpp" />
+    <ClCompile Include="src\game\states\MainMenuState.cpp" />
+    <ClCompile Include="src\game\states\PlayingState.cpp" />
     <ClCompile Include="src\game\ui\UI.cpp" />
     <ClCompile Include="src\game\ui\UICards.cpp" />
     <ClCompile Include="src\game\WallGrid.cpp" />
     <ClCompile Include="src\game\xp\XP.cpp" />
+    <ClCompile Include="src\game\YAxisLine.cpp" />
+    <ClCompile Include="src\graphics\FrameBuffer.cpp" />
     <ClCompile Include="src\graphics\MeshRenderer.cpp" />
     <ClCompile Include="src\game\shooting\Card.cpp" />
     <ClCompile Include="src\game\shooting\Shooter.cpp" />
@@ -225,6 +245,7 @@
     <ClCompile Include="src\graphics\Mesh.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\graphics\IndexBuffer.cpp" />
+    <ClCompile Include="src\graphics\OutlinePostProcess.cpp" />
     <ClCompile Include="src\graphics\Renderer.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\TrailMesh.cpp" />
@@ -235,6 +256,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\behavior_tree\nodes\CompositeNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\DecoratorNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\RandomSelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\Root.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SelectorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\SequenceNode.h" />
@@ -242,8 +265,33 @@
     <ClInclude Include="src\game\enemies\caterpillar\Caterpillar.h" />
     <ClInclude Include="src\game\enemies\caterpillar\CaterpillarBody.h" />
     <ClInclude Include="src\game\enemies\EnemyProjectile.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\ServiceNode.h" />
+    <ClInclude Include="src\engine\behavior_tree\nodes\WaitTask.h" />
+    <ClInclude Include="src\engine\MeshManager.h" />
+    <ClInclude Include="src\game\BossFightController.h" />
+    <ClInclude Include="src\game\enemies\boss\BodyRotateTask.h" />
+    <ClInclude Include="src\game\enemies\boss\BossBody.h" />
+    <ClInclude Include="src\game\enemies\boss\BossCage.h" />
+    <ClInclude Include="src\game\enemies\boss\BossEntranceTask.h" />
+    <ClInclude Include="src\game\enemies\boss\BossHealingCube.h" />
+    <ClInclude Include="src\game\enemies\boss\EnoughHealthDecorator.h" />
+    <ClInclude Include="src\game\enemies\boss\GrassAttackTask.h" />
+    <ClInclude Include="src\game\enemies\boss\HealCubeEntranceTask.h" />
+    <ClInclude Include="src\game\enemies\boss\HealingLine.h" />
+    <ClInclude Include="src\game\enemies\boss\HealTask.h" />
+    <ClInclude Include="src\game\enemies\boss\LerpBodyColorService.h" />
+    <ClInclude Include="src\game\enemies\boss\WallGridRevealTask.h" />
+    <ClInclude Include="src\game\enemies\boss\WaveAttackTask.h" />
+    <ClInclude Include="src\game\enemies\grass_enemy\GrassEnemy.h" />
+    <ClInclude Include="src\game\enemies\grass_enemy\GrassRiseAndFallTask.h" />
+    <ClInclude Include="src\game\enemies\wave_enemy\WaveEnemy.h" />
+    <ClInclude Include="src\game\enemies\pillar_enemy\WarningTask.h" />
+    <ClInclude Include="src\game\enemies\wave_enemy\WaveRiseAndFallTask.h" />
+    <ClInclude Include="src\game\enemies\wave_system\Wave.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveController.h" />
     <ClInclude Include="src\game\enemies\wave_system\WaveType.h" />
+    <ClInclude Include="src\engine\state_machine\BaseState.h" />
+    <ClInclude Include="src\engine\state_machine\StateManager.h" />
     <ClInclude Include="src\game\OBB.h" />
     <ClInclude Include="src\engine\ShaderManager.h" />
     <ClInclude Include="src\game\enemies\boss\BossEnemy.h" />
@@ -274,10 +322,17 @@
     <ClInclude Include="src\engine\Timer.h" />
     <ClInclude Include="src\game\shooting\cards\DefaultCard.h" />
     <ClInclude Include="src\game\shooting\cards\SineCard.h" />
+    <ClInclude Include="src\game\states\BossFightState.h" />
+    <ClInclude Include="src\game\states\GameStateManager.h" />
+    <ClInclude Include="src\game\states\MainMenuState.h" />
+    <ClInclude Include="src\game\states\PlayingState.h" />
+    <ClInclude Include="src\game\states\SelectCardState.h" />
     <ClInclude Include="src\game\ui\UI.h" />
     <ClInclude Include="src\game\ui\UICards.h" />
     <ClInclude Include="src\game\WallGrid.h" />
     <ClInclude Include="src\game\xp\XP.h" />
+    <ClInclude Include="src\game\YAxisLine.h" />
+    <ClInclude Include="src\graphics\FrameBuffer.h" />
     <ClInclude Include="src\graphics\MeshRenderer.h" />
     <ClInclude Include="src\game\shooting\Card.h" />
     <ClInclude Include="src\game\shooting\Shooter.h" />
@@ -305,6 +360,7 @@
     <ClInclude Include="src\game\Transform.h" />
     <ClInclude Include="src\graphics\Mesh.h" />
     <ClInclude Include="src\graphics\IndexBuffer.h" />
+    <ClInclude Include="src\graphics\OutlinePostProcess.h" />
     <ClInclude Include="src\graphics\Renderer.h" />
     <ClInclude Include="src\graphics\TrailSegment.h" />
     <ClInclude Include="src\graphics\Shader.h" />
@@ -317,12 +373,15 @@
     <ClInclude Include="src\engine\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\healcube.shader" />
+    <None Include="res\shaders\healline.shader" />
     <None Include="res\shaders\mesh.shader" />
     <None Include="res\shaders\grid.shader" />
     <None Include="res\shaders\transition.frag" />
     <None Include="res\shaders\transition.vert" />
-    <None Include="res\shaders\postprocess.shader" />
+    <None Include="res\shaders\outlinePP.shader" />
     <None Include="res\shaders\wallGrid.shader" />
+    <None Include="res\shaders\yaxis.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\sprites\basiccard.png" />

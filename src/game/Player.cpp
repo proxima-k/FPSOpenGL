@@ -1,23 +1,31 @@
 #include<iostream>
 
+#include <MeshManager.h>
+#include <ShaderManager.h>
+
 #include "Player.h"
 #include"Transform.h"
 #include "Game.h"
 #include "imgui/imgui.h"
 #include "AudioManager.h"
 
-Player::Player(Camera* camera)
-    : Entity(), camera(camera), physicsbody()
+Player::Player(Camera* camera, GLFWwindow* window)
+    : Entity(), camera(camera), physicsbody(), window(window)
 { 
-    transform.scale = glm::vec3(0.5f);
+    transform.scale = glm::vec3(0.9f);
+    transform.position = transform.getUp() * (transform.scale.y / 2.f);
     physicsbody.bGravity = true;
     collision_channel = Collision_Channel::Player;
+
+    this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
+    meshRenderer->setColor(glm::vec3(1.f));
 }
 
-void Player::update(GLFWwindow* window, float deltaTime) 
+void Player::update(float deltaTime) 
 {
     physicsbody.update();
 
+    if (!canInput) return;
     processKeyboard(window, deltaTime);
     processAudioInput(window);
 
@@ -33,6 +41,8 @@ void Player::update(GLFWwindow* window, float deltaTime)
 
 void Player::checkCollision() 
 {
+    //return;
+
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr && !bIsInvincible)
     {
@@ -54,8 +64,8 @@ void Player::die()
 {
     game->gameOver();
 
-    game->reset();
-    this->reset();
+    //game->reset();
+    //this->reset();
 }
 
 void Player::reset()
@@ -66,6 +76,16 @@ void Player::reset()
 
     bIsShieldAlive = true;
     bIsInvincible = false;
+
+    transform.position = transform.getUp() * (transform.scale.y / 2.f);
+    transform.rotation = glm::quat(1, 0, 0, 0);
+
+    lastX = camera->getScreenWidth() / 2.0;
+    lastY = camera->getScreenHeight() / 2.0;
+    currentPitch = 0;
+    physicsbody.velocity = glm::vec3(0);
+    physicsbody.acceleration = glm::vec3(0);
+    firstMouse = true;
 }
 
 void Player::update_shield(float dt)
@@ -105,13 +125,13 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     physicsbody.acceleration = glm::vec3(0.0f);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        physicsbody.acceleration += playerSpeed * camera->getCameraForward();
+        physicsbody.acceleration += playerSpeed * camera->transform.getForward();
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        physicsbody.acceleration -= playerSpeed * camera->getCameraForward();
+        physicsbody.acceleration -= playerSpeed * camera->transform.getForward();
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        physicsbody.acceleration -= glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
+        physicsbody.acceleration -= glm::normalize(glm::cross(camera->transform.getForward(), camera->getWorldUp())) * playerSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        physicsbody.acceleration += glm::normalize(glm::cross(camera->getCameraForward(), camera->getCameraUp())) * playerSpeed;
+        physicsbody.acceleration += glm::normalize(glm::cross(camera->transform.getForward(), camera->getWorldUp())) * playerSpeed;
 
     // debug
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
@@ -189,6 +209,8 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
 
 void Player::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+    if (!canInput) return;
+
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
         shooter.shootDefault(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());
@@ -197,6 +219,47 @@ void Player::mouse_button_callback(GLFWwindow* window, int button, int action, i
     {
         shooter.shootCardFromQueue(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());
     }
+}
+
+void Player::mouse_movement_callback(float xPos, float yPos)
+{
+    //if (game->bGameOver) return;
+
+    if (!canInput) return;
+
+    if (firstMouse)
+    {
+        lastX = xPos;
+        lastY = yPos;
+        firstMouse = false;
+    }
+
+    float xOffset = xPos - lastX;
+    float yOffset = yPos - lastY;
+    lastX = xPos;
+    lastY = yPos;
+
+    float sensitivity = 0.1f; // Adjust sensitivity as needed
+    xOffset *= sensitivity;
+    yOffset *= sensitivity;
+
+    // Rotate the Yaw of the camera (looking left and right)
+    glm::quat yRotate = glm::angleAxis(glm::radians(-xOffset), glm::vec3(0, 1, 0));
+    camera->transform.rotation = yRotate * camera->transform.rotation;
+
+    // constrain pitch to avoid overturn
+    float newPitch = currentPitch + yOffset;
+    if (newPitch < -89.f) {
+        yOffset = -89.f - currentPitch;
+    }
+    else if (newPitch > 89.f) {
+        yOffset = 89.f - currentPitch;
+    }
+    currentPitch += yOffset;
+
+    // Rotate the Pitch of the camera (looking up and down)
+    glm::quat xRotate = glm::angleAxis(glm::radians(yOffset), camera->transform.getRight());
+    camera->transform.rotation = xRotate * camera->transform.rotation;
 }
 
 void Player::updateCameraPosition() 

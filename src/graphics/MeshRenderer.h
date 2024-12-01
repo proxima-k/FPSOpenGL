@@ -16,7 +16,9 @@ public:
 	MeshRenderer(Mesh* mesh, Shader* shader, Camera* camera, glm::vec3 color = glm::vec3(1.f));
 
 	void draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale);
-	
+	void draw(Transform& transform);
+	void draw(glm::mat4 modelMatrix);
+
 	void setMesh(Mesh* mesh) { this->mesh = mesh; }
 	void setShader(Shader* shader) { this->shader = shader; }
 	void setTargetCamera(Camera* camera) { this->targetCamera = camera; }

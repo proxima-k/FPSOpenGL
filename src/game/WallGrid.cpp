@@ -121,13 +121,18 @@ void WallGrid::draw()
 	glm::mat4 projection;
 	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
+	//shader->SetFloat("u_displayHeight", -glm::cos(timer) + 1.0f);
+	shader->SetFloat("u_revealHeight", revealHeight);
+	shader->SetFloat("u_revealIntensity", revealIntensity);
+
 	shader->SetMat4("u_Model", model);
 	shader->SetMat4("u_View", view);
 	shader->SetMat4("u_Projection", projection);
 
 	glm::vec3 bgColor(0.1f);
 	shader->SetFloat3("u_bgColor", bgColor);
-	shader->SetFloat("u_renderRadius", yCellCount * cellLength);
+	shader->SetFloat("u_gridHeight", yCellCount * cellLength + 0.1f);
+	shader->SetFloat3("u_playerPos", player->transform.position);
 
 
 	GLCall(glDrawArrays(GL_LINES, 0, verticesCount));

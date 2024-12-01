@@ -13,38 +13,38 @@
 
 #include "../graphics/VertexBufferLayout.h"
 
-Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
-	: cellWidth(cellWidth), cellHeight(cellHeight), cellsPerSideOfAxis(cellsPerSideOfAxis)
+
+Grid::Grid(int xCellCount, int zCellCount, float cellSize)
+	: cellWidth(cellSize), cellHeight(cellSize), xCellCount(xCellCount), zCellCount(zCellCount)
 {
 	std::vector<float> vertices;
 
-	// creating vertical lines
-	for (int i = -cellsPerSideOfAxis; i <= cellsPerSideOfAxis; i++) {
-		vertices.push_back(i * cellWidth);
+	for (int i = -xCellCount; i <= xCellCount; i++) {
+		vertices.push_back(i * cellSize);
 		vertices.push_back(0);
-		vertices.push_back(-cellsPerSideOfAxis * cellHeight);
+		vertices.push_back(-zCellCount * cellSize);
 
-		vertices.push_back(i * cellWidth);
+		vertices.push_back(i * cellSize);
 		vertices.push_back(0);
-		vertices.push_back(cellsPerSideOfAxis * cellHeight);
+		vertices.push_back(zCellCount * cellSize);
 
-		//vertices.push_back(glm::vec3(i * cellWidth, 0, -cellsPerSideOfAxis * cellHeight));
-		//vertices.push_back(glm::vec3(i * cellWidth, 0,  cellsPerSideOfAxis * cellHeight));
+		//vertices.push_back(glm::vec3(i * cellSize, 0, -cellsPerSideOfAxis * cellSize));
+		//vertices.push_back(glm::vec3(i * cellSize, 0,  cellsPerSideOfAxis * cellSize));
 	}
 
-	// creating horizontal lines
-	for (int j = -cellsPerSideOfAxis; j <= cellsPerSideOfAxis; j++) {
-		vertices.push_back(-cellsPerSideOfAxis * cellWidth);
+	for (int j = -zCellCount; j <= zCellCount; j++) {
+		vertices.push_back(-xCellCount * cellSize);
 		vertices.push_back(0);
-		vertices.push_back(j * cellHeight);
+		vertices.push_back(j * cellSize);
 
-		vertices.push_back( cellsPerSideOfAxis * cellWidth);
+		vertices.push_back(xCellCount * cellSize);
 		vertices.push_back(0);
-		vertices.push_back(j * cellHeight);
+		vertices.push_back(j * cellSize);
 
 		//vertices.push_back(glm::vec3(-cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
 		//vertices.push_back(glm::vec3( cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
 	}
+
 	verticesCount = vertices.size();
 
 	VAO = new VertexArray();
@@ -115,7 +115,7 @@ void Grid::draw()
 
 	glm::vec3 bgColor(0.1f);
 	shader->SetFloat3("u_bgColor", bgColor);
-	shader->SetFloat("u_renderRadius", cellWidth* (cellsPerSideOfAxis - 1));
+	shader->SetFloat("u_renderRadius", cellWidth * (xCellCount - 1));
 	shader->SetFloat3("u_gridWorldPos", transform.position);
 	shader->SetFloat3("u_playerWorldPos", player->transform.position);
 
@@ -137,22 +137,77 @@ void Grid::setPlayer(Player* _player)
 	player = _player;
 }
 
-glm::vec2 Grid::getCellPosInt(glm::vec3 position) 
+glm::vec2 Grid::getCellCoords(glm::vec3 position) 
 {
 	int x = position.x / cellWidth;
 	int y = position.z / cellHeight;
 
+	if (position.x < 0) {
+		x--;
+	}
+
+	if (position.z < 0) {
+		y--;
+	}
+
 	return glm::vec2(x, y);
 }
 
-void Grid::getCellCenter(int x, int y, glm::vec3& center)
+glm::vec2 Grid::getCellCenter(int xCellIndex, int yCellIndex)
 {
-	center.x = x * cellWidth + cellWidth / 2;
-	center.y = 0;
-	center.z = y * cellHeight + cellHeight / 2;
-
+	glm::vec2 center;
+	center.x = xCellIndex * cellWidth + cellWidth / 2;
+	center.y = yCellIndex * cellHeight + cellHeight / 2;
+	return center;
 }
 
-void Grid::getCellCenter(glm::vec3 position, glm::vec3& center)
+glm::vec2 Grid::getCellCenter(glm::vec3 position)
 {
+	glm::vec2 cellCoords = getCellCoords(position);
+	return getCellCenter(cellCoords.x, cellCoords.y);
 }
+
+/*
+Grid::Grid(float cellWidth, float cellHeight, int cellsPerSideOfAxis)
+	: cellWidth(cellWidth), cellHeight(cellHeight), cellsPerSideOfAxis(cellsPerSideOfAxis)
+{
+	std::vector<float> vertices;
+
+	// creating vertical lines
+	for (int i = -cellsPerSideOfAxis; i <= cellsPerSideOfAxis; i++) {
+		vertices.push_back(i * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(-cellsPerSideOfAxis * cellHeight);
+
+		vertices.push_back(i * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(cellsPerSideOfAxis * cellHeight);
+
+		//vertices.push_back(glm::vec3(i * cellWidth, 0, -cellsPerSideOfAxis * cellHeight));
+		//vertices.push_back(glm::vec3(i * cellWidth, 0,  cellsPerSideOfAxis * cellHeight));
+	}
+
+	// creating horizontal lines
+	for (int j = -cellsPerSideOfAxis; j <= cellsPerSideOfAxis; j++) {
+		vertices.push_back(-cellsPerSideOfAxis * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(j * cellHeight);
+
+		vertices.push_back( cellsPerSideOfAxis * cellWidth);
+		vertices.push_back(0);
+		vertices.push_back(j * cellHeight);
+
+		//vertices.push_back(glm::vec3(-cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
+		//vertices.push_back(glm::vec3( cellsPerSideOfAxis * cellWidth, 0, j * cellWidth));
+	}
+	verticesCount = vertices.size();
+
+	VAO = new VertexArray();
+	VBO = new VertexBuffer(&vertices[0], vertices.size() * sizeof(float));
+
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+
+	VAO->AddBuffer(*VBO, layout);
+}
+*/

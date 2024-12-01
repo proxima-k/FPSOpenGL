@@ -6,9 +6,7 @@ namespace BT {
 	class RootNode : public BaseNode {
 	public:
 		~RootNode() override {
-			if (child != nullptr) {
-				delete child;
-			}
+			if (child != nullptr) delete child;
 		}
 
 		void setChild(BaseNode* node) {

@@ -17,8 +17,8 @@ void Entity::draw()
 {
 	if (meshRenderer == nullptr)
 	{
-		std::cout << "MeshRenderer is null" << std::endl;
+		//std::cout << "MeshRenderer is null" << std::endl;
 		return;
 	}
-	meshRenderer->draw(transform.position, transform.rotation, transform.scale);
+	meshRenderer->draw(transform);
 }

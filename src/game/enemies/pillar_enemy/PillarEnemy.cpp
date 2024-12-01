@@ -30,7 +30,7 @@ PillarEnemy::PillarEnemy(glm::vec3 position)
 
     collision_channel = Collision_Channel::Enemy;
 
-	transform.scale = glm::vec3(1.0f, 0.01f, 1.0f);
+	transform.scale = glm::vec3(0.9f, 0.01f, 0.9f);
     transform.position = position;
 
 	initMeshRenderer();
@@ -39,5 +39,5 @@ PillarEnemy::PillarEnemy(glm::vec3 position)
 void PillarEnemy::initMeshRenderer()
 {
 	this->meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), Camera::mainCamera);
-	this->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
+	this->meshRenderer->setColor(glm::vec3(1.f, 0.5f, 0.5f));
 }

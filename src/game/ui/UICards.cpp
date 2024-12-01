@@ -93,7 +93,7 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
                 dashbuffcard->applyPassiveEffect();
             }
 
-            game->currentGameState = Game::GameStates::Playing;
+            game->changeState(GameStateManager::State::Playing);
 
             if (shooter->cardQueue.size() > maxCardHandSize) {
                 shooter->cardQueue.pop();

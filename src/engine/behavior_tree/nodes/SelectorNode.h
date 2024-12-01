@@ -17,13 +17,19 @@ namespace BT {
 			while (currentChildIndex < children.size()) {
 				NodeState childState = children[currentChildIndex]->update(deltaTime, blackboard);
 
-				if (childState == NodeState::RUNNING || childState != NodeState::SUCCESS)
+				if (childState == NodeState::RUNNING || childState == NodeState::SUCCESS)
 					return childState;
 
 				currentChildIndex++;
 			}
 
 			return NodeState::FAILURE;
+		}
+
+		void onNodeAbort(Blackboard& blackboard) override {
+			BaseNode::onNodeAbort(blackboard);
+			children[currentChildIndex]->abort(blackboard);
+			currentChildIndex = -1;
 		}
 
 	private:
