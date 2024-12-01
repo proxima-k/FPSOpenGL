@@ -203,6 +203,13 @@ int main(void)
 
         while (!glfwWindowShouldClose(window))
         {
+            // FRAMEBUFFER FOR POST-PROCESSING
+            FBO.Bind();
+            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glEnable(GL_DEPTH_TEST);
+
+
             // LOGICS =========================================================
             glfwPollEvents();
 
@@ -213,20 +220,10 @@ int main(void)
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            /*if (game->currentGameState == Game::GameStates::Playing)
-            {
-                player->update(deltaTime);
-            }*/
-            game->update();
-            game->render();
 
+            game->update();
 
             // GRAPHICS =======================================================
-            FBO.Bind();
-            GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glEnable(GL_DEPTH_TEST);
-            
             // geometry pass
             game->render();
 
