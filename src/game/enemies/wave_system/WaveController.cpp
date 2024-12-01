@@ -15,8 +15,7 @@ WaveController::WaveController() {
 
 void WaveController::populate_queue() {
 	std::vector<Wave*> waveOne = {
-		//new Wave(EnemyType::Basic, 2.0f),
-		new Wave(EnemyType::Propeller, 5.0f)
+		new Wave(EnemyType::Basic, 5.0f)
 	};
 	waveQueue.push(create_wave_sequence(waveOne));
 

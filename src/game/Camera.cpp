@@ -11,6 +11,33 @@ Camera* Camera::mainCamera = nullptr;
 Camera::Camera(glm::vec3 worldUp, unsigned int screenWidth, unsigned int screenHeight)
     : worldUp(worldUp), screenWidth(screenWidth), screenHeight(screenHeight) {}
 
+void Camera::invokeScreenShake(float intensity, float duration) {
+    shakeIntensity = intensity;
+    shakeDuration = duration;
+    shakeTimeLeft = duration;
+    bScreenIsShaking = true;
+}
+
+void Camera::updateShake(float deltaTime) {
+    if (bScreenIsShaking) {
+        shakeTimeLeft -= deltaTime;
+
+        if (shakeTimeLeft <= 0.0f) {
+            bScreenIsShaking = false;
+        }
+        else {
+            float shakeAmount = shakeIntensity * (shakeTimeLeft / shakeDuration);
+            float offsetX = shakeAmount * std::sin(shakeTimeLeft * shakeFrequency * 3.0f);
+            float offsetY = shakeAmount * std::cos(shakeTimeLeft * shakeFrequency * 3.0f);
+
+            transform.position.x += offsetX;
+            transform.position.y += offsetY;
+
+            shakeFrequency = std::max(shakeFrequency, 20.0f);
+        }
+    }
+}
+
 
 //void Camera::lookAt(glm::vec3 targetPosition)
 //{

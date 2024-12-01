@@ -39,6 +39,8 @@ void Player::update(float deltaTime)
     update_shield(deltaTime);
     update_dash(deltaTime);
     update_iframe(deltaTime);
+
+    camera->updateShake(deltaTime);
 }
 
 void Player::checkCollision() 
@@ -55,6 +57,7 @@ void Player::checkCollision()
             bIsShieldAlive = false;
             bIsInvincible = true;
             invincibilityCooldownTimer = invincibilityCooldown;
+            camera->invokeScreenShake(.07f, 0.7f);
         }
         else {
             die();
@@ -62,12 +65,8 @@ void Player::checkCollision()
     }
 }
 
-void Player::die()
-{
+void Player::die() {
     game->gameOver();
-
-    //game->reset();
-    //this->reset();
 }
 
 void Player::reset()
@@ -229,7 +228,7 @@ void Player::mouse_button_callback(GLFWwindow* window, int button, int action, i
 
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
     {
-        shooter.shootDefault(camera->transform.position, camera->transform.getForward(), camera->transform.getUp());
+        shooter.shootDefault(camera->transform.position + camera->transform.getForward() * glm::vec3(0.15), camera->transform.getForward(), camera->transform.getUp());
     }
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
     {

@@ -22,11 +22,21 @@ public:
     unsigned int getScreenWidth() { return screenWidth; }
     unsigned int getScreenHeight() { return screenHeight; }
 
+    void invokeScreenShake(float intensity, float duration);
+    void updateShake(float deltaTime);
+    bool isScreenShaking() { return bScreenIsShaking; }
+    bool bScreenIsShaking;
+
 private:
     // todo: change to worldUp?
     glm::vec3 worldUp;
 
     unsigned int screenWidth, screenHeight;
+
+    float shakeIntensity = 0.1f;
+    float shakeDuration = 1.0f;
+    float shakeTimeLeft = shakeDuration;
+    float shakeFrequency = 5.0f;
 };
 
 #endif

@@ -163,7 +163,6 @@
     <ClCompile Include="src\engine\behavior_tree\nodes\WaitTask.cpp" />
     <ClCompile Include="src\engine\MeshManager.cpp" />
     <ClCompile Include="src\game\CreditsObject.cpp" />
-    <ClCompile Include="src\game\CreditsObject.h" />
     <ClCompile Include="src\game\enemies\bomber\BomberEnemy.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\Caterpillar.cpp" />
     <ClCompile Include="src\game\enemies\caterpillar\CaterpillarBody.cpp" />
@@ -208,7 +207,6 @@
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard2.cpp" />
     <ClCompile Include="src\game\shooting\cards\PlaceholderCard3.cpp" />
     <ClCompile Include="src\game\Spawner.cpp" />
-    <ClCompile Include="src\engine\Trail.cpp" />
     <ClCompile Include="src\game\shooting\cards\CosineCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\DefaultCard.cpp" />
     <ClCompile Include="src\game\shooting\cards\SineCard.cpp" />
@@ -319,7 +317,6 @@
     <ClInclude Include="src\game\shooting\cards\PlaceholderCard3.h" />
     <ClInclude Include="src\game\shooting\cards\SpeedPassive.h" />
     <ClInclude Include="src\game\Spawner.h" />
-    <ClInclude Include="src\engine\Trail.h" />
     <ClInclude Include="src\game\shooting\cards\CosineCard.h" />
     <ClInclude Include="src\engine\Timer.h" />
     <ClInclude Include="src\game\shooting\cards\DefaultCard.h" />
@@ -379,6 +376,7 @@
     <None Include="res\shaders\healline.shader" />
     <None Include="res\shaders\mesh.shader" />
     <None Include="res\shaders\grid.shader" />
+    <None Include="res\shaders\trail.shader" />
     <None Include="res\shaders\transition.frag" />
     <None Include="res\shaders\transition.vert" />
     <None Include="res\shaders\outlinePP.shader" />
