@@ -22,7 +22,7 @@ BossCage::BossCage(glm::vec3 centerWorldPosition, int xCellCount, int yCellCount
 	wallGrid = new WallGrid(cellSize, xCellCount, zCellCount, yCellCount);
 	floorGrid = new Grid(xCellCount, zCellCount, cellSize);
 
-	wallGrid->transform.position = centerWorldPosition;
+          	wallGrid->transform.position = centerWorldPosition;
 	floorGrid->transform.position = centerWorldPosition;
 
 	BT::RootNode* rootNode = new BT::RootNode();

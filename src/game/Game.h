@@ -135,6 +135,9 @@ public:
         return (getCurrentState() == GameStateManager::State::Playing || getCurrentState() == GameStateManager::State::BossFight);
     }
 
+    void startCredits();
+    bool bWin = false;
+
     Camera* camera;
     Player* player;
 

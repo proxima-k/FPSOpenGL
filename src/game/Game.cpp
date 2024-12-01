@@ -4,6 +4,7 @@
 
 #include "Player.h"
 #include "enemies/CubeEnemy.h"
+#include "CreditsObject.h"
 
 #include "AABB.h"
 #include "OBB.h"
@@ -24,7 +25,6 @@ Game::Game()
 
 	textureManager = new TextureManager;
 	textureManager->init();
-
 }
 
 Game::~Game()
@@ -247,4 +247,20 @@ void Game::clearEnemies() {
 			}
 		}
 	}
+}
+
+void Game::startCredits() {
+
+	if (bWin) return;
+
+	glm::vec3 spawnPos = glm::vec3(player->transform.position + (player->transform.getForward() * glm::vec3(20))) + glm::vec3(0, 20, 0);
+	auto credits = spawn_entity<CreditObject>(spawnPos);
+
+	glm::vec3 direction = player->transform.position - credits->transform.position;
+	direction.y = 0.0f;
+	direction = glm::normalize(direction);
+
+	credits->transform.rotation = glm::quatLookAt(-direction, glm::vec3(0, 1, 0));
+
+	bWin = true;
 }

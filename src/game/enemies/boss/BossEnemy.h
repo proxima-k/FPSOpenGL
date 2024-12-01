@@ -9,6 +9,7 @@
 #include "BossCage.h"
 
 class BossBody;
+class BossFightController;
 
 class BossEnemy : public Enemy
 {
@@ -29,8 +30,11 @@ public:
 	void setCanCollide(bool canCollide);
 	void setTargetColor(glm::vec3 color);
 
+	void die(float xp) override;
+
 	glm::vec3 defaultPosition;
 	BossCage* bossCage = nullptr;
+	BossFightController* bossFightController = nullptr;
 
 	std::vector<BossBody*> bossBodies = std::vector<BossBody*>(8, nullptr);
 

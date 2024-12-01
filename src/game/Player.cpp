@@ -144,6 +144,10 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         this->reset();
     }
 
+    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+    {
+        game->startCredits();
+    }
 
     // jumping and dampening
     bool bIsGrounded = transform.position.y < 0 + playerHeight + 0.1f;

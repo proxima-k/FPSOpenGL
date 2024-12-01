@@ -48,11 +48,12 @@ void BossFightController::initializeBossFight()
 	boss= new BossEnemy(cage->centerWorldPosition + glm::vec3(0,3.f,0));
 	game->add_entity<BossEnemy>(boss);
 	boss->bossCage = cage;
+	boss->bossFightController = this;
 }
 
 void BossFightController::notifyBossDied() 
 {
-	// notify game that boss died
+	game->startCredits();
 }
 
 void BossFightController::cleanUp()

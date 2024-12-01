@@ -144,7 +144,7 @@ void BossEnemy::notifyBossBodyDeath(int index)
 
 	if (currentBodyCount <= 0) {
 		// add extra stuff to show boss died
-		destroy();
+		die(0);
 	}
 }
 
@@ -228,6 +228,11 @@ void BossEnemy::setTargetColor(glm::vec3 color)
 	targetColor = color;
 	colorTValue = 0;
 	startColor = currentColor;
+}
+
+void BossEnemy::die(float xp) {
+	bossFightController->notifyBossDied();
+	destroy();
 }
 
 void BossEnemy::setBodyColor(glm::vec3 color)
