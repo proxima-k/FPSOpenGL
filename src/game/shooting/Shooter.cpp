@@ -19,7 +19,7 @@ Shooter::Shooter()
 }
 
 void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
-	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
+	//MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
 	Card* newCard = nullptr;
 
 	switch (card->getCardType()) {

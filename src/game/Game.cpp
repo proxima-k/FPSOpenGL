@@ -4,6 +4,7 @@
 
 #include "Player.h"
 #include "enemies/CubeEnemy.h"
+#include "CreditsObject.h"
 
 #include "AABB.h"
 #include "OBB.h"
@@ -11,6 +12,9 @@
 #include "../graphics/MeshRenderer.h"
 #include "../graphics/Mesh.h"
 #include "../graphics/Shader.h"
+
+#include "Grid.h"
+#include "YAxisLine.h"
 
 Game::Game()
 {
@@ -21,9 +25,6 @@ Game::Game()
 
 	textureManager = new TextureManager;
 	textureManager->init();
-
-	waveController = new WaveController;
-	waveController->populate_queue();
 }
 
 Game::~Game()
@@ -33,9 +34,11 @@ Game::~Game()
 		delete entitys[i];
 		entitys[i] = nullptr;
 	}
-	
+
 	delete textureManager;
 	delete waveController;
+	delete bossFightController;
+	delete gameStateManager;
 }
 
 void Game::update()
@@ -44,45 +47,65 @@ void Game::update()
 	deltaTime = currentFrame - lastFrameTime;
 	lastFrameTime = currentFrame;
 
+
+	// update game states here
+	if (gameStateManager != nullptr)
+		gameStateManager->update(deltaTime);
+
+
 	// updates all the entitys
 	for (int i = 0; i < MAX_ENTITYS; i++) 
 	{
-		if (entitys[i] != nullptr)
-		{
-			if (entitys[i]->destroyed)
-			{
-				delete entitys[i];
-				entitys[i] = nullptr;
-			}
-			else 
-			{
-				entitys[i]->update(deltaTime);
-			}
+		if (entitys[i] == nullptr) continue;
 
+		if (entitys[i]->destroyed) {
+			delete entitys[i];
+			entitys[i] = nullptr;
+		}
+		else {
+			if (!isInGame()) continue;
+			entitys[i]->update(deltaTime);
 		}
 	}
 
-	for (int i = 0; i < 20; i++)
+	// handles healing line updates and destruction
+	for (int i = 0; i < MAX_HEAL_LINES; i++) {
+		
+		if (healingLines[i] == nullptr) continue;
+
+		if (healingLines[i]->destroyed) {
+			std::cout << "deleting healing line" << std::endl;
+			delete healingLines[i];
+			healingLines[i] = nullptr;
+		}
+		else {
+			if (!isInGame()) continue;
+			healingLines[i]->update(deltaTime);
+		}
+	}
+
+	for (int i = 0; i < MAX_PARTICLE_CTRLS; i++)
 	{
 		auto* pCtrl = particleCtrl[i];
 
 		if (pCtrl == nullptr) continue;
 
 		if (pCtrl->isEmpty()) {
-			particleCtrl[i] = nullptr;
 			delete pCtrl;
-
-			std::cout << "Destroy Particle Controller" << std::endl;
+			particleCtrl[i] = nullptr;
 			return;
 		}
 
+		if (!isInGame()) continue;
 		pCtrl->update(deltaTime);
 	}
 
-	if (currentGameState != GameStates::SelectCards && currentGameState != GameStates::Menu) {
+	bossFightController->update(deltaTime);
+	floorGrid->update();
+	/*if (currentGameState != GameStates::SelectCards && currentGameState != GameStates::Menu) {
 		timeLeftUntilBoss -= deltaTime;
 		waveController->update(deltaTime);
-	}
+	}*/
 }
 
 // calls the draw function on all the entities
@@ -90,18 +113,38 @@ void Game::render()
 {
 	for (int i = 0; i < MAX_ENTITYS; i++)
 	{
-		if (entitys[i] != nullptr)
-		{
-			entitys[i]->draw();
-		}
+		if (entitys[i] == nullptr || entitys[i]->destroyed)
+			continue;
+
+		entitys[i]->draw();
 	}
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < MAX_PARTICLE_CTRLS; i++)
 	{
 		auto* pCtrl = particleCtrl[i];
 
 		if (pCtrl != nullptr)
 			pCtrl->render();
+	}
+
+	if (player->canDrawBody)
+		player->draw();
+}
+
+void Game::renderHealingLines() {
+	for (int i = 0; i < MAX_HEAL_LINES; i++) {
+		if (healingLines[i] == nullptr) continue;
+		healingLines[i]->draw();
+	}
+}
+
+void Game::renderGrid() {
+	bossFightController->drawBossCage();
+	if (!bossFightController->bossFightIsActive()) {
+		if (floorGrid != nullptr)
+			floorGrid->draw();
+		if (yAxisLine != nullptr)
+			yAxisLine->draw();
 	}
 }
 
@@ -144,31 +187,27 @@ Entity* Game::get_colliding_entity_OBB(Entity* self, Collision_Channel channel)
 void Game::enterSelectCardState()
 {
 	if (crtPlayerXP >= maxPlayerXP) {
-		for (int i = 0; i < MAX_ENTITYS; i++) {
-			if (entitys[i] != nullptr) {
-				if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
-					entitys[i]->destroyed = true;
-				}
-			}
-		}
+		clearEnemies();
 		crtPlayerXP = 0;
 		level_up_player();
-
-		currentGameState = GameStates::SelectCards;
+		//currentGameState = GameStates::SelectCards;
+		gameStateManager->changeState(GameStateManager::State::SelectCards);
 	}
 }
 
 void Game::gameOver()
 {
-	currentGameState = Menu;
+	//currentGameState = Menu;
 
-	for (int i = 0; i < MAX_ENTITYS; i++)
+	/*for (int i = 0; i < MAX_ENTITYS; i++)
 	{
 		if (entitys[i] != nullptr)
 		{
 			entitys[i]->destroy();
 		}
-	}
+	}*/
+
+	gameStateManager->changeState(GameStateManager::State::MainMenu);
 }
 
 void Game::reset()
@@ -178,17 +217,19 @@ void Game::reset()
 	playerLevel = 1;
 
 	timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
+	//timeLeftUntilBoss = 5.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
 	playerDashMultiplier = 1.0f;
 
 	bGameOver = false;
+	bWin = false;
 
 	player->reset();
 	waveController->reset_waves();
 
-	GameStates currentGameState = GameStates::Playing;
+	//GameStates currentGameState = GameStates::Playing;
 
 	for (int i = 0; i < MAX_ENTITYS; ++i)
 	{
@@ -197,10 +238,30 @@ void Game::reset()
 	}
 }
 
-// saves the mesh, shader and camera to be used when spawning new entities
-void Game::setMeshRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera)
-{
-	this->cubeEnemyMesh = cardMesh;
-	this->cubeEnemyShader = cardShader;
-	this->camera = camera;
+void Game::clearEnemies() {
+	for (int i = 0; i < MAX_ENTITYS; i++) {
+		if (entitys[i] != nullptr) {
+			if (entitys[i]->collision_channel == Collision_Channel::Enemy) {
+				/*entitys[i]->destroyed = true;*/
+				delete entitys[i];
+				entitys[i] = nullptr;
+			}
+		}
+	}
+}
+
+void Game::startCredits() {
+
+	if (bWin) return;
+
+	glm::vec3 spawnPos = glm::vec3(player->transform.position + (player->transform.getForward() * glm::vec3(20))) + glm::vec3(0, 20, 0);
+	auto credits = spawn_entity<CreditObject>(spawnPos);
+
+	glm::vec3 direction = player->transform.position - credits->transform.position;
+	direction.y = 0.0f;
+	direction = glm::normalize(direction);
+
+	credits->transform.rotation = glm::quatLookAt(-direction, glm::vec3(0, 1, 0));
+
+	bWin = true;
 }

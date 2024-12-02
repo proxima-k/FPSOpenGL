@@ -5,8 +5,12 @@
 #include <string>
 #include <random>
 
+#include "../Player.h"
+
 #include "../shooting/cards/CosineCard.h"
 #include "../shooting/cards/SineCard.h"
+
+#include "../enemies/boss/BossEnemy.h"
 
 UI::UI() : crosshair(0), kanitFont(nullptr) {}
 
@@ -25,18 +29,23 @@ void UI::init(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    crosshair = game->textureManager->getTexture("crosshair177");
+    GLuint(*getTexture)(std::string) = [](std::string fileName) -> GLuint {
+        return game->textureManager->getTexture(fileName);
+        };
 
-    cards.basicCardTexture = game->textureManager->getTexture("basiccard");
-    cards.sineCardTexture = game->textureManager->getTexture("sinecard");
-    cards.cosineCardTexture = game->textureManager->getTexture("cosinecard");
-    cards.placeholder1card = game->textureManager->getTexture("placeholder1card");
-    cards.placeholder2card = game->textureManager->getTexture("placeholder2card");
-    cards.placeholder3card = game->textureManager->getTexture("placeholder3card");
-    cards.passivedamagecard = game->textureManager->getTexture("damagebuffcard");
-    cards.passivespeedcard = game->textureManager->getTexture("speedbuffcard");
-    cards.passivedashcard = game->textureManager->getTexture("dashbuffcard");
-    cards.emptydeck = game->textureManager->getTexture("emptydeck");
+    damageScreenEffect = getTexture("damage");
+    crosshair = getTexture("crosshair177");
+
+    cards.basicCardTexture = getTexture("basiccard");
+    cards.sineCardTexture = getTexture("sinecard");
+    cards.cosineCardTexture = getTexture("cosinecard");
+    cards.placeholder1card = getTexture("placeholder1card");
+    cards.placeholder2card = getTexture("placeholder2card");
+    cards.placeholder3card = getTexture("placeholder3card");
+    cards.passivedamagecard = getTexture("damagebuffcard");
+    cards.passivespeedcard = getTexture("speedbuffcard");
+    cards.passivedashcard = getTexture("dashbuffcard");
+    cards.emptydeck = getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
     menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 120.0f);
@@ -83,9 +92,14 @@ void UI::render(GLFWwindow* window)
     ImVec2 deckPosPassives(windowWidth - cardSize.x - 20, windowHeight - cardSize.y - 20);
     ImVec2 deckPosActives(windowWidth - cardSize.x * 2 - 40, windowHeight - cardSize.y - 20);
 
-    switch (game->currentGameState)
+    //std::cout << game->getCurrentState() << std::endl;
+    switch (game->getCurrentState())
     {
-    case Game::GameStates::Playing:
+    case GameStateManager::State::BossFight:
+            renderBossUI(windowSize);
+        break;
+
+    case GameStateManager::State::Playing:
             renderPlayModeUI(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -96,7 +110,7 @@ void UI::render(GLFWwindow* window)
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
-    case Game::GameStates::SelectCards:
+    case GameStateManager::State::SelectCards:
             renderPlayModeUI(windowSize);
             cards.renderCardSelection(windowSize);
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -107,11 +121,11 @@ void UI::render(GLFWwindow* window)
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
-    case Game::GameStates::Dead:
+    case GameStateManager::State::Dead:
             ImGui::Text("HA DEAD");
         break;
 
-    case Game::GameStates::Menu:
+    case GameStateManager::State::MainMenu:
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
             ImVec2 menuSpriteSize = { windowWidth, windowHeight };
@@ -127,7 +141,7 @@ void UI::render(GLFWwindow* window)
 
             if (clicked) {
                 game->reset();
-                game->currentGameState = Game::GameStates::Playing;
+                game->changeState(GameStateManager::State::Playing);
             }
 
             if (menuFont)
@@ -142,8 +156,24 @@ void UI::render(GLFWwindow* window)
 
             ImGui::SetCursorPos({ (windowWidth / 7) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
-
         break;
+    }
+
+    auto player = game->player;
+    if (!player->bIsShieldAlive) {
+        ImVec2 screenSize = { windowWidth, windowHeight };
+
+        float sCooldown = player->shieldCooldown;
+        float sCooldownTimer = player->shieldCooldownTimer;
+        sCooldown /= sCooldown;
+        sCooldownTimer /= sCooldown;
+
+        float tint = sCooldownTimer - sCooldown;
+
+        ImVec4 tintColor = ImVec4(1.0f, 1.0f, 1.0f, tint);
+
+        ImGui::SetCursorPos({ 0, 0 });
+        ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("damage"), screenSize, ImVec2(0, 0), ImVec2(1, 1), tintColor);
     }
 
     if (kanitFont)
@@ -187,7 +217,6 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     ImGui::Text("%s", timeText);
 
     displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
-   
     
     ImGui::SetCursorPos(levelPos);
     ImGui::Text("Lvl %d", game->get_player_level());
@@ -205,22 +234,65 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     
     ImGui::SetCursorPos(crosshairPos);
     ImGui::Image((void*)(intptr_t)crosshair, ImVec2(currentCrosshairSize, currentCrosshairSize));
-    }
-    void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
-    {
+}
+
+void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor)
+{
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
 
     drawList->AddRectFilled(
         pos,
         ImVec2(pos.x + size.x * fraction, pos.y + size.y),
-        ImGui::GetColorU32(barColor)
-    );
+        ImGui::GetColorU32(barColor));
 }
 
 void UI::renderGameOverUI(ImVec2 windowSize)
 {
 
+}
+
+void UI::renderBossUI(ImVec2 windowSize) {
+    BossEnemy* boss = game->bossFightController->getBoss();
+    if (boss == nullptr) return;
+
+    auto [crtHP, maxHP] = boss->getTotalCrtHP();
+    float displayHpFraction = (maxHP > 0) ? crtHP / maxHP : 0.0f;
+
+    static float previousHpFraction = displayHpFraction;
+
+    const float lerpSpeed = 0.1f;
+    previousHpFraction += (displayHpFraction - previousHpFraction) * lerpSpeed;
+
+    ImVec2 barSize(windowSize.x, 25);
+    ImVec4 barColor(1.00f, 0.0f, 0.0f, 1.0f);
+    customProgressBar(previousHpFraction, barSize, barColor);
+
+    ImVec2 bossName((windowSize.x) / 2.0f - (40 / 2), 0);
+
+    ImGui::SetCursorPos(bossName);
+    ImGui::Text("Two Cubed");
+
+    static float currentCrosshairSize = 40.0f;
+    static float targetCrosshairSize = 40.0f;
+    const float lerpSpeedCrosshair = 0.2f;
+    const float enlargedSize = 55.0f;
+
+    ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
+
+    if (ImGui::IsMouseClicked(0))
+    {
+        targetCrosshairSize = enlargedSize;
+    }
+    currentCrosshairSize += (targetCrosshairSize - currentCrosshairSize) * lerpSpeedCrosshair;
+
+    if (currentCrosshairSize >= enlargedSize - 5)
+    {
+        targetCrosshairSize = 40.0f;
+    }
+
+    ImGui::SetCursorPos(crosshairPos);
+    ImGui::Image((void*)(intptr_t)crosshair, ImVec2(currentCrosshairSize, currentCrosshairSize));
 }
 
 void UI::shutdown()

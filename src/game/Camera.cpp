@@ -8,17 +8,55 @@
 
 Camera* Camera::mainCamera = nullptr;
 
-Camera::Camera(Transform transform, glm::vec3 up, unsigned int screenWidth, unsigned int screenHeight)
-    : transform(transform), cameraUp(up), firstMouse(true), screenWidth(screenWidth), screenHeight(screenHeight)
-{
-    cameraForward = glm::vec3(0.0f, 0.0f, 1.0f);
-    transform.rotation = glm::vec3(0, 0, 0);
-    lastX = screenWidth / 2.0;  // assuming initial window width of 640
-    lastY = screenHeight / 2.0;  // assuming initial window height of 640
+Camera::Camera(glm::vec3 worldUp, unsigned int screenWidth, unsigned int screenHeight)
+    : worldUp(worldUp), screenWidth(screenWidth), screenHeight(screenHeight) {}
+
+void Camera::invokeScreenShake(float intensity, float duration) {
+    shakeIntensity = intensity;
+    shakeDuration = duration;
+    shakeTimeLeft = duration;
+    bScreenIsShaking = true;
 }
 
+void Camera::updateShake(float deltaTime) {
+    if (bScreenIsShaking) {
+        shakeTimeLeft -= deltaTime;
+
+        if (shakeTimeLeft <= 0.0f) {
+            bScreenIsShaking = false;
+        }
+        else {
+            float shakeAmount = shakeIntensity * (shakeTimeLeft / shakeDuration);
+            float offsetX = shakeAmount * std::sin(shakeTimeLeft * shakeFrequency * 3.0f);
+            float offsetY = shakeAmount * std::cos(shakeTimeLeft * shakeFrequency * 3.0f);
+
+            transform.position.x += offsetX;
+            transform.position.y += offsetY;
+
+            shakeFrequency = std::max(shakeFrequency, 20.0f);
+        }
+    }
+}
+
+
+//void Camera::lookAt(glm::vec3 targetPosition)
+//{
+//    glm::vec3 forward = glm::normalize(targetPosition - transform.position);
+//    glm::vec3 right = glm::normalize(glm::cross(worldUp, forward)); 
+//    glm::vec3 up = glm::cross(forward, right);
+//
+//    // Create a rotation matrix from the basis vectors
+//    glm::mat3 rotationMatrix = glm::mat3(right, up, forward);
+//
+//    // Convert rotation matrix to quaternion
+//    transform.rotation = glm::quat_cast(rotationMatrix);
+//}
+
+
+/*
 void Camera::processMouseMovement(float xPos, float yPos)
 {
+    std::cout << xPos << " " << yPos << std::endl;
     if (game->bGameOver) return;
 
     if (firstMouse)
@@ -57,3 +95,4 @@ void Camera::processMouseMovement(float xPos, float yPos)
 
     cameraForward = transform.getForward();
 }
+*/

@@ -24,6 +24,7 @@ public:
 
     void renderPlayModeUI(ImVec2 windowSize);
     void renderGameOverUI(ImVec2 windowSize);
+    void renderBossUI(ImVec2 windowSize);
 
     void customProgressBar(float fraction, const ImVec2& size, const ImVec4& barColor);
 
@@ -33,6 +34,7 @@ private:
     UICards cards;
 
     GLuint crosshair;
+    GLuint damageScreenEffect;
     ImFont* kanitFont;
     ImFont* menuFont;
 

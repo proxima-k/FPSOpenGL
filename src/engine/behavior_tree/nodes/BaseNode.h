@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "../Blackboard.h"
@@ -19,15 +20,19 @@ namespace BT {
 
 		NodeState update(float deltaTime, Blackboard& blackboard);
 		NodeState finishExecuteNode(bool success);
+		void abort(Blackboard& blackboard);
+		virtual NodeState getState() { return state; }
+
+		bool canRepeat = true;
 
 	protected:
 		// events to be used for custom nodes, 
 		virtual void onNodeStart(Blackboard& blackboard) = 0;
 		virtual NodeState onNodeUpdate(float deltaTime, Blackboard& blackboard) = 0;
 		virtual void onNodeFinish(Blackboard& blackboard) = 0;
-		//virtual void onNodeAborted() {}
+		virtual void onNodeAbort(Blackboard& blackboard) { if (canRepeat) state = NodeState::READY; }
 
 		NodeState state = NodeState::READY;
-		//bool hasStarted = false;
+		bool hasRunOnce = false;
 	};
 }
