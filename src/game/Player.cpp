@@ -148,6 +148,11 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         game->startCredits();
     }
 
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+    {
+        game->changeState(GameStateManager::BossFight);
+    }
+
     // jumping and dampening
     bool bIsGrounded = transform.position.y < 0 + playerHeight + 0.1f;
     physicsbody.dampening = bIsGrounded ? 5.f : 2.f;
