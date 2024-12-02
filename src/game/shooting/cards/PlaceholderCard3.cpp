@@ -26,7 +26,7 @@ void PlaceHolderCard3::update(float deltaTime)
     float z = playerPosition.z + orbitRadius * sin(angle);
 
     glm::vec3 cameraForward = glm::normalize(game->camera->transform.getForward());
-    float verticalOffset = cameraForward.y * orbitRadius;
+    float verticalOffset = cameraForward.y/2 * orbitRadius;
 
     transform.position = glm::vec3(x, playerPosition.y + verticalOffset, z);
 
