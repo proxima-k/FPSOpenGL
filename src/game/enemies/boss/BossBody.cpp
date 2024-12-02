@@ -24,7 +24,7 @@ BossBody::BossBody(glm::vec3 spawnPosition)
 
 	behaviorTree.getBlackboard().setValue<Entity*>("body", this);
 
-	maxHealth = 20;
+	maxHealth = 60;
 	health = maxHealth;
 
 	transform.scale = glm::vec3(1);
