@@ -22,10 +22,12 @@ void GrassAttackTask::onNodeStart(BT::Blackboard& blackboard)
 
 BT::NodeState GrassAttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blackboard)
 {
-
 	if (waveTimer <= 0.f) {
 		if (currentWave >= MAX_WAVE)
 			return BT::NodeState::SUCCESS;
+
+		game->camera->invokeScreenShake(.08f, warningTime);
+
 		// spawn grass enemy algorithm
 		// randomize a bunch of positions, check if the target cell is part of the positions, then skip it
 		// set wait time, attack time and height offset for each grass enemy

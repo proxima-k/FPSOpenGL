@@ -12,4 +12,11 @@ public:
     drmp3_uint64 totalPCMFrameCount;
     drmp3_int16* audioData;
     std::string fileName;
+
+    ~AudioClip() {
+        if (audioData) {
+            drmp3_free(audioData, nullptr);
+            audioData = nullptr;
+        }
+    }
 };
