@@ -15,17 +15,17 @@ WaveController::WaveController() {
 
 void WaveController::populate_queue() {
 	std::vector<Wave*> waveOne = {
-		new Wave(EnemyType::Basic, 5.0f)
+		new Wave(EnemyType::Basic, 5.0f),
 	};
 	waveQueue.push(create_wave_sequence(waveOne));
 
 	std::vector<Wave*> waveTwo = {
-		new Wave(EnemyType::Basic, 1.5f)
+		new Wave(EnemyType::Basic, 1.5f),
 	};
 	waveQueue.push(create_wave_sequence(waveTwo));
 
 	std::vector<Wave*> waveThree = {
-		new Wave(EnemyType::Basic, 1.0f)
+		new Wave(EnemyType::Basic, 1.0f),
 	};
 	waveQueue.push(create_wave_sequence(waveThree));
 
@@ -46,37 +46,44 @@ void WaveController::populate_queue() {
 	waveQueue.push(create_wave_sequence(waveFive));
 
 	std::vector<Wave*> waveSix = {
-		new Wave(EnemyType::Cosine, 6.0f),
-		new Wave(EnemyType::Sinus, 6.0f),
+		new Wave(EnemyType::Cosine, 2.0f),
+		new Wave(EnemyType::Sinus, 2.0f),
 		new Wave(EnemyType::Basic, 2.0f)
 	};
 	waveQueue.push(create_wave_sequence(waveSix));
 
 	std::vector<Wave*> waveSeven = {
-		new Wave(EnemyType::Cosine, 5.0f),
-		new Wave(EnemyType::Sinus, 5.0f),
-		new Wave(EnemyType::Basic, 2.0f)
+		new Wave(EnemyType::Cosine, 3.0f),
+		new Wave(EnemyType::Sinus, 3.0f),
+		new Wave(EnemyType::Basic, 1.0f),
+		new Wave(EnemyType::Bomber, 3.0f)
 	};
 	waveQueue.push(create_wave_sequence(waveSeven));
 
 	std::vector<Wave*> waveEight = {
-		new Wave(EnemyType::Cosine, 4.0f),
-		new Wave(EnemyType::Sinus, 4.0f),
-		new Wave(EnemyType::Basic, 1.5f)
+		new Wave(EnemyType::Cosine, 2.0f),
+		new Wave(EnemyType::Sinus, 2.0f),
+		new Wave(EnemyType::Basic, 1.5f),
+		new Wave(EnemyType::Bomber, 2.0f)
 	};
 	waveQueue.push(create_wave_sequence(waveEight));
 
 	std::vector<Wave*> waveNine = {
-		new Wave(EnemyType::Cosine, 3.0f),
-		new Wave(EnemyType::Sinus, 3.0f),
-		new Wave(EnemyType::Basic, 1.0f)
+		new Wave(EnemyType::Cosine, 2.0f),
+		new Wave(EnemyType::Sinus, 2.0f),
+		new Wave(EnemyType::Basic, 1.0f),
+		new Wave(EnemyType::Bomber, 1.5f),
+		new Wave(EnemyType::Propeller, 4.0f)
+
 	};
 	waveQueue.push(create_wave_sequence(waveNine));
 
 	std::vector<Wave*> waveTen = {
-	new Wave(EnemyType::Cosine, 2.0f),
-	new Wave(EnemyType::Sinus, 2.0f),
-	new Wave(EnemyType::Basic, 0.5f)
+	new Wave(EnemyType::Cosine, 5.0f),
+	new Wave(EnemyType::Sinus, 5.0f),
+	new Wave(EnemyType::Basic, 2.5f),
+	new Wave(EnemyType::Bomber, 5.0f),
+	new Wave(EnemyType::Propeller, 4.0f)
 	};
 	waveQueue.push(create_wave_sequence(waveTen));
 }
