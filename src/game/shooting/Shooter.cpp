@@ -44,7 +44,7 @@ void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDi
 	}
 
 	if (newCard != nullptr) {
-		newCard->transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
+		newCard->transform.scale = glm::vec3(0.1f, 0.008f, 0.1f);
 		newCard->launch(launchPosition, launchDirection, upDirection);
 	}
 }

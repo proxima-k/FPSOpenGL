@@ -44,6 +44,7 @@ void HealTask::onNodeStart(BT::Blackboard& blackboard)
         BossHealingCube* newHealingCube = new BossHealingCube(spawnPosition, newBossBody, this, i, cellNormal);
         game->add_entity(newHealingCube);
         healingCubes.push_back(newHealingCube);
+        std::cout << "test" << std::endl;
     }
 
     colorTimer = 0.f;

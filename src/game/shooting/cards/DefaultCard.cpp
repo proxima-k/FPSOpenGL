@@ -12,11 +12,15 @@ DefaultCard::DefaultCard(glm::vec3 position)
 
 void DefaultCard::update(float deltaTime)
 {
-	glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
+	timeElapsed += deltaTime;
+
+	glm::vec3 rightVector = glm::normalize(glm::cross(launchDirection, upDirection));
+
 
 	currentPosition += launchDirection * deltaTime * 10.f;
+	transform.position = currentPosition;
 
-	transform.position = currentPosition + rightVector * height;
+	transform.rotation = glm::angleAxis(glm::radians(timeElapsed * 550), -upDirection) * transform.rotation;
 
 	Entity* hit_actor = game->get_colliding_entity_OBB(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
@@ -45,4 +49,6 @@ void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, gl
 	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
 	currentPosition = launchPosition;
+
+	transform.lookAt(launchPosition + launchDirection);
 }

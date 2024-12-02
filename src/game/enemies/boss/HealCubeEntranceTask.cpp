@@ -10,7 +10,7 @@
 HealCubeEntranceTask::HealCubeEntranceTask(float offset)
 {
 	timer = offset;
-	std::cout << timer << std::endl;
+	//std::cout << timer << std::endl;
 }
 
 void HealCubeEntranceTask::onNodeStart(BT::Blackboard& blackboard)
@@ -25,6 +25,7 @@ BT::NodeState HealCubeEntranceTask::onNodeUpdate(float deltaTime, BT::Blackboard
 		timer -= deltaTime;
 		return BT::NodeState::RUNNING;
 	}
+
 
 	if (t >= 0.99f) return BT::NodeState::SUCCESS;
 
