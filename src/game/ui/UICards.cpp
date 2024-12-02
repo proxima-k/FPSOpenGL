@@ -194,7 +194,7 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
 void UICards::randomizeCards()
 {
     std::vector<GLuint> cardTextures;
-    cardTextures.insert(cardTextures.end(), { passivespeedcard, passivedashcard });
+    cardTextures.insert(cardTextures.end(), { passivespeedcard, passivedashcard, passivedamagecard });
 
     if(shooter->cardQueue.size() < 3)
     cardTextures.insert(cardTextures.end(), { sineCardTexture, cosineCardTexture, placeholder1card, placeholder2card, placeholder3card });
