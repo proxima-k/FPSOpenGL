@@ -96,7 +96,7 @@ int main(void)
 
     int width, height;
     int channels;
-    unsigned char* pixels = stbi_load("C:/Projects/FPSOpenGL/res/sprites/placeholder.jpg", &width, &height, &channels, 4);
+    unsigned char* pixels = stbi_load("res/sprites/xyz_icon.png", &width, &height, &channels, 4);
 
     if (pixels == NULL)
     {
