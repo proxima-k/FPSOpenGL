@@ -153,7 +153,7 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 {
 	for (int i = 0; i < MAX_ENTITYS; i++) 
 	{
-		if (entitys[i] == other || entitys[i] == nullptr || entitys[i]->collision_channel != channel)
+		if (entitys[i] == nullptr || entitys[i] == other || entitys[i]->collision_channel != channel || entitys[i]->destroyed)
 			continue;
 
 		AABB a = AABB::from_position_size(other->transform);
@@ -170,7 +170,7 @@ Entity* Game::get_coliding_entity(Entity* other, Collision_Channel channel)
 Entity* Game::get_colliding_entity_OBB(Entity* self, Collision_Channel channel)
 {
 	for (int i = 0; i < MAX_ENTITYS; i++) {
-		if (entitys[i] == self || entitys[i] == nullptr || entitys[i]->collision_channel != channel) 
+		if (entitys[i] == nullptr || entitys[i] == self || entitys[i]->collision_channel != channel || entitys[i]->destroyed)
 			continue;
 
 		OBB::OBB obb1(&(self->transform)	  , self->transform.scale);
@@ -217,7 +217,7 @@ void Game::reset()
 	playerLevel = 1;
 
 	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
-	timeLeftUntilBoss = 5.f;
+	timeLeftUntilBoss = 30.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
