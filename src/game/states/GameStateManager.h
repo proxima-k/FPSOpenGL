@@ -38,6 +38,7 @@ public:
     }
 
     void changeState(State targetState) {
+        if (currentState == targetState) return;
         previousState = currentState;
         switch (targetState) {
         case State::MainMenu:

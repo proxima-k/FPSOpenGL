@@ -114,7 +114,11 @@ public:
     Entity* get_colliding_entity_OBB(Entity* other, Collision_Channel channel);
 
     void enterSelectCardState();
-    void addPlayerXP(int xp) { crtPlayerXP += xp; enterSelectCardState(); }
+    void addPlayerXP(int xp) { 
+        if (getCurrentState() != GameStateManager::State::Playing) return;
+        crtPlayerXP += xp; 
+        enterSelectCardState(); 
+    }
     void level_up_player() {
         playerLevel++;
         maxPlayerXP += pow(100, ((playerLevel*1.5f)+15) / 20);

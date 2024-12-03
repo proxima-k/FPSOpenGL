@@ -71,32 +71,6 @@ Game* game = nullptr;
 Grid* floorGrid = nullptr;
 AudioManager* audioManager = nullptr;
 
-GLuint LoadTextureFromFile(const char* filename)
-{
-    int width, height, channels;
-    unsigned char* pixels = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
-    if (!pixels)
-    {
-        std::cerr << "Failed to load image: " << filename << std::endl;
-        return 0;
-    }
-
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    stbi_image_free(pixels);
-
-    return textureID;
-}
-
 YAxisLine* yAxisLine = nullptr;
 
 int main(void)
