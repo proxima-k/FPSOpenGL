@@ -55,6 +55,10 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
         ImVec2 scaleOffset = ImVec2((scaledCardSize.x - cardSize.x) / 2, (scaledCardSize.y - cardSize.y) / 2);
         ImVec2 adjustedPos = ImVec2(cardPos.x - scaleOffset.x, cardPos.y - scaleOffset.y);
 
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 1.f, 1.f, 0.f));          // Button idle color
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.f, 1.f, 1.f, 1.f));   // Button hover color
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.f, 1.f, 1.f, 0.f));    // Button active color
+
         ImGui::SetCursorPos(adjustedPos);
         bool clicked = ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], scaledCardSize);
 
@@ -99,6 +103,9 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
                 shooter->cardQueue.pop();
             }
         }
+        ImGui::PopStyleColor(3);
+
+
         ImGui::PopID();
     }
 }

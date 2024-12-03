@@ -97,6 +97,13 @@ void UI::render(GLFWwindow* window)
     {
     case GameStateManager::State::BossFight:
             renderBossUI(windowSize);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+            cards.cardsRandomized = false;
+            cards.highlightCard = false;
+
+            cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
+            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
     case GameStateManager::State::Playing:
@@ -218,8 +225,8 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     ImVec2 levelPos((windowSize.x) / 2.0f - (40 / 2), 0);
     ImVec2 clockPos((windowSize.x) / 2.0f - (40 / 2), windowSize.y - 40);
     ImVec2 crosshairPos((windowSize.x) / 2.0f - (currentCrosshairSize / 2), (windowSize.y) / 2.0f - (currentCrosshairSize / 2));
-    ImVec2 barSize(windowWidth, 25);
-    ImVec4 barColor(1.00f, 0.91f, 0.32f, 1.0f);
+    ImVec2 barSize(windowWidth, 30);
+    ImVec4 barColor(0.447f, 0.294f, 1.f, 1.0f);
     
     int minutes = static_cast<int>(game->timeLeftUntilBoss) / 60;
     int seconds = static_cast<int>(game->timeLeftUntilBoss) % 60;
@@ -235,7 +242,7 @@ void UI::renderPlayModeUI(ImVec2 windowSize)
     displayedScoreFraction += (crtScoreFraction - displayedScoreFraction) * lerpSpeed;
     
     ImGui::SetCursorPos(levelPos);
-    ImGui::Text("Lvl %d", game->get_player_level());
+    ImGui::Text("LVL %d", game->get_player_level());
     
     if (ImGui::IsMouseClicked(0))
     {
@@ -280,14 +287,14 @@ void UI::renderBossUI(ImVec2 windowSize) {
     const float lerpSpeed = 0.1f;
     previousHpFraction += (displayHpFraction - previousHpFraction) * lerpSpeed;
 
-    ImVec2 barSize(windowSize.x, 25);
-    ImVec4 barColor(1.00f, 0.0f, 0.0f, 1.0f);
+    ImVec2 barSize(windowSize.x, 30);
+    ImVec4 barColor(1.00f, 0.286f, 0.286f, 1.0f);
     customProgressBar(previousHpFraction, barSize, barColor);
 
     ImVec2 bossName((windowSize.x) / 2.0f - (40 / 2), 0);
 
     ImGui::SetCursorPos(bossName);
-    ImGui::Text("Two Cubed");
+    ImGui::Text("TWO CUBED");
 
     static float currentCrosshairSize = 40.0f;
     static float targetCrosshairSize = 40.0f;

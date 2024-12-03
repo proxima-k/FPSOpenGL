@@ -232,10 +232,10 @@ void BossEnemy::setTargetColor(glm::vec3 color)
 
 std::tuple<float, float> BossEnemy::getTotalCrtHP() {
 	float crtHp = 0;
-	float maxHp = 8 * 20;
+	float maxHp = 8 * BossBody::MAX_HEALTH;
 
 	for (auto body : bossBodies) {
-		if(body != nullptr)
+		if (body != nullptr && !body->destroyed)
 			crtHp += body->health;
 	}
 	return std::make_tuple(crtHp, maxHp);

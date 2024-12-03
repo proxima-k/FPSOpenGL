@@ -9,6 +9,7 @@ class BossEnemy; // forward declaration to prevent circular dependencies
 
 class BossBody : public Enemy {
 public:
+
 	BossBody(glm::vec3 spawnPosition);
 	BossBody(glm::vec3 spawnPosition, int index, glm::vec3 offsetDirection, float offsetMagnitude);
 	~BossBody();
@@ -29,6 +30,8 @@ public:
 	// reference to the main controller
 	BossEnemy* bossController = nullptr;
 	bool smoothSizing = false;
+
+	const static int MAX_HEALTH = 60;
 
 private:
 	int sizeSteps = 8;
