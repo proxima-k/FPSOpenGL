@@ -39,16 +39,16 @@ void UI::init(GLFWwindow* window)
     cards.basicCardTexture = getTexture("basiccard");
     cards.sineCardTexture = getTexture("sinecard");
     cards.cosineCardTexture = getTexture("cosinecard");
-    cards.placeholder1card = getTexture("placeholder1card");
-    cards.placeholder2card = getTexture("placeholder2card");
-    cards.placeholder3card = getTexture("placeholder3card");
+    cards.placeholder1card = getTexture("x3");
+    cards.placeholder2card = getTexture("pull");
+    cards.placeholder3card = getTexture("circle");
     cards.passivedamagecard = getTexture("damagebuffcard");
     cards.passivespeedcard = getTexture("speedbuffcard");
     cards.passivedashcard = getTexture("dashbuffcard");
     cards.emptydeck = getTexture("emptydeck");
 
-    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 40.0f);
-    menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/Kanit-Light.ttf", 120.0f);
+    kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/SpaceMono-Bold.ttf", 40.0f);
+    menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/SpaceMono-Bold.ttf", 120.0f);
 
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
@@ -131,31 +131,47 @@ void UI::render(GLFWwindow* window)
             ImVec2 menuSpriteSize = { windowWidth, windowHeight };
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("menusprite"), menuSpriteSize);
 
-            float buttonSizeX = (windowWidth / 5);
-            float buttonSizeY = (windowHeight / 10);
-
-            ImGui::SetCursorPos({ (windowWidth / 7) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
+            // PLAY BUTTON
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 1.f, 1.f, 1.f));          // Button idle color
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.85f, 0.85f, 1.f));   // Button hover color
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.6f, 0.6f, 1.f));    // Button active color
+            float buttonSizeX = (400);
+            float buttonSizeY = (150);
+            ImGui::SetCursorPos({ (windowWidth / 7.5f) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
             ImVec2 buttonSize = { buttonSizeX , buttonSizeY };
             //ImGui::PushStyleColor(ImGuiCol_Button, { 2, 2, 2, 2 });
             bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("play"), buttonSize);
-
             if (clicked) {
                 game->reset();
                 game->changeState(GameStateManager::State::Playing);
             }
+            ImGui::PopStyleColor(3);
 
-            if (menuFont)
+            /*if (menuFont)
             {
                 ImGui::PopFont();
                 ImGui::PushFont(menuFont);
-            }
+            }*/
 
-            float titleSizeX = (windowWidth / 1.5f);
-            float titleSizeY = (windowHeight / 2);
+            // TITLE
+            float titleSizeX = (500);
+            //float titleSizeX = (windowWidth / 2.f);
+            //float titleSizeY = (windowHeight / 2.f);
+            float titleSizeY = (500);
             ImVec2 titleSize = { titleSizeX , titleSizeY };
 
-            ImGui::SetCursorPos({ (windowWidth / 7) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
+            ImGui::SetCursorPos({ (windowWidth / 7.5f) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
+
+
+
+            // CHEATSHEET
+            float cheatSizeX = (500);
+            float cheatSizeY = (250);
+            ImVec2 cheatSize = { cheatSizeX , cheatSizeY };
+
+            ImGui::SetCursorPos({ (windowWidth / 6.5f) - (cheatSizeX / 2), (windowHeight * 3.15f / 4.f) - (cheatSizeY / 2)});
+            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("cheatsheet"), (cheatSize));
         break;
     }
 
