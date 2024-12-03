@@ -4,6 +4,7 @@
 
 #include "HealTask.h"
 #include "BossHealingCube.h"
+#include "../game/AudioManager.h"
 
 #include <iostream>
 
@@ -23,7 +24,17 @@ BT::NodeState HealCubeEntranceTask::onNodeUpdate(float deltaTime, BT::Blackboard
 {
 	if (timer > 0) {
 		timer -= deltaTime;
+
 		return BT::NodeState::RUNNING;
+	}
+	else {
+		if (!bPlaySpawnSound) {
+			auto clip = audioManager->getAudioClip("pillarThud.mp3");
+			if (clip)
+				audioManager->playSound(clip, glm::vec3(0), 0.25f);
+
+			bPlaySpawnSound = true;
+		}
 	}
 
 	if (t >= 0.99f) return BT::NodeState::SUCCESS;

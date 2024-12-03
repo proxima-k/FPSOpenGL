@@ -25,7 +25,8 @@ void AudioManager::init() {
         "MoveRight.mp3",
         "ShotsFired.mp3", 
         "XPGain.mp3", 
-        "GameOver.mp3"
+        "GameOver.mp3",
+        "pillarThud.mp3",
     };
 
     std::string path = "res/audio/";

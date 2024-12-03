@@ -3,6 +3,7 @@
 #include "../../Entity.h"
 
 #include "../game/Game.h"
+#include "../game/AudioManager.h"
 
 void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 {
@@ -15,6 +16,9 @@ void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 		entity->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
 
 		game->camera->invokeScreenShake(.1f, 0.5f);
+		auto clip = audioManager->getAudioClip("pillarThud.mp3");
+		if (clip)
+			audioManager->playSound(clip, glm::vec3(0), 0.25f);
 	}
 }
 

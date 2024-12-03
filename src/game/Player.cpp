@@ -162,20 +162,12 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
         physicsbody.add_force(glm::vec3(0, 10000 * deltaTime, 0));
     }
 
-    // dashing
-    float vMagnitude = glm::length(physicsbody.velocity);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && bCanDash) {
+        const float dashSpeed = 100000.0f * game->playerDashMultiplier;
+        physicsbody.add_force(camera->transform.getForward() * dashSpeed * deltaTime);
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && bCanDash && vMagnitude > 4)
-    {
-        glm::vec3 dashDirection = glm::normalize(physicsbody.velocity);
-        if (glm::length(dashDirection) > 0.0f)
-        {
-            const float dashSpeed = 40000.0f * game->playerDashMultiplier;
-            physicsbody.add_force(dashDirection * dashSpeed * deltaTime);
-
-            dashCooldownTimer = dashCooldown;
-            bCanDash = false;
-        }
+        dashCooldownTimer = dashCooldown;
+        bCanDash = false;
     }
 
     // apply velocity

@@ -18,5 +18,7 @@ private:
 	float t = 0.f;
 	float timer = 0.f;
 
+	bool bPlaySpawnSound = false;
+
 	BossHealingCube* healCube = nullptr;
 };

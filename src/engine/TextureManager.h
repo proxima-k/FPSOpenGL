@@ -19,7 +19,6 @@ public:
 		if (textures.find(fileName) != textures.end()) {
 			return textures[fileName];
 		}
-		std::cout << "no texture found" << std::endl;
 
 		return 0;
 	}
