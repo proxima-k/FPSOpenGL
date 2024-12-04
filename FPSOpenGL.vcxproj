@@ -255,7 +255,6 @@
     <ClCompile Include="src\game\shooting\UI\UICard.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\CompositeNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\DecoratorNode.h" />
     <ClInclude Include="src\engine\behavior_tree\nodes\RandomSelectorNode.h" />
@@ -385,7 +384,6 @@
     <None Include="res\shaders\yaxis.shader" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Downloads\favicon_io\xyz.ico" />
     <Image Include="res\sprites\basiccard.png" />
     <Image Include="res\sprites\cosinecard.png" />
     <Image Include="res\sprites\crosshair177.png" />
@@ -402,9 +400,6 @@
     <Image Include="res\sprites\play.png" />
     <Image Include="res\sprites\sinecard.png" />
     <Image Include="res\sprites\speedbuffcard.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="FPSOpenGL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

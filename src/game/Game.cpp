@@ -216,8 +216,8 @@ void Game::reset()
 	maxPlayerXP = 100;
 	playerLevel = 1;
 
-	//timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
-	timeLeftUntilBoss = 30.f;
+	timeLeftUntilBoss = (minutesUntilBossSpawns * 60) + 1;
+	//timeLeftUntilBoss = 30.f;
 
 	playerDamageMultiplier = 1.0f;
 	playerSpeedMultiplier = 1.0f;
