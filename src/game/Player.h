@@ -31,7 +31,13 @@ public:
 	void update_dash(float dt);
 	void update_iframe(float dt);
 
-	void reset_pitch() { currentPitch = 0; }
+	void reset_pitch() { 
+		static float currentTilt = 0.0f;
+		static float lastTilt = 0.0f;
+		currentTilt = 0.0f;
+		lastTilt = 0.0f;
+		currentPitch = 0.0f;
+	}
 	glm::vec3 getWorldUp() const { return glm::vec3(0, 1, 0); }
 
 	Camera* getCamera() const { return camera; }
