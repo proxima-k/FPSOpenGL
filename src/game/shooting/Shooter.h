@@ -27,6 +27,9 @@ public:
 	void setCardRenderer(Mesh* cardMesh, Shader* cardShader, Camera* camera);
 	void setPlayer(Player* player) { this->player = player; }
 
+	void update(float deltaTime);
+	float getCardCooldownLeftPercentage() { return currentCardCooldown / CARD_COOLDOWN; }
+
 	std::queue<Card*> cardQueue;
 	std::queue<Card*> cardPassivesQueue;
 
@@ -34,7 +37,10 @@ public:
 	Shader* cardShader;
 	Camera* camera;
 
+
 private:	
+	float currentCardCooldown = 0.f;
+	const float CARD_COOLDOWN = 0.5f;
 
 	std::vector<Entity*> uiCards;
 

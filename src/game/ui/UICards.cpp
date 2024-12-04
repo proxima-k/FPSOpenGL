@@ -116,9 +116,7 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
     }
 }
 
-
-
-void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool highlightCard)
+void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool showCooldown, float cooldownLeftPercentage)
 {
     float deckYSpacing = 20;
 
@@ -129,6 +127,7 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
 
     std::vector<Card*> tempVector;
     std::queue<Card*> tempQueue = queue;
+
 
     if (queue.size() <= 0)
     {
@@ -145,65 +144,83 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
 
     for (int i = queue.size() - 1; i >= 0; i--)
     {
-        float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
-        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing - (queue.size() * deckYSpacing / 2));
-
-        if (highlightCard && i == 0) {
-            highlightProgress += ImGui::GetIO().DeltaTime * 5;
-
-            if (highlightProgress > 1.0f) highlightProgress = 1.0f;
-
-            highlightCurrentOffset = glm::mix(0.0f, highlightOffsetMax, highlightProgress);
-            deckYOffset -= highlightCurrentOffset;
-        }
-        else if (!highlightCard) {
-            highlightProgress = 0.0f;
-        }
-
-        ImVec2 cardPos(deckPos.x, deckPos.y + deckYOffset);
-
-        ImGui::SetCursorPos(cardPos);
-
+        void* targetCardTexture = nullptr;
         switch (tempVector[i]->getCardType())
         {
         case Card::CardType::Sine:
-            ImGui::Image((void*)(intptr_t)sineCardTexture, cardSize);
+            targetCardTexture = (void*)(intptr_t)sineCardTexture;
             break;
 
         case Card::CardType::Cosine:
-            ImGui::Image((void*)(intptr_t)cosineCardTexture, cardSize);
+            targetCardTexture = (void*)(intptr_t)cosineCardTexture;
             break;
 
         case Card::CardType::Placeholder1:
-            ImGui::Image((void*)(intptr_t)placeholder1card, cardSize);
+            targetCardTexture = (void*)(intptr_t)placeholder1card;
             break;
 
         case Card::CardType::Placeholder2:
-            ImGui::Image((void*)(intptr_t)placeholder2card, cardSize);
+            targetCardTexture = (void*)(intptr_t)placeholder2card;
             break;
 
         case Card::CardType::Placeholder3:
-            ImGui::Image((void*)(intptr_t)placeholder3card, cardSize);
+            targetCardTexture = (void*)(intptr_t)placeholder3card;
             break;
 
         case Card::CardType::PassiveDamage:
-            ImGui::Image((void*)(intptr_t)passivedamagecard, cardSize);
-        break;
+            targetCardTexture = (void*)(intptr_t)passivedamagecard;
+            break;
 
         case Card::CardType::PassiveSpeed:
-            ImGui::Image((void*)(intptr_t)passivespeedcard, cardSize);
-        break;
+            targetCardTexture = (void*)(intptr_t)passivespeedcard;
+            break;
 
         case Card::CardType::PassiveDash:
-            ImGui::Image((void*)(intptr_t)passivedashcard, cardSize);
-        break;
+            targetCardTexture = (void*)(intptr_t)passivedashcard;
+            break;
 
         default:
-            ImGui::Image((void*)(intptr_t)basicCardTexture, cardSize);
+            targetCardTexture = (void*)(intptr_t)basicCardTexture;
             break;
         }
+
+        float deckXOffset((2 - (2 - 1) / 2.0f) * selectionXSpacing);
+        float deckYOffset((i - (2 - 1) / 2.0f) * deckYSpacing - (queue.size() * deckYSpacing / 2));
+        ImVec2 cardPos(deckPos.x, deckPos.y + deckYOffset);
+
+        // if highlight card
+        if (showCooldown && i == 0 && cooldownLeftPercentage > 0.f) {
+            /*ImGui::SetCursorPos(cardPos);
+            ImGui::Image(targetCardTexture, cardSize);*/
+
+            ImDrawList* drawList = ImGui::GetWindowDrawList();
+            drawList->AddImage(
+                targetCardTexture,
+                ImVec2(cardPos.x, cardPos.y),
+                ImVec2(cardPos.x + cardSize.x, cardPos.y + cardSize.y * cooldownLeftPercentage),
+                ImVec2(0.0f, 0.0f),
+                ImVec2(1.0f, cooldownLeftPercentage),
+                ImGui::GetColorU32(ImVec4(0.1f, 0.1f, 0.1f, 1.f))
+            );
+
+            drawList->AddImage(
+                targetCardTexture,
+                ImVec2(cardPos.x, cardPos.y + cardSize.y * cooldownLeftPercentage),
+                ImVec2(cardPos.x + cardSize.x, cardPos.y + cardSize.y),
+                ImVec2(0.0f, cooldownLeftPercentage),
+                ImVec2(1.0f, 1.0f),
+                ImGui::GetColorU32(ImVec4(0.5f, 0.5f, 0.5f, 1.f))
+            );
+        }
+        else {
+            ImGui::SetCursorPos(cardPos);
+            ImGui::Image(targetCardTexture, cardSize);
+        }
+        // then perform division
+        // else just create default image with cursor position
     }
 }
+
 void UICards::randomizeCards()
 {
     std::vector<GLuint> cardTextures;

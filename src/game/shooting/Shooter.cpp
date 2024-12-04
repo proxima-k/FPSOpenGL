@@ -65,6 +65,8 @@ void Shooter::shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirec
 {
 	if (cardQueue.size() <= 0) return;
 
+	if (currentCardCooldown > 0) return;
+
 	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
 	Card* cardToSpawn = cardQueue.front();
 
@@ -72,6 +74,8 @@ void Shooter::shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirec
 
 	cardQueue.pop();
 	cardQueue.push(cardToSpawn);
+
+	currentCardCooldown = CARD_COOLDOWN;
 }
 
 void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
@@ -85,5 +89,9 @@ void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, 
 	delete defaultCard;
 }
 
-
-
+void Shooter::update(float deltaTime) {
+	if (currentCardCooldown > 0.f)
+		currentCardCooldown -= deltaTime;
+	else
+		currentCardCooldown = 0.f;
+}

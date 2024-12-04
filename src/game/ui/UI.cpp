@@ -102,8 +102,8 @@ void UI::render(GLFWwindow* window)
             cards.cardsRandomized = false;
             cards.highlightCard = false;
 
+            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize, true, shooter->getCardCooldownLeftPercentage());
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
-            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
     case GameStateManager::State::Playing:
@@ -113,8 +113,8 @@ void UI::render(GLFWwindow* window)
             cards.cardsRandomized = false;
             cards.highlightCard = false;
 
+            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize, true, shooter->getCardCooldownLeftPercentage());
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
-            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
     case GameStateManager::State::SelectCards:
@@ -124,8 +124,8 @@ void UI::render(GLFWwindow* window)
 
             cards.highlightCard = true;
 
+            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize, true, shooter->getCardCooldownLeftPercentage());
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
-            cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize);
         break;
 
     case GameStateManager::State::Dead:

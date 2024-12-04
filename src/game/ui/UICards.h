@@ -23,7 +23,7 @@ class UICards
 {
 public:
     void renderCardSelection(ImVec2 windowSize);
-    void deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool highlightCard = false);
+    void deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool showCooldown = false, float cooldownLeftPercentage = 0.f);
     void randomizeCards();
 
     GLuint basicCardTexture;
@@ -53,7 +53,7 @@ public:
     float highlightProgress = 0.0f;
 
     bool cardsRandomized = false;
-    bool highlightCard = false;
+    bool highlightCard = true;
 
     std::string descriptionTxt;
 };

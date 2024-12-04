@@ -26,6 +26,7 @@ Player::Player(Camera* camera, GLFWwindow* window)
 void Player::update(float deltaTime) 
 {
     physicsbody.update();
+    shooter.update(deltaTime);
 
     if (!canInput) return;
     processKeyboard(window, deltaTime);
