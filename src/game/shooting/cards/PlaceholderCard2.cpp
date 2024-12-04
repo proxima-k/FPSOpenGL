@@ -32,7 +32,7 @@ void PlaceHolderCard2::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 	bDestroyOnHit = false;
 	damage = 20;
 	speed = 10.0f;
-	aliveTime = 200.0f;
+	aliveTime = 15.f;
 	transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
 
 	initializeTimer(aliveTime);

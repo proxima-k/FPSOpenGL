@@ -30,7 +30,7 @@ void CosineCard::update(float deltaTime)
 void CosineCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
-	aliveTime = 200.0f;
+	aliveTime = 15.f;
 	damage = 10;
 
 	initializeTimer(aliveTime);

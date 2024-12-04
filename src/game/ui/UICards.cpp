@@ -16,14 +16,14 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
     ImGui::Text(descriptionTxt.c_str());
 
     std::map<GLuint, std::string> cardDescriptions = {
-    {sineCardTexture, "sin(x) — The card moves left to right, deals more damage"},
-    {cosineCardTexture, "cos(x) — The card moves up and down, deals more damage"},
-    {placeholder1card, "3x - Launches three cards"},
-    {placeholder2card, "x^2 - Has a boomerang effect, deals more damage"},
-    {placeholder3card, "d * pi - A card that circles around you"},
-    {passivedamagecard, "dmg(x) - Boosts your damage"},
-    {passivespeedcard, "spd(x) - Makes you move faster"},
-    {passivedashcard, "dash(x) Increeses dash lenght"}
+    {sineCardTexture, "sin(x)  -> The card moves up and down, deals more damage"},
+    {cosineCardTexture, "cos(x)  -> The card moves left to right, deals more damage"},
+    {placeholder1card, "3x  -> Launches three cards"},
+    {placeholder2card, "-(x-1)^2 + 1  -> Has a boomerang effect, deals more damage"},
+    {placeholder3card, "X^2 + Y^2 = R  -> A card that circles around you"},
+    {passivedamagecard, "dmg(x)  -> Boosts your damage"},
+    {passivespeedcard, "spd(x)  -> Makes you move faster"},
+    {passivedashcard, "dash(x)  -> Increase dash length"}
     };
 
     int cardsPerRow = (selectionAmount > 2) ? (selectionAmount + 1) / 2 : selectionAmount;
@@ -61,6 +61,12 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
 
         ImGui::SetCursorPos(adjustedPos);
         bool clicked = ImGui::ImageButton((void*)(intptr_t)selectedTextures[i], scaledCardSize);
+
+        // set description based on hovered
+        // if is hovered, get the description from the map and set it to description text
+        if (isHovered)
+            descriptionTxt = cardDescriptions[selectedTextures[i]];
+
 
         if (clicked)
         {

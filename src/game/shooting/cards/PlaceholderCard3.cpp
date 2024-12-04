@@ -34,13 +34,15 @@ void PlaceHolderCard3::update(float deltaTime)
     transform.rotation = glm::quatLookAt(direction, upDirection);
 
     playerPosition = game->camera->transform.position;
+
+    timer.updateTimer(deltaTime);
 }
 
 void PlaceHolderCard3::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
 	damage = 10;
-	aliveTime = 200.0f;
+	aliveTime = 6.f;
 
 	transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
 

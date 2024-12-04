@@ -32,7 +32,7 @@ void SineCard::update(float deltaTime)
 void SineCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
-	aliveTime = 200.0f;
+	aliveTime = 15.0f;
 	damage = 10;
 
 	initializeTimer(aliveTime);

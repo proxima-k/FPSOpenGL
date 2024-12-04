@@ -39,7 +39,7 @@ void DefaultCard::update(float deltaTime)
 void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = true;
-	aliveTime = 200.0f;
+	aliveTime = 10.f;
 	damage = 5;
 
 	initializeTimer(aliveTime);

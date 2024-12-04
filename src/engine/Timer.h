@@ -37,7 +37,7 @@ public:
 
 private:
 	bool inactive = false;
-	int currentTime = 0;
+	float currentTime = 0;
 
     std::function<void()> callback;
 };
