@@ -177,6 +177,10 @@ int main(void)
 
         std::cout << "Welcome to (xyz)^0!" << std::endl;
 
+        bool isPaused = false;
+        bool hasPressed = false;
+        bool escapePressed = false;
+
         while (!glfwWindowShouldClose(window))
         {
             // FRAMEBUFFER FOR POST-PROCESSING
@@ -189,8 +193,16 @@ int main(void)
             // LOGICS =========================================================
             glfwPollEvents();
 
-            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS && !escapePressed) {
+                escapePressed = true;
+            }
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE && escapePressed) {
+                escapePressed = false;
+
+                if (game->getCurrentState() != GameStateManager::State::MainMenu)
+                    game->changeState(GameStateManager::State::MainMenu);
+                else
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
             }
 
             /*if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
@@ -199,12 +211,21 @@ int main(void)
             else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
                 playerCamera.updateFOV(playerCamera.getFOV() - deltaTime * 15);
             }*/
+            
+            /*if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS && !hasPressed) {
+                isPaused = !isPaused;
+                hasPressed = true;
+            }
+            if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE && hasPressed) {
+                hasPressed = false;
+            }*/
 
             double currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-            game->update();
+            if (!isPaused)
+                game->update();
 
 
             // GRAPHICS =======================================================
