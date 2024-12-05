@@ -19,7 +19,7 @@ void ShaderManager::init()
         loadShader(shaderName);
     }
 
-    std::cout << "Meshes loaded!" << std::endl;
+    std::cout << "Shaders loaded!" << std::endl;
 }
 
 void ShaderManager::loadShader(std::string shaderName)

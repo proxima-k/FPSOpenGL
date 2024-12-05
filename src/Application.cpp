@@ -69,9 +69,9 @@ Player* player = nullptr;
 UI ui;
 Game* game = nullptr;
 Grid* floorGrid = nullptr;
+YAxisLine* yAxisLine = nullptr;
 AudioManager* audioManager = nullptr;
 
-YAxisLine* yAxisLine = nullptr;
 
 int main(void)
 {
@@ -175,6 +175,8 @@ int main(void)
         audioManager->init();
         ui.init(window);
 
+        std::cout << "Welcome to (xyz)^0!" << std::endl;
+
         while (!glfwWindowShouldClose(window))
         {
             // FRAMEBUFFER FOR POST-PROCESSING
@@ -187,15 +189,23 @@ int main(void)
             // LOGICS =========================================================
             glfwPollEvents();
 
-            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-                glfwTerminate();
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            }
+
+            /*if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+                playerCamera.updateFOV(playerCamera.getFOV() + deltaTime * 15);
+            }
+            else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+                playerCamera.updateFOV(playerCamera.getFOV() - deltaTime * 15);
+            }*/
 
             double currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrameTime;
             lastFrameTime = currentFrame;
 
-
             game->update();
+
 
             // GRAPHICS =======================================================
             // geometry pass
@@ -223,7 +233,7 @@ int main(void)
             ui.end();
 
             // audio
-            //audioManager->update();
+            audioManager->update();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
@@ -231,6 +241,7 @@ int main(void)
     }
     ui.shutdown();
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }

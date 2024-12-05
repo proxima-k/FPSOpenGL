@@ -63,7 +63,7 @@ std::vector<float> Mesh::getMeshVerticesFromObjFile(const std::string& filePath)
 	}
 
 	if (!reader.Warning().empty()) {
-		std::cout << "TinyObjReader Warning: " << reader.Warning();
+		//std::cout << "TinyObjReader Warning: " << reader.Warning();
 	}
 
 	auto& attrib = reader.GetAttrib();

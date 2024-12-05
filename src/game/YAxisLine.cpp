@@ -68,7 +68,8 @@ void YAxisLine::draw()
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
+	projection = camera->getProjectionMatrix();
+	//projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
 	shader->SetMat4("u_Model", model);
 	shader->SetMat4("u_View", view);

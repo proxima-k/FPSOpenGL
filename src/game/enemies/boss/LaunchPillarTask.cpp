@@ -35,7 +35,7 @@ BT::NodeState LaunchPillarTask::onNodeUpdate(float deltaTime, BT::Blackboard& bl
         glm::vec3 predictPosition = player->transform.position + glm::normalize(player->physicsbody.velocity) * constant;
 
         glm::vec2 cellIndex = floorGrid->getCellCoords(predictPosition - cage->centerWorldPosition);
-        std::cout << cellIndex.x << "   " << cellIndex.y << std::endl;
+        //std::cout << cellIndex.x << "   " << cellIndex.y << std::endl;
         
         int xCellCount = cage->xCellCount;
         int zCellCount = cage->zCellCount;

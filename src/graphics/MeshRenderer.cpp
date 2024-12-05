@@ -65,7 +65,8 @@ void MeshRenderer::draw(glm::mat4 modelMatrix)
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), targetCamera->getResolutionRatio(), 0.1f, 100.f);
+	projection = targetCamera->getProjectionMatrix();
+	//projection = glm::perspective(glm::radians(45.f), targetCamera->getResolutionRatio(), 0.1f, 100.f);
 
 	shader->SetMat4("u_Model", modelMatrix);
 	shader->SetMat4("u_View", view);

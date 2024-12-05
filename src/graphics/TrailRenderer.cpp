@@ -51,7 +51,8 @@ void TrailRenderer::draw(glm::vec3 position, glm::quat rotation, glm::vec3 scale
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), targetCamera->getResolutionRatio(), 0.1f, 100.f);
+	projection = targetCamera->getProjectionMatrix();
+	//projection = glm::perspective(glm::radians(45.f), targetCamera->getResolutionRatio(), 0.1f, 100.f);
 
 	unsigned int modelLoc = glGetUniformLocation(shader->GetID(), "u_Model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));

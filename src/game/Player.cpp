@@ -42,6 +42,8 @@ void Player::update(float deltaTime)
     update_iframe(deltaTime);
 
     camera->updateShake(deltaTime);
+    
+    // update camera fov
 }
 
 void Player::checkCollision() 
@@ -88,36 +90,49 @@ void Player::reset()
     physicsbody.velocity = glm::vec3(0);
     physicsbody.acceleration = glm::vec3(0);
     firstMouse = true;
+    camera->reset();
 }
 
 void Player::update_shield(float dt)
 {
     if (bIsShieldAlive) return;
-        shieldCooldownTimer -= dt;
-        if (shieldCooldownTimer <= 0.0f) {
-            shieldCooldownTimer = shieldCooldown;
-            bIsShieldAlive = true;
-        }
+
+    shieldCooldownTimer -= dt;
+    if (shieldCooldownTimer <= 0.0f) {
+        shieldCooldownTimer = shieldCooldown;
+        bIsShieldAlive = true;
+    }
 }
 
 void Player::update_dash(float dt)
 {
     if (bCanDash) return;
-        dashCooldownTimer -= dt;
-        if (dashCooldownTimer <= 0.0f) {
-            bCanDash = true;
-            dashCooldownTimer = 0.0f;
-        }
+
+    dashCooldownTimer -= dt;
+    if (dashFOVTimer > 0.f) {
+        dashFOVTimer -= dt;
+        dashFOVTimer = glm::clamp(dashFOVTimer, 0.f, DASH_FOV_TIME);
+        float x = (1.f - dashFOVTimer / DASH_FOV_TIME) * glm::pi<float>();
+        float equation = glm::sin(x + (glm::sin(x)/1.05f)) * 20.f;
+        float targetFOV = 45.f + equation;
+        camera->updateFOV(targetFOV);
+    }
+    if (dashCooldownTimer <= 0.0f) {
+        bCanDash = true;
+        dashCooldownTimer = 0.0f;
+        dashFOVTimer = DASH_FOV_TIME;
+    }
 }
 
 void Player::update_iframe(float dt)
 {
     if (!bIsInvincible) return;
-        invincibilityCooldownTimer -= dt;
-        if (invincibilityCooldownTimer <= 0.0f) {
-            bIsInvincible = false;
-            invincibilityCooldownTimer = invincibilityCooldown;
-        }
+
+    invincibilityCooldownTimer -= dt;
+    if (invincibilityCooldownTimer <= 0.0f) {
+        bIsInvincible = false;
+        invincibilityCooldownTimer = invincibilityCooldown;
+    }
 }
 
 void Player::processKeyboard(GLFWwindow* window, float deltaTime)
@@ -158,17 +173,21 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     bool bIsGrounded = transform.position.y < 0 + playerHeight + 0.1f;
     physicsbody.dampening = bIsGrounded ? 5.f : 2.f;
 
+    if (bIsGrounded) bUsedDash = false;
+
+
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && bIsGrounded)
     {
         physicsbody.add_force(glm::vec3(0, 10000 * deltaTime, 0));
     }
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && bCanDash) {
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS && bCanDash && !bUsedDash) {
         const float dashSpeed = 100000.0f * game->playerDashMultiplier;
         physicsbody.add_force(camera->transform.getForward() * dashSpeed * deltaTime);
 
         dashCooldownTimer = dashCooldown;
         bCanDash = false;
+        bUsedDash = true;
     }
 
     // apply velocity

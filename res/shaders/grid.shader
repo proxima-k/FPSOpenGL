@@ -21,7 +21,7 @@ void main()
 in vec3 fragPos;
 
 uniform vec3 u_bgColor;
-uniform float u_renderRadius;
+//uniform float u_renderRadius;
 uniform vec3 u_gridWorldPos;
 uniform vec3 u_playerWorldPos;
 

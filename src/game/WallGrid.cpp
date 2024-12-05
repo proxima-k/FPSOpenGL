@@ -119,7 +119,8 @@ void WallGrid::draw()
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
+	projection = camera->getProjectionMatrix();
+	//projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
 	//shader->SetFloat("u_displayHeight", -glm::cos(timer) + 1.0f);
 	shader->SetFloat("u_revealHeight", revealHeight);

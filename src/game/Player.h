@@ -74,6 +74,7 @@ private:
 	float invincibilityCooldownTimer = 0.0f;
 
 	bool bCanDash = true;
+	bool bUsedDash = false;
 	bool bIsInvincible;
 	// camera settings
 	float lastX;
@@ -82,4 +83,7 @@ private:
 	float currentPitch = 0;
 
 	bool canDash = true;
+
+	const float DASH_FOV_TIME = 0.8f;
+	float dashFOVTimer = 0.f;
 };

@@ -16,7 +16,7 @@ void TextureManager::init() {
             std::string textureName = entry.path().stem().string();
             loadStrings.push_back(textureName);
 
-            std::cout << "Texture Loaded :: " << textureName << std::endl;
+            //std::cout << "Texture Loaded :: " << textureName << std::endl;
         }
     }
 
@@ -24,7 +24,7 @@ void TextureManager::init() {
         loadTexture(textureName);
     }
 
-    std::cout << "Textures Loaded";
+    std::cout << "Textures loaded!" << std::endl;
 }
 
 void TextureManager::loadTexture(std::string textureName) {

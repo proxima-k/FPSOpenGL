@@ -107,7 +107,8 @@ void Grid::draw()
 
 	// Projection matrix
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
+	projection = camera->getProjectionMatrix();
+	//projection = glm::perspective(glm::radians(45.f), camera->getResolutionRatio(), 0.1f, 100.f);
 
 	shader->SetMat4("u_Model", model);
 	shader->SetMat4("u_View", view);
@@ -115,7 +116,7 @@ void Grid::draw()
 
 	glm::vec3 bgColor(0.1f);
 	shader->SetFloat3("u_bgColor", bgColor);
-	shader->SetFloat("u_renderRadius", cellWidth * (xCellCount - 1));
+	//shader->SetFloat("u_renderRadius", cellWidth * (xCellCount - 1));
 	shader->SetFloat3("u_gridWorldPos", transform.position);
 	shader->SetFloat3("u_playerWorldPos", player->transform.position);
 
