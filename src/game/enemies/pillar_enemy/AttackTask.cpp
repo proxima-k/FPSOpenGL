@@ -15,7 +15,7 @@ void AttackTask::onNodeStart(BT::Blackboard& blackboard)
 		entity->collision_channel = Collision_Channel::Enemy;
 		entity->meshRenderer->setColor(glm::vec3(1.f, 0.3f, 0.3f));
 
-		game->camera->invokeScreenShake(.1f, 0.5f);
+		game->camera->invokeScreenShake(.095f, 0.35f);
 		auto clip = audioManager->getAudioClip("pillarThud.mp3");
 		if (clip)
 			audioManager->playSound(clip, glm::vec3(0), 0.25f);

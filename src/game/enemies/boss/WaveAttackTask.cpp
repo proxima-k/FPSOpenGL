@@ -42,6 +42,11 @@ BT::NodeState WaveAttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blac
 	}
 
 	if (timer <= 0) {
+		if (stepsLeft == glm::min(cage->xCellCount, cage->zCellCount)) {
+			hasShakedCamera = false;
+			shakeCountdown = SHAKE_WAIT_TIME;
+		}
+
 		//std::cout << "WAVE ATTACK" << std::endl;
 		// reset timer
 		timer = timeToSpawnWave;
@@ -70,6 +75,12 @@ BT::NodeState WaveAttackTask::onNodeUpdate(float deltaTime, BT::Blackboard& blac
 	}
 
 	timer -= deltaTime;
+
+	shakeCountdown -= deltaTime;
+	if (!hasShakedCamera && shakeCountdown <= 0.f) {
+		game->camera->invokeScreenShake(0.15f, 0.75f);
+		hasShakedCamera = true;
+	}
 
 	return BT::NodeState::RUNNING;
 }

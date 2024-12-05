@@ -29,6 +29,7 @@ BT::NodeState HealCubeEntranceTask::onNodeUpdate(float deltaTime, BT::Blackboard
 	}
 	else {
 		if (!bPlaySpawnSound) {
+			game->camera->invokeScreenShake(0.05f, 0.25f);
 			auto clip = audioManager->getAudioClip("pillarThud.mp3");
 			if (clip)
 				audioManager->playSound(clip, glm::vec3(0), 0.25f);

@@ -19,7 +19,9 @@ private:
 	float attackTime = 5.f;
 	float fallTime = 0.5f;
 
-	float screenShakeCountdown = warningTime;
+	
+	bool hasShakedCamera = true;
+	float shakeCountdown = 0.f;
 
 	BossCage* cage;
 };

@@ -57,9 +57,11 @@ void Player::checkCollision()
         audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
 
         if (bIsShieldAlive) {
+            std::cout << "hit" << std::endl;
             bIsShieldAlive = false;
             bIsInvincible = true;
             invincibilityCooldownTimer = invincibilityCooldown;
+            shieldCooldownTimer = shieldCooldown;
             camera->invokeScreenShake(.07f, 0.7f);
         }
         else {
@@ -113,7 +115,7 @@ void Player::update_dash(float dt)
         dashFOVTimer -= dt;
         dashFOVTimer = glm::clamp(dashFOVTimer, 0.f, DASH_FOV_TIME);
         float x = (1.f - dashFOVTimer / DASH_FOV_TIME) * glm::pi<float>();
-        float equation = glm::sin(x + (glm::sin(x)/1.05f)) * 20.f;
+        float equation = glm::sin(x + (glm::sin(x)/1.05f)) * 20.f * game->playerDashMultiplier;
         float targetFOV = 45.f + equation;
         camera->updateFOV(targetFOV);
     }

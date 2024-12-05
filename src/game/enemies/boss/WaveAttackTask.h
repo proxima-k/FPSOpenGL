@@ -24,5 +24,9 @@ private:
 	int loopsLeft = 0;
 	int totalLoops = 4;
 
+	bool hasShakedCamera = true;
+	float SHAKE_WAIT_TIME = 1.f;
+	float shakeCountdown = 0.f;
+
 	BossCage* cage;
 };
