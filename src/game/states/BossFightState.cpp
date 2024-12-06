@@ -16,7 +16,6 @@ void BossFightState::onEnterState()
 
 	game->bossFightController->cleanUp();
 
-	//game->bossFightController->cleanUp();
 	if (gameStateManager->getPreviousState() == GameStateManager::State::MainMenu) {
 		player->reset();
 

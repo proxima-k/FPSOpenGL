@@ -234,9 +234,11 @@ void Player::tiltCamera(GLFWwindow* window, float deltaTime)
 
     float tiltDifference = currentTilt - lastTilt;
 
-    glm::quat tiltQuat = glm::quat(glm::vec3(0.0f, 0.0f, glm::radians(tiltDifference)));
+    //glm::quat tiltQuat = glm::quat(glm::vec3(0.0f, 0.0f, glm::radians(tiltDifference)));
+    //camera->transform.rotation = glm::normalize(glm::quat(camera->transform.rotation) * tiltQuat);
 
-    camera->transform.rotation = glm::normalize(glm::quat(camera->transform.rotation) * tiltQuat);
+    glm::quat zRotate = glm::angleAxis(glm::radians(tiltDifference), camera->transform.getForward());
+    camera->transform.rotation = zRotate * camera->transform.rotation;
 
     lastTilt = currentTilt;
 }
@@ -280,7 +282,7 @@ void Player::mouse_movement_callback(float xPos, float yPos)
     // Rotate the Yaw of the camera (looking left and right)
     glm::quat yRotate = glm::angleAxis(glm::radians(-xOffset), glm::vec3(0, 1, 0));
     camera->transform.rotation = yRotate * camera->transform.rotation;
-    transform.rotation = yRotate * camera->transform.rotation;
+    transform.rotation = yRotate * transform.rotation;
 
     // constrain pitch to avoid overturn
     float newPitch = currentPitch + yOffset;
@@ -293,7 +295,7 @@ void Player::mouse_movement_callback(float xPos, float yPos)
     currentPitch += yOffset;
 
     // Rotate the Pitch of the camera (looking up and down)
-    glm::quat xRotate = glm::angleAxis(glm::radians(yOffset), camera->transform.getRight());
+    glm::quat xRotate = glm::angleAxis(glm::radians(yOffset), transform.getRight());
     camera->transform.rotation = xRotate * camera->transform.rotation;
 }
 
