@@ -10,7 +10,7 @@ public:
 	CosineCard(glm::vec3 position)
 		: Card(position) {
 		meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
-
+		meshRenderer->setColor(glm::vec3(1.f, 0.341f, 0.341f));
 	}
 
 	void update(float deltaTime) override;

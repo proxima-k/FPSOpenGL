@@ -23,7 +23,7 @@ class UICards
 {
 public:
     void renderCardSelection(ImVec2 windowSize);
-    void deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool showCooldown = false, float cooldownLeftPercentage = 0.f);
+    void deckShowcase(ImVec2 deckPos, std::queue<Card::CardType> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool showCooldown = false, float cooldownLeftPercentage = 0.f);
     void randomizeCards();
 
     GLuint basicCardTexture;

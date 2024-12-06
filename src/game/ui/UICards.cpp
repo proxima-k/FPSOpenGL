@@ -73,34 +73,34 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
             std::cout << "Pressed button " << i << std::endl;
 
             if (selectedTextures[i] == sineCardTexture) {
-                shooter->cardQueue.push(new SineCard(glm::vec3(0)));
+                shooter->cardQueue.push(Card::CardType::Sine);
             }
             else if (selectedTextures[i] == cosineCardTexture) {
-                shooter->cardQueue.push(new CosineCard(glm::vec3(0)));
+                shooter->cardQueue.push(Card::CardType::Cosine);
             }
             else if (selectedTextures[i] == placeholder1card) {
-                shooter->cardQueue.push(new PlaceHolderCard1(glm::vec3(0)));
+                shooter->cardQueue.push(Card::CardType::Placeholder1);
             }
             else if (selectedTextures[i] == placeholder2card) {
-                shooter->cardQueue.push(new PlaceHolderCard2(glm::vec3(0)));
+                shooter->cardQueue.push(Card::CardType::Placeholder2);
             }
             else if (selectedTextures[i] == placeholder3card) {
-                shooter->cardQueue.push(new PlaceHolderCard3(glm::vec3(0)));
+                shooter->cardQueue.push(Card::CardType::Placeholder3);
             }
             else if (selectedTextures[i] == passivedamagecard) {
-                auto damagePassive = new DamagePassive(glm::vec3(0));
-                shooter->cardPassivesQueue.push(damagePassive);
-                damagePassive->applyPassiveEffect();
+                DamagePassive damagePassive(glm::vec3(0));
+                shooter->cardPassivesQueue.push(Card::CardType::PassiveDamage);
+                damagePassive.applyPassiveEffect();
             }
             else if (selectedTextures[i] == passivespeedcard) {
-                auto passivespeedcard = new SpeedPassive(glm::vec3(0));
-                shooter->cardPassivesQueue.push(passivespeedcard);
-                passivespeedcard->applyPassiveEffect();
+                SpeedPassive speedPassive(glm::vec3(0));
+                shooter->cardPassivesQueue.push(Card::CardType::PassiveSpeed);
+                speedPassive.applyPassiveEffect();
             }
             else if (selectedTextures[i] == passivedashcard) {
-                auto dashbuffcard = new DashPassive(glm::vec3(0));
-                shooter->cardPassivesQueue.push(dashbuffcard);
-                dashbuffcard->applyPassiveEffect();
+                DashPassive dashPassive(glm::vec3(0));
+                shooter->cardPassivesQueue.push(Card::CardType::PassiveDash);
+                dashPassive.applyPassiveEffect();
             }
 
             game->changeState(GameStateManager::State::Playing);
@@ -116,7 +116,7 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
     }
 }
 
-void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool showCooldown, float cooldownLeftPercentage)
+void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card::CardType> queue, ImVec2 cardPosCenter, ImVec2 cardSize, bool showCooldown, float cooldownLeftPercentage)
 {
     float deckYSpacing = 20;
 
@@ -125,8 +125,8 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
 
     ImVec2 cardPos(deckPos.x, deckPos.y + deckYOffset);
 
-    std::vector<Card*> tempVector;
-    std::queue<Card*> tempQueue = queue;
+    std::vector<Card::CardType> tempVector;
+    std::queue<Card::CardType> tempQueue = queue;
 
 
     if (queue.size() <= 0)
@@ -145,7 +145,7 @@ void UICards::deckShowcase(ImVec2 deckPos, std::queue<Card*> queue, ImVec2 cardP
     for (int i = queue.size() - 1; i >= 0; i--)
     {
         void* targetCardTexture = nullptr;
-        switch (tempVector[i]->getCardType())
+        switch (tempVector[i])
         {
         case Card::CardType::Sine:
             targetCardTexture = (void*)(intptr_t)sineCardTexture;

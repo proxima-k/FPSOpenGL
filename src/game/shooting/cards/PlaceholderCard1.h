@@ -11,6 +11,7 @@ public:
 	PlaceHolderCard1(glm::vec3 position)
 		: Card(position), bCanSpawnChildren(true) {
 		meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
+		meshRenderer->setColor(glm::vec3(0.3216f, 0.5216f, 1.f));
 	}
 
 	void update(float deltaTime) override;
@@ -26,10 +27,7 @@ public:
 private:
 	float height = 0.f;
 	float timeElapsed = 0.f;
-	glm::vec3 currentPosition;
 
 	bool bCanSpawnChildren;
-
-
 };
 

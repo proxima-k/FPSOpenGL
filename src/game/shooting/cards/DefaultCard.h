@@ -16,9 +16,7 @@ public:
 	CardType getCardType() const override { return Normal; }
 
 private:
-	float height = 0.f;
 	float timeElapsed = 0.f;
 
-	glm::vec3 currentPosition;
 };
 

@@ -4,6 +4,7 @@ Card::Card(glm::vec3 position)
 	: Entity(position)
 {
 	collision_channel = Collision_Channel::Projectile;
+	transform.scale = glm::vec3(0.1f, 0.0075f, 0.12f);
 }
 
 void Card::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)

@@ -2,6 +2,27 @@
 
 void PlaceHolderCard3::update(float deltaTime)
 {
+    float orbitSpeed = 5.f;
+    angle += orbitSpeed * deltaTime;
+
+    if (angle > glm::two_pi<float>()) {
+        angle -= glm::two_pi<float>();
+    }
+
+    playerPosition = game->camera->transform.position;
+    float x = playerPosition.x + orbitRadius * cos(angle);
+    float z = playerPosition.z + orbitRadius * sin(angle);
+
+    glm::vec3 cameraForward = glm::normalize(game->camera->transform.getForward());
+    float verticalOffset = cameraForward.y/2 * orbitRadius;
+
+    transform.position = glm::vec3(x, playerPosition.y, z);
+
+    /*glm::vec3 direction = glm::normalize(transform.position - playerPosition);
+    transform.rotation = glm::quatLookAt(direction, upDirection);*/
+
+    timer.updateTimer(deltaTime);
+
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr)
     {
@@ -14,28 +35,6 @@ void PlaceHolderCard3::update(float deltaTime)
                 destroy();
         }
     }
-
-    float orbitSpeed = 5.f;
-    angle += orbitSpeed * deltaTime;
-
-    if (angle > glm::two_pi<float>()) {
-        angle -= glm::two_pi<float>();
-    }
-
-    float x = playerPosition.x + orbitRadius * cos(angle);
-    float z = playerPosition.z + orbitRadius * sin(angle);
-
-    glm::vec3 cameraForward = glm::normalize(game->camera->transform.getForward());
-    float verticalOffset = cameraForward.y/2 * orbitRadius;
-
-    transform.position = glm::vec3(x, playerPosition.y + verticalOffset, z);
-
-    glm::vec3 direction = glm::normalize(transform.position - playerPosition);
-    transform.rotation = glm::quatLookAt(direction, upDirection);
-
-    playerPosition = game->camera->transform.position;
-
-    timer.updateTimer(deltaTime);
 }
 
 void PlaceHolderCard3::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)

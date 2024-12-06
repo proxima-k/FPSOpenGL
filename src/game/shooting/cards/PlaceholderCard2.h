@@ -5,12 +5,14 @@
 #include <MeshManager.h>
 #include <ShaderManager.h>
 
+// pull card
 class PlaceHolderCard2 : public Card
 {
 public:
 	PlaceHolderCard2(glm::vec3 position)
 		: Card(position) {
 		meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
+		meshRenderer->setColor(glm::vec3(1.f, 0.7411f, 0.349f));
 	}
 
 	void update(float deltaTime) override;

@@ -18,11 +18,10 @@ Shooter::Shooter()
 	shooter = this;
 }
 
-void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
-	//MeshRenderer newMeshRenderer(cardMesh, cardShader, camera);
+Card* Shooter::spawnCard(Card::CardType cardType, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection) {
 	Card* newCard = nullptr;
 
-	switch (card->getCardType()) {
+	switch (cardType) {
 	case Card::Normal:
 		newCard = game->spawn_entity<DefaultCard>(launchPosition);
 		break;
@@ -32,21 +31,22 @@ void Shooter::spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDi
 	case Card::Sine:
 		newCard = game->spawn_entity<SineCard>(launchPosition);
 		break;
-	case Card::Placeholder1:
+	case Card::Placeholder1: // x3
 		newCard = game->spawn_entity<PlaceHolderCard1>(launchPosition);
 		break;
-	case Card::Placeholder2:
+	case Card::Placeholder2: // pull
 		newCard = game->spawn_entity<PlaceHolderCard2>(launchPosition);
 		break;
-	case Card::Placeholder3:
+	case Card::Placeholder3: // circle
 		newCard = game->spawn_entity<PlaceHolderCard3>(launchPosition);
 		break;
 	}
 
 	if (newCard != nullptr) {
-		newCard->transform.scale = glm::vec3(0.1f, 0.005f, 0.1f);
 		newCard->launch(launchPosition, launchDirection, upDirection);
 	}
+
+	return newCard;
 }
 
 void Shooter::emptyAllQueues() {
@@ -67,8 +67,7 @@ void Shooter::shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirec
 
 	if (currentCardCooldown > 0) return;
 
-	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
-	Card* cardToSpawn = cardQueue.front();
+	Card::CardType cardToSpawn = cardQueue.front();
 
 	spawnCard(cardToSpawn, launchPosition, launchDirection, upDirection);
 
@@ -80,13 +79,11 @@ void Shooter::shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirec
 
 void Shooter::shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
-	MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
+	//DefaultCard* defaultCard = new DefaultCard(launchPosition);
 
-	DefaultCard* defaultCard = new DefaultCard(launchPosition);
+	spawnCard(Card::Normal, launchPosition, launchDirection, upDirection);
 
-	spawnCard(defaultCard, launchPosition, launchDirection, upDirection);
-
-	delete defaultCard;
+	//delete defaultCard;
 }
 
 void Shooter::update(float deltaTime) {

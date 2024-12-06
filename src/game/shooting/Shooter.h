@@ -20,7 +20,7 @@ public:
 
 	void shootCardFromQueue(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 	void shootDefault(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
-	void spawnCard(Card* card, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
+	Card* spawnCard(Card::CardType cardType, glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection);
 
 	void emptyAllQueues();
 
@@ -30,8 +30,8 @@ public:
 	void update(float deltaTime);
 	float getCardCooldownLeftPercentage() { return currentCardCooldown / CARD_COOLDOWN; }
 
-	std::queue<Card*> cardQueue;
-	std::queue<Card*> cardPassivesQueue;
+	std::queue<Card::CardType> cardQueue;
+	std::queue<Card::CardType> cardPassivesQueue;
 
 	Mesh* cardMesh;
 	Shader* cardShader;

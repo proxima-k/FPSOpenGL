@@ -5,12 +5,12 @@
 
 void PlaceHolderCard1::update(float deltaTime)
 {
-
 	glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
 
-	currentPosition += launchDirection * deltaTime * 10.f;
+	transform.position += launchDirection * deltaTime * 10.f;
 
-	transform.position = currentPosition + rightVector * height;
+	glm::quat yawRotate = glm::angleAxis(glm::radians(deltaTime * 900.f), -upDirection);
+	transform.rotation = yawRotate * transform.rotation;
 
 	Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
@@ -50,14 +50,11 @@ void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 			launchDirection.x * glm::sin(-spreadAngle) + launchDirection.z * glm::cos(-spreadAngle)
 		);
 
-		MeshRenderer newMeshRenderer(cardMesh, cardShader, camera, glm::vec3(0.3f, 1.f, 0.3f));
+		Card* leftCard = game->player->shooter.spawnCard(Card::CardType::Normal, transform.position, leftDirection, upDirection);
+		Card* rightCard = game->player->shooter.spawnCard(Card::CardType::Normal, transform.position, rightDirection, upDirection);
 
-		// todo: potential memory leak
-		DefaultCard* leftCard = new DefaultCard(launchPosition);
-		DefaultCard* rightCard = new DefaultCard(launchPosition);;
-
-		game->player->shooter.spawnCard(leftCard, transform.position, leftDirection, upDirection);
-		game->player->shooter.spawnCard(rightCard, transform.position, rightDirection, upDirection);
+		leftCard->meshRenderer->setColor(glm::vec3(0.3216f, 0.5216f, 1.f));
+		rightCard->meshRenderer->setColor(glm::vec3(0.3216f, 0.5216f, 1.f));
 
 		leftCard->damage = damage;
 		rightCard->damage = damage;
@@ -65,6 +62,6 @@ void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirectio
 
 	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
-	currentPosition = launchPosition;
 	transform.position = launchPosition;
+	transform.lookAt(transform.position + launchDirection, upDirection);
 }

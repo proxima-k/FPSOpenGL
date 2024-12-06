@@ -4,19 +4,20 @@
 #include <ShaderManager.h>
 
 DefaultCard::DefaultCard(glm::vec3 position)
-	: Card(position), currentPosition(position)
+	: Card(position)
 {
 	meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
-
 }
 
 void DefaultCard::update(float deltaTime)
 {
 	glm::vec3 rightVector = glm::cross(launchDirection, upDirection);
 
-	currentPosition += launchDirection * deltaTime * 10.f;
+	transform.position += launchDirection * deltaTime * 10.f;
 
-	transform.position = currentPosition + rightVector * height;
+	glm::quat yawRotate = glm::angleAxis(glm::radians(deltaTime * 900.f), -upDirection);
+	transform.rotation = yawRotate * transform.rotation;
+
 
 	Entity* hit_actor = game->get_colliding_entity_OBB(this, Collision_Channel::Enemy);
 	if (hit_actor != nullptr)
@@ -25,7 +26,7 @@ void DefaultCard::update(float deltaTime)
 		if (enemy != nullptr)
 		{
 			enemy->take_damage(damage * game->playerDamageMultiplier);
-
+			
 			game->spawn_particle_source(transform.position, 20.0f, 0.3f, 0.8f);
 
 			if(bDestroyOnHit)
@@ -44,5 +45,5 @@ void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, gl
 
 	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);
-	currentPosition = launchPosition;
+	transform.lookAt(transform.position + launchDirection, upDirection);
 }

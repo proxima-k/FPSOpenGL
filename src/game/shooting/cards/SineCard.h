@@ -12,6 +12,7 @@ public:
 	SineCard(glm::vec3 position)
 		: Card(position) {
 		meshRenderer = new MeshRenderer(meshManager->getMesh("cube"), shaderManager->getShader("mesh"), game->camera);
+		meshRenderer->setColor(glm::vec3(0.494f, 0.851f, 0.341f));
 	}
 
 	void update(float deltaTime) override;

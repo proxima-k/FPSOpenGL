@@ -14,8 +14,9 @@
 Player::Player(Camera* camera, GLFWwindow* window)
     : Entity(), camera(camera), physicsbody(), window(window)
 { 
-    transform.scale = glm::vec3(0.4f, 0.7f, 0.4f);
+    transform.scale = glm::vec3(0.4f, 0.8f, 0.4f);
     transform.position = transform.getUp() * (transform.scale.y / 2.f);
+    playerHeight = transform.scale.y / 2.f;
     physicsbody.bGravity = true;
     collision_channel = Collision_Channel::Player;
 
@@ -92,6 +93,9 @@ void Player::reset()
     physicsbody.velocity = glm::vec3(0);
     physicsbody.acceleration = glm::vec3(0);
     firstMouse = true;
+
+    // fov juice reset
+    dashFOVTimer = 0.f;
     camera->reset();
 }
 
@@ -111,6 +115,7 @@ void Player::update_dash(float dt)
     if (bCanDash) return;
 
     dashCooldownTimer -= dt;
+
     if (dashFOVTimer > 0.f) {
         dashFOVTimer -= dt;
         dashFOVTimer = glm::clamp(dashFOVTimer, 0.f, DASH_FOV_TIME);
@@ -119,6 +124,7 @@ void Player::update_dash(float dt)
         float targetFOV = 45.f + equation;
         camera->updateFOV(targetFOV);
     }
+
     if (dashCooldownTimer <= 0.0f) {
         bCanDash = true;
         dashCooldownTimer = 0.0f;

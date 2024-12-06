@@ -14,6 +14,7 @@ void MainMenuState::onEnterState()
 {
 	player = gameStateManager->game->player;
 	camera = gameStateManager->game->camera;
+	camera->reset();
 
 	timeElapsed = 0.f;
 	t = 0.f;
