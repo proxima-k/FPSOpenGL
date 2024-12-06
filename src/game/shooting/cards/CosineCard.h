@@ -25,5 +25,6 @@ private:
 	float timeElapsed = 0.f;
 
 	glm::vec3 currentPosition;
+	glm::vec3 lastPosition;
 };
 
