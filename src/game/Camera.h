@@ -18,7 +18,7 @@ public:
 
     void updateScreenSize(unsigned int width, unsigned int height) { screenWidth = width; screenHeight = height; }
     void updateFOV(float newFOV) { fieldOfView = glm::clamp(newFOV, 0.0000001f, 179.f); }
-    void reset() { fieldOfView = 45.f; nearClipping = 0.1f; farClipping = 100.f; }
+    void reset() { fieldOfView = 45.f; nearClipping = 0.1f; farClipping = 100.f; shakeTimeLeft = 0.f;  }
 
     float getResolutionRatio() { return (float)screenWidth / screenHeight; }
     unsigned int getScreenWidth() { return screenWidth; }

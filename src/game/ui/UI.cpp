@@ -48,7 +48,7 @@ void UI::init(GLFWwindow* window)
     cards.emptydeck = getTexture("emptydeck");
 
     kanitFont = io.Fonts->AddFontFromFileTTF("res/fonts/SpaceMono-Bold.ttf", 40.0f);
-    menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/SpaceMono-Bold.ttf", 120.0f);
+    menuFont = io.Fonts->AddFontFromFileTTF("res/fonts/SpaceMono-Bold.ttf", 30.0f);
 
     if (!kanitFont) {
         std::cerr << "Failed to load font: Kanit-Light.ttf" << std::endl;
@@ -134,19 +134,40 @@ void UI::render(GLFWwindow* window)
 
     case GameStateManager::State::MainMenu:
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            if (menuFont)
+            {
+                ImGui::PopFont();
+                ImGui::PushFont(menuFont);
+            }
 
+            // MENU BG SPRITE
             ImVec2 menuSpriteSize = { windowWidth, windowHeight };
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("menusprite"), menuSpriteSize);
+
+            
+
+            // TITLE
+            //float titleSizeX = (windowWidth / 2.f);
+            //float titleSizeY = (windowHeight / 2.f);
+            float titleSizeX = (windowWidth / 5.f);
+            float titleSizeY = titleSizeX / 2.f;
+            ImVec2 titleSize = { titleSizeX , titleSizeY };
+
+            ImGui::SetCursorPos({ (windowWidth / 30.f), (windowHeight / 4.f) - (titleSizeY / 2.f) });
+            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
+
+           
 
             // PLAY BUTTON
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 1.f, 1.f, 1.f));          // Button idle color
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.85f, 0.85f, 1.f));   // Button hover color
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.6f, 0.6f, 1.f));    // Button active color
-            float buttonSizeX = (400);
-            float buttonSizeY = (150);
-            ImGui::SetCursorPos({ (windowWidth / 7.5f) - (buttonSizeX / 2), (windowHeight / 2) - (buttonSizeY / 2) });
+            float buttonSizeX = windowWidth / 4.8f;
+            float buttonSizeY = buttonSizeX / 2.6666667f;
+            ImGui::SetCursorPos({ (windowWidth / 30.f), (windowHeight / 2) - (buttonSizeY / 2) });
             ImVec2 buttonSize = { buttonSizeX , buttonSizeY };
-            //ImGui::PushStyleColor(ImGuiCol_Button, { 2, 2, 2, 2 });
+
+
             bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("play"), buttonSize);
             if (clicked) {
                 game->reset();
@@ -154,31 +175,26 @@ void UI::render(GLFWwindow* window)
             }
             ImGui::PopStyleColor(3);
 
-            /*if (menuFont)
-            {
-                ImGui::PopFont();
-                ImGui::PushFont(menuFont);
-            }*/
-
-            // TITLE
-            float titleSizeX = (500);
-            //float titleSizeX = (windowWidth / 2.f);
-            //float titleSizeY = (windowHeight / 2.f);
-            float titleSizeY = (500);
-            ImVec2 titleSize = { titleSizeX , titleSizeY };
-
-            ImGui::SetCursorPos({ (windowWidth / 7.5f) - (titleSizeX / 2), (windowHeight / 4.f) - (titleSizeY / 2) });
-            ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
-
-
 
             // CHEATSHEET
-            float cheatSizeX = (500);
-            float cheatSizeY = (250);
+            float cheatSizeX = (windowWidth / 3.84f);
+            float cheatSizeY = cheatSizeX / 2.f;
             ImVec2 cheatSize = { cheatSizeX , cheatSizeY };
 
-            ImGui::SetCursorPos({ (windowWidth / 6.5f) - (cheatSizeX / 2), (windowHeight * 3.15f / 4.f) - (cheatSizeY / 2)});
+            ImGui::SetCursorPos({ (windowWidth / 30.f), (windowHeight * 3.15f / 4.f) - (cheatSizeY / 2)});
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("cheatsheet"), (cheatSize));
+
+            
+            // TOOL CREDITS
+            float textWidth = ImGui::CalcTextSize("made in c++ and opengl").x;
+            ImVec2 toolCreditsPos((windowWidth - textWidth - 20.f), (windowHeight - 40.f));
+            //ImVec2 toolCreditsPos((windowWidth / 30.f), (windowHeight * 3.15f / 4.f) + (cheatSizeY / 2) + 10.f);
+            ImGui::SetCursorPos(toolCreditsPos);
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 0.85f, 0.85f, 0.9f)); // Gray
+            ImGui::Text("made in c++ and opengl");
+            ImGui::PopStyleColor();
+
+
         break;
     }
 

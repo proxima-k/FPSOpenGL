@@ -14,7 +14,7 @@
 Player::Player(Camera* camera, GLFWwindow* window)
     : Entity(), camera(camera), physicsbody(), window(window)
 { 
-    transform.scale = glm::vec3(0.4f, 0.8f, 0.4f);
+    transform.scale = glm::vec3(0.45f, 0.8f, 0.45f);
     transform.position = transform.getUp() * (transform.scale.y / 2.f);
     playerHeight = transform.scale.y / 2.f;
     physicsbody.bGravity = true;
@@ -161,11 +161,11 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
     // debug
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         game->addPlayerXP(10);
-    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    /*if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     {
         game->reset();
         this->reset();
-    }
+    }*/
 
     if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
     {
@@ -174,6 +174,7 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
     {
+        game->clearEnemies();
         game->changeState(GameStateManager::BossFight);
     }
 
