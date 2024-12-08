@@ -10,7 +10,7 @@ void GrassRiseAndFallTask::onNodeStart(BT::Blackboard& blackboard)
     if (entity != nullptr) {
         updateHeight();
         entity->collision_channel = Collision_Channel::Enemy;
-        entity->meshRenderer->setColor(glm::vec3(0.5f, 0.99f, 0.f));
+        entity->meshRenderer->setColor(glm::vec3(0.698f, 0.992f, 0.2f));
     }
     else {
         state = BT::NodeState::FAILURE;

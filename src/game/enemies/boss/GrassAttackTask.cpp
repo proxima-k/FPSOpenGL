@@ -11,7 +11,7 @@
 void GrassAttackTask::onNodeStart(BT::Blackboard& blackboard)
 {
 	BossEnemy* boss = blackboard.getValue<BossEnemy*>("boss");
-	boss->setTargetColor(glm::vec3(0.5f, 0.99f, 0.f));
+	boss->setTargetColor(glm::vec3(0.698f, 0.992f, 0.2f));
 
 	cage = boss->bossCage;
 	// resetValues();
