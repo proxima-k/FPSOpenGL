@@ -14,6 +14,8 @@ void TextureManager::init() {
     for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
         if (entry.is_regular_file()) {
             std::string textureName = entry.path().stem().string();
+
+            if (entry.path().extension().string().substr(1) != "png") continue;
             loadStrings.push_back(textureName);
 
             //std::cout << "Texture Loaded :: " << textureName << std::endl;
