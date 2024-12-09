@@ -143,7 +143,6 @@ void UI::render(GLFWwindow* window)
             // MENU BG SPRITE
             ImVec2 menuSpriteSize = { windowWidth, windowHeight };
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("menusprite"), menuSpriteSize);
-
             
 
             // TITLE
@@ -156,7 +155,17 @@ void UI::render(GLFWwindow* window)
             ImGui::SetCursorPos({ (windowWidth / 30.f), (windowHeight / 4.f) - (titleSizeY / 2.f) });
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("(xyz)^0"), (titleSize));
 
-           
+            // TOOL CREDITS
+            timeElapsed += 0.02 * 1.5f;
+            float n = 2.05f;
+            float textGlow = glm::cos(timeElapsed) / n + ((n - 1) / n);
+            float textWidth = ImGui::CalcTextSize("made in c++ and opengl").x;
+            ImVec2 toolCreditsPos((windowWidth / 30.f) + (titleSizeX / 6.f), (windowHeight / 4.f) + (titleSizeY / 2.f) - (titleSizeY / 10.f));
+            //ImVec2 toolCreditsPos((windowWidth / 30.f), (windowHeight * 3.15f / 4.f) + (cheatSizeY / 2) + 10.f);
+            ImGui::SetCursorPos(toolCreditsPos);
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 0.85f, 0.85f, textGlow)); // Gray
+            ImGui::Text("made in c++ and opengl");
+            ImGui::PopStyleColor();
 
             // PLAY BUTTON
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 1.f, 1.f, 1.f));          // Button idle color
@@ -172,6 +181,7 @@ void UI::render(GLFWwindow* window)
             if (clicked) {
                 game->reset();
                 game->changeState(GameStateManager::State::Playing);
+                timeElapsed = 0;
             }
             ImGui::PopStyleColor(3);
 
@@ -185,14 +195,14 @@ void UI::render(GLFWwindow* window)
             ImGui::Image((void*)(intptr_t)game->textureManager->getTexture("cheatsheet"), (cheatSize));
 
             
-            // TOOL CREDITS
-            float textWidth = ImGui::CalcTextSize("made in c++ and opengl").x;
-            ImVec2 toolCreditsPos((windowWidth - textWidth - 20.f), (windowHeight - 40.f));
-            //ImVec2 toolCreditsPos((windowWidth / 30.f), (windowHeight * 3.15f / 4.f) + (cheatSizeY / 2) + 10.f);
-            ImGui::SetCursorPos(toolCreditsPos);
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 0.85f, 0.85f, 0.9f)); // Gray
-            ImGui::Text("made in c++ and opengl");
-            ImGui::PopStyleColor();
+            //// TOOL CREDITS
+            //float textWidth = ImGui::CalcTextSize("made in c++ and opengl").x;
+            //ImVec2 toolCreditsPos((windowWidth - textWidth - 20.f), (windowHeight - 40.f));
+            ////ImVec2 toolCreditsPos((windowWidth / 30.f), (windowHeight * 3.15f / 4.f) + (cheatSizeY / 2) + 10.f);
+            //ImGui::SetCursorPos(toolCreditsPos);
+            //ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 0.85f, 0.85f, 0.9f)); // Gray
+            //ImGui::Text("made in c++ and opengl");
+            //ImGui::PopStyleColor();
 
 
         break;

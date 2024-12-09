@@ -39,4 +39,6 @@ private:
     ImFont* menuFont;
 
     bool initialized;
+
+    float timeElapsed = 0.f;
 };
