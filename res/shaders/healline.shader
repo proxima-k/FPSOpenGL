@@ -22,7 +22,6 @@ in vec3 fragPos;
 
 // uniform vec3 u_bgColor;
 uniform vec3 u_startPos;
-uniform vec3 u_endPos;
 uniform float u_timeElapsed;
 
 out vec4 targetColor;

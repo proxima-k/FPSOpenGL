@@ -106,7 +106,7 @@ void AudioManager::update() {
         alec(alGetSourcei(it->source, AL_SOURCE_STATE, &sourceState));
 
         if (sourceState == AL_STOPPED) {
-            std::cout << "source stopped playing" << std::endl;
+            //std::cout << "source stopped playing" << std::endl;
             alec(alSourceStop(it->source));
             alec(alDeleteSources(1, &it->source));
 
@@ -128,7 +128,7 @@ ALuint AudioManager::getBufferForClip(AudioClip* audioClip) {
         return bufferCache[audioClip->fileName];
     }
 
-    std::cout << "creating new buffer for audio clip" << std::endl;
+    //std::cout << "creating new buffer for audio clip" << std::endl;
 
     drmp3_config config = audioClip->config;
     drmp3_uint64 totalPCMFrameCount = audioClip->totalPCMFrameCount;

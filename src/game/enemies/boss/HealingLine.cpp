@@ -68,7 +68,7 @@ void HealingLine::draw()
 
 	shader->SetFloat("u_timeElapsed", timeElapsed);
 	shader->SetFloat3("u_startPos", startPosition);
-	shader->SetFloat3("u_endPos", endPosition);
+	//shader->SetFloat3("u_endPos", endPosition);
 
 	GLCall(glDrawArrays(GL_LINES, 0, verticesDataCount));
 }

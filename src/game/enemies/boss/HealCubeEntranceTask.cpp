@@ -11,7 +11,7 @@
 HealCubeEntranceTask::HealCubeEntranceTask(float offset)
 {
 	timer = offset;
-	std::cout << timer << std::endl;
+	//std::cout << timer << std::endl;
 }
 
 void HealCubeEntranceTask::onNodeStart(BT::Blackboard& blackboard)

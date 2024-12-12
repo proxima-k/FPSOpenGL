@@ -13,7 +13,9 @@ BossHealingCube::BossHealingCube(glm::vec3 spawnPosition, BossBody* bossBodyToHe
 	: Enemy(spawnPosition), bossBodyToHeal(bossBodyToHeal), healTaskNode(healTaskNode), index(index), faceDirection(cellNormal), cellPosition(spawnPosition)
 {
 	BT::RootNode* root = new BT::RootNode();
-	HealCubeEntranceTask* entranceTask = new HealCubeEntranceTask(index/3.5f);
+
+	float timeBetweenCubes = (float)index / healTaskNode->currentTotalHealingCubes;
+	HealCubeEntranceTask* entranceTask = new HealCubeEntranceTask(timeBetweenCubes * 3.3f);
 	entranceTask->canRepeat = false;
 
 	behaviorTree.setRootNode(root);

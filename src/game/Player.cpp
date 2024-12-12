@@ -58,7 +58,7 @@ void Player::checkCollision()
         audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
 
         if (bIsShieldAlive) {
-            std::cout << "hit" << std::endl;
+            //std::cout << "hit" << std::endl;
             bIsShieldAlive = false;
             bIsInvincible = true;
             invincibilityCooldownTimer = invincibilityCooldown;
@@ -318,7 +318,7 @@ void Player::processAudioInput(GLFWwindow* window)
     bool isWPressed = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS);
     if (isWPressed && !prevWState)
     {
-        std::cout << "Playing forward sound" << std::endl;
+        //std::cout << "Playing forward sound" << std::endl;
         auto clip = audioManager->getAudioClip("MoveUp.mp3");
         if (clip)
             audioManager->playSound(clip, transform.position, volume);
