@@ -24,6 +24,7 @@ public:
 	void mouse_movement_callback(float xPos, float yPos);
 	void updateCameraPosition();
 	void checkCollision();
+	void damage();
 	void die();
 	void reset();
 
@@ -32,8 +33,6 @@ public:
 	void update_iframe(float dt);
 
 	void reset_pitch() { 
-		static float currentTilt = 0.0f;
-		static float lastTilt = 0.0f;
 		currentTilt = 0.0f;
 		lastTilt = 0.0f;
 		currentPitch = 0.0f;
@@ -82,6 +81,9 @@ private:
 	float lastX;
 	float lastY;
 	float currentPitch = 0;
+
+	float currentTilt = 0.0f;
+	float lastTilt = 0.0f;
 
 	bool canDash = true;
 

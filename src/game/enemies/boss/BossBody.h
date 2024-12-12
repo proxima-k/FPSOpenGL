@@ -31,7 +31,7 @@ public:
 	BossEnemy* bossController = nullptr;
 	bool smoothSizing = false;
 
-	const static int MAX_HEALTH = 60;
+	const static int MAX_HEALTH = 100;
 
 private:
 	int sizeSteps = 8;

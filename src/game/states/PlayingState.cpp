@@ -36,7 +36,7 @@ void PlayingState::onUpdateState(float deltaTime)
 {
 	player->update(deltaTime);
 	game->timeLeftUntilBoss -= deltaTime;
-	//game->waveController->update(deltaTime);
+	game->waveController->update(deltaTime);
 
 	// lerp camera movement back to original
 	// if t isn't at 1 then player cannot input

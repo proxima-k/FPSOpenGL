@@ -31,7 +31,7 @@ void PlaceHolderCard1::update(float deltaTime)
 void PlaceHolderCard1::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, glm::vec3 upDirection)
 {
 	bDestroyOnHit = false;
-	damage = 10.f;
+	damage = 4.f;
 	aliveTime = 10.f;
 
 	if (bCanSpawnChildren)

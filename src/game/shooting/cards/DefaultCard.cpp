@@ -41,7 +41,7 @@ void DefaultCard::launch(glm::vec3 launchPosition, glm::vec3 launchDirection, gl
 {
 	bDestroyOnHit = true;
 	aliveTime = 10.f;
-	damage = 5;
+	damage = 5.f;
 
 	initializeTimer(aliveTime);
 	Card::launch(launchPosition, launchDirection, upDirection);

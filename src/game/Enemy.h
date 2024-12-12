@@ -21,14 +21,14 @@ public:
 		health -= damage;
 		if (health <= 0)
 		{
-			die(1.f);
+			die(xpAmount);
 		}
 	}
 
 	// so all enemies simply can call die() to be removed from the game
 	virtual void die(float xpSpawnAmount)
 	{
-		game->addPlayerXP(xpAmount);
+		game->addPlayerXP(xpSpawnAmount);
 		game->spawn_particle_source(transform.position, 40.0f, 0.3f, 2.0f);
 		destroy();
 	}

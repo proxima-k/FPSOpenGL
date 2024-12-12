@@ -54,20 +54,24 @@ void Player::checkCollision()
     Entity* hit_actor = game->get_coliding_entity(this, Collision_Channel::Enemy);
     if (hit_actor != nullptr && !bIsInvincible)
     {
-        auto gameOverSoundEffect = audioManager->getAudioClip("GameOver.mp3");
-        audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
+        damage();
+    }
+}
 
-        if (bIsShieldAlive) {
-            //std::cout << "hit" << std::endl;
-            bIsShieldAlive = false;
-            bIsInvincible = true;
-            invincibilityCooldownTimer = invincibilityCooldown;
-            shieldCooldownTimer = shieldCooldown;
-            camera->invokeScreenShake(.07f, 0.7f);
-        }
-        else {
-            die();
-        }
+void Player::damage() {
+    auto gameOverSoundEffect = audioManager->getAudioClip("GameOver.mp3");
+    audioManager->playSound(gameOverSoundEffect, transform.position, 0.4f);
+
+    if (bIsShieldAlive) {
+        //std::cout << "hit" << std::endl;
+        bIsShieldAlive = false;
+        bIsInvincible = true;
+        invincibilityCooldownTimer = invincibilityCooldown;
+        shieldCooldownTimer = shieldCooldown;
+        camera->invokeScreenShake(.07f, 0.7f);
+    }
+    else {
+        die();
     }
 }
 
@@ -112,23 +116,25 @@ void Player::update_shield(float dt)
 
 void Player::update_dash(float dt)
 {
-    if (bCanDash) return;
-
+    //if (bCanDash) return;
     dashCooldownTimer -= dt;
-
-    if (dashFOVTimer > 0.f) {
-        dashFOVTimer -= dt;
-        dashFOVTimer = glm::clamp(dashFOVTimer, 0.f, DASH_FOV_TIME);
-        float x = (1.f - dashFOVTimer / DASH_FOV_TIME) * glm::pi<float>();
-        float equation = glm::sin(x + (glm::sin(x)/1.05f)) * 20.f * game->playerDashMultiplier;
-        float targetFOV = 45.f + equation;
-        camera->updateFOV(targetFOV);
-    }
 
     if (dashCooldownTimer <= 0.0f) {
         bCanDash = true;
         dashCooldownTimer = 0.0f;
         dashFOVTimer = DASH_FOV_TIME;
+        return;
+    }
+
+
+    if (dashFOVTimer > 0.f) {
+        dashFOVTimer -= dt;
+        dashFOVTimer = glm::clamp(dashFOVTimer, 0.f, DASH_FOV_TIME);
+        float x = (1.f - dashFOVTimer / DASH_FOV_TIME) * glm::pi<float>();
+        float maxFOV = glm::clamp(((game->playerDashMultiplier / 2.f) * 20.f), 0.f, 45.f);
+        float equation = glm::sin(x + (glm::sin(x)/1.05f)) * maxFOV;
+        float targetFOV = 45.f + equation;
+        camera->updateFOV(targetFOV);
     }
 }
 
@@ -174,8 +180,10 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
     {
-        game->clearEnemies();
-        game->changeState(GameStateManager::BossFight);
+        if (game->getCurrentState() != GameStateManager::BossFight) {
+            game->clearEnemies();
+            game->changeState(GameStateManager::BossFight);
+        }
     }
 
     // jumping and dampening
@@ -216,9 +224,6 @@ void Player::processKeyboard(GLFWwindow* window, float deltaTime)
 
 void Player::tiltCamera(GLFWwindow* window, float deltaTime)
 {
-    static float currentTilt = 0.0f;
-    static float lastTilt = 0.0f;
-
     const float rotationSpeed = 10.0f;
     const float maxTilt = 5.0f;
     float targetTilt = 0.0f;

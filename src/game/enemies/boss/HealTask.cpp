@@ -134,7 +134,7 @@ glm::vec3 HealTask::getColorFromIndex(int index)
     case 1:
         return glm::vec3(1.0f, 1.0f, 0.3f);
     case 2:
-        return glm::vec3(0.3f, 1.0f, 0.3f);
+        return glm::vec3(0.698f, 0.992f, 0.2f);
     case 3:
         return glm::vec3(0.3f, 1.0f, 1.0f);
     case 4:

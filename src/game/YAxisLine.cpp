@@ -51,7 +51,7 @@ void YAxisLine::init(Camera* _camera, Player* _player)
 
 void YAxisLine::draw()
 {
-	if (glm::distance2(player->transform.position, camera->transform.position) > 16 * 16) return;
+	if (glm::distance2(player->transform.position, camera->transform.position) > 2500) return;
 
 	VAO->Bind();
 	shader->Bind();

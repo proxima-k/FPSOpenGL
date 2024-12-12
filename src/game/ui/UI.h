@@ -33,7 +33,7 @@ public:
 private:
     void resetCursorPos(GLFWwindow* window);
     bool hasResetCursor = false;
-    const float CURSOR_CLICK_COOLDOWN = 0.7f;
+    const float CURSOR_CLICK_COOLDOWN = 0.575f;
     float cursorClickTimer = CURSOR_CLICK_COOLDOWN;
 
     UICards cards;

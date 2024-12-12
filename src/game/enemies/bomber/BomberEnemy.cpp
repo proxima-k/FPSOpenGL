@@ -21,7 +21,7 @@ BomberEnemy::BomberEnemy(glm::vec3 position)
 
 	collision_channel = Collision_Channel::Enemy;
 
-	xpAmount = 50.0f;
+	xpAmount = 100.f;
 	maxHealth = 10.0f;
 
 	health = maxHealth;
@@ -36,7 +36,7 @@ void BomberEnemy::update(float deltaTime)
     glm::vec3 camPos = Camera::mainCamera->transform.position;
     glm::vec3 dirToCamera = glm::normalize(camPos - transform.position);
 
-    glm::vec3 speed = glm::vec3(1.5) * pulsationSpeed;
+    glm::vec3 speed = glm::vec3(3.5) * pulsationSpeed;
     glm::vec3 forwardDir = -transform.getForward();
     physicsBody.acceleration = glm::vec3(0.0f);
     physicsBody.acceleration += forwardDir * speed;
