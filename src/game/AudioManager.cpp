@@ -16,15 +16,32 @@ AudioManager::~AudioManager() {
 }
 
 void AudioManager::init() {
+    // initialization - opening a device and a context
+    const ALCchar* defaultDeviceString = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
+    std::cout << defaultDeviceString << std::endl;
+    device = alcOpenDevice(defaultDeviceString);
+    if (!device) {
+        std::cerr << "Failed to open default device" << std::endl;
+        return;
+    }
+
+    context = alcCreateContext(device, nullptr);
+    if (!alcMakeContextCurrent(context)) {
+        std::cerr << "Failed to make OpenAL context current" << std::endl;
+        alcCloseDevice(device);
+        device = nullptr;
+        return;
+    }
+
     drmp3_config config;
     drmp3_uint64 totalPCMFrameCount;
     std::vector<std::string> fileNames = {
-        "MoveUp.mp3", 
-        "MoveBack.mp3", 
-        "MoveLeft.mp3", 
+        "MoveUp.mp3",
+        "MoveBack.mp3",
+        "MoveLeft.mp3",
         "MoveRight.mp3",
-        "ShotsFired.mp3", 
-        "XPGain.mp3", 
+        "ShotsFired.mp3",
+        "XPGain.mp3",
         "GameOver.mp3",
         "pillarThud.mp3",
     };
@@ -49,21 +66,6 @@ void AudioManager::init() {
     }
 
     std::cerr << "Audio clips loaded" << std::endl;
-
-    const ALCchar* defaultDeviceString = alcGetString(nullptr, ALC_DEFAULT_DEVICE_SPECIFIER);
-    device = alcOpenDevice(defaultDeviceString);
-    if (!device) {
-        std::cerr << "Failed to open default device" << std::endl;
-        return;
-    }
-
-    context = alcCreateContext(device, nullptr);
-    if (!alcMakeContextCurrent(context)) {
-        std::cerr << "Failed to make OpenAL context current" << std::endl;
-        alcCloseDevice(device);
-        device = nullptr;
-        return;
-    }
 }
 
 AudioClip* AudioManager::getAudioClip(const std::string& fileName) {
@@ -104,12 +106,14 @@ void AudioManager::update() {
         alec(alGetSourcei(it->source, AL_SOURCE_STATE, &sourceState));
 
         if (sourceState == AL_STOPPED) {
+            std::cout << "source stopped playing" << std::endl;
             alec(alSourceStop(it->source));
             alec(alDeleteSources(1, &it->source));
 
-            if (alIsBuffer(it->buffer)) {
+            // shouldn't be called since buffer can be reused
+            /*if (alIsBuffer(it->buffer)) {
                 alec(alDeleteBuffers(1, &it->buffer));
-            }
+            }*/
 
             it = activeSourceBuffers.erase(it);
         }
@@ -123,6 +127,8 @@ ALuint AudioManager::getBufferForClip(AudioClip* audioClip) {
     if (bufferCache.find(audioClip->fileName) != bufferCache.end()) {
         return bufferCache[audioClip->fileName];
     }
+
+    std::cout << "creating new buffer for audio clip" << std::endl;
 
     drmp3_config config = audioClip->config;
     drmp3_uint64 totalPCMFrameCount = audioClip->totalPCMFrameCount;
