@@ -2,7 +2,7 @@
 
 #include <map>
 
-void UICards::renderCardSelection(ImVec2 windowSize) {
+void UICards::renderCardSelection(ImVec2 windowSize, bool canClick) {
     ImVec2 descriptionBoxSize = { windowSize.x / 1.5f, 120 };
 
     ImGui::SetCursorPos({ (windowSize.x / 2 - descriptionBoxSize.x / 2), (windowSize.y * 0.7f - descriptionBoxSize.y / 2) });
@@ -68,9 +68,9 @@ void UICards::renderCardSelection(ImVec2 windowSize) {
             descriptionTxt = cardDescriptions[selectedTextures[i]];
 
 
-        if (clicked)
+        if (clicked && canClick)
         {
-            std::cout << "Pressed button " << i << std::endl;
+            //std::cout << "Pressed button " << i << std::endl;
 
             if (selectedTextures[i] == sineCardTexture) {
                 shooter->cardQueue.push(Card::CardType::Sine);

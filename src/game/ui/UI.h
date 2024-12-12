@@ -31,6 +31,11 @@ public:
     float displayedScoreFraction = 0.0f;
 
 private:
+    void resetCursorPos(GLFWwindow* window);
+    bool hasResetCursor = false;
+    const float CURSOR_CLICK_COOLDOWN = 0.7f;
+    float cursorClickTimer = CURSOR_CLICK_COOLDOWN;
+
     UICards cards;
 
     GLuint crosshair;

@@ -27,6 +27,7 @@ void PlayingState::onEnterState()
 	}
 	else {
 		player->canInput = true;
+		player->firstMouse = true;
 		t = 1.f;
 	}
 }

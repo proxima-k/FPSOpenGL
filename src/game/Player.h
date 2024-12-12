@@ -61,6 +61,8 @@ public:
 	float shieldCooldown = 5.0f;
 	float shieldCooldownTimer = 0.0f;
 
+	bool firstMouse = true;
+
 private:
 	Camera* camera = nullptr;
 	GLFWwindow* window = nullptr;
@@ -79,7 +81,6 @@ private:
 	// camera settings
 	float lastX;
 	float lastY;
-	bool firstMouse = true;
 	float currentPitch = 0;
 
 	bool canDash = true;

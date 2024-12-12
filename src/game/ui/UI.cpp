@@ -70,6 +70,7 @@ void UI::end()
 
 void UI::render(GLFWwindow* window)
 {
+    bool canClick = cursorClickTimer <= 0.f;
     ImGuiIO& io = ImGui::GetIO();
     ImVec2 windowSize = io.DisplaySize;
 
@@ -104,6 +105,8 @@ void UI::render(GLFWwindow* window)
 
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize, true, shooter->getCardCooldownLeftPercentage());
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
+        
+            hasResetCursor = false;
         break;
 
     case GameStateManager::State::Playing:
@@ -115,12 +118,20 @@ void UI::render(GLFWwindow* window)
 
             cards.deckShowcase(deckPosActives, shooter->cardQueue, cardPosCenter, cardSize, true, shooter->getCardCooldownLeftPercentage());
             cards.deckShowcase(deckPosPassives, shooter->cardPassivesQueue, cardPosCenter, cardSize);
+        
+            hasResetCursor = false;
         break;
 
     case GameStateManager::State::SelectCards:
+            if (!hasResetCursor) {
+                hasResetCursor = true;
+                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                resetCursorPos(window);
+                cursorClickTimer = CURSOR_CLICK_COOLDOWN;
+            }
+
             renderPlayModeUI(windowSize);
-            cards.renderCardSelection(windowSize);
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            cards.renderCardSelection(windowSize, canClick);
 
             cards.highlightCard = true;
 
@@ -130,10 +141,18 @@ void UI::render(GLFWwindow* window)
 
     case GameStateManager::State::Dead:
             ImGui::Text("HA DEAD");
+            hasResetCursor = false;
+
         break;
 
     case GameStateManager::State::MainMenu:
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            if (!hasResetCursor) {
+                hasResetCursor = true;
+                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                resetCursorPos(window);
+                cursorClickTimer = CURSOR_CLICK_COOLDOWN;
+            }
+
             if (menuFont)
             {
                 ImGui::PopFont();
@@ -178,7 +197,7 @@ void UI::render(GLFWwindow* window)
 
 
             bool clicked = ImGui::ImageButton((void*)(intptr_t)game->textureManager->getTexture("play"), buttonSize);
-            if (clicked) {
+            if (clicked && canClick) {
                 game->reset();
                 game->changeState(GameStateManager::State::Playing);
                 timeElapsed = 0;
@@ -231,6 +250,9 @@ void UI::render(GLFWwindow* window)
     }
 
     ImGui::End();
+
+    if (cursorClickTimer > 0.f)
+        cursorClickTimer -= 0.02f;
 }
 
 void UI::renderPlayModeUI(ImVec2 windowSize)
@@ -295,6 +317,14 @@ void UI::customProgressBar(float fraction, const ImVec2& size, const ImVec4& bar
         ImVec2(pos.x + size.x * fraction, pos.y + size.y),
         ImGui::GetColorU32(barColor));
 }
+
+void UI::resetCursorPos(GLFWwindow* window)
+{
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+    glfwSetCursorPos(window, width / 2.0, height / 2.0);
+}
+
 
 void UI::renderGameOverUI(ImVec2 windowSize)
 {
